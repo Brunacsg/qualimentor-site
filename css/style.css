@@ -145,3 +145,18 @@ form textarea {
   background-color: #fafafa;
   margin-top: 3rem;
 }
+
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #5E3B94;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #472f77;
+}
