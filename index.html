@@ -1,144 +1,40 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<link rel="stylesheet" href="style.css" />
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Qualimentor - Consultoria em QA</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff;
-      color: #333;
-    }
-
-    header {
-      background-color: #5E3B94;
-      padding: 1rem 2rem;
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    nav {
-      margin-top: 0.5rem;
-    }
-
-    nav a {
-      color: #CCEAE5;
-      margin-right: 20px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    section {
-      padding: 3rem 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    section h2 {
-      color: #5E3B94;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-    }
-
-    footer {
-      background-color: #f3f3f3;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #777;
-    }
-
-    .menu-link {
-      cursor: pointer;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qualimentor - Consultoria de QA</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Qualimentor</h1>
-    <nav>
-      <a class="menu-link" href="#inicio">Início</a>
-      <a class="menu-link" href="#sobre">Sobre</a>
-      <a class="menu-link" href="#empresas">Para Empresas</a>
-      <a class="menu-link" href="#contato">Contato</a>
-    </nav>
+    <div class="container">
+      <h1 class="logo">Qualimentor</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">Início</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="servicos.html">Serviços</a></li>
+          <li><a href="empresas.html">Para Empresas</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <section id="inicio">
-    <h2>Missão da Qualimentor</h2>
-    <p>“Formar profissionais de qualidade, entregando talentos motivados, bem acompanhados e preparados para elevar os resultados dos nossos clientes.”</p>
-  </section>
-
-  <section id="sobre">
-    <h2>Sobre a Qualimentor</h2>
-
-    <h3>Missão</h3>
-    <p>Conectar empresas a profissionais de qualidade, formando e acompanhando talentos que entregam excelência técnica com atitude colaborativa.</p>
-
-    <h3>Visão</h3>
-    <p>Ser referência nacional em consultoria e formação em QA, sendo reconhecida pela seriedade, cuidado com os profissionais e impacto real nos resultados dos clientes.</p>
-
-    <h3>Valores</h3>
-    <ul>
-      <li>Compromisso com a qualidade</li>
-      <li>Crescimento conjunto (cliente e QA)</li>
-      <li>Ética, clareza e transparência</li>
-      <li>Valorização do ser humano</li>
-      <li>Aprendizado contínuo</li>
-    </ul>
-  </section>
-
-  <section id="empresas">
-    <h2>Para Empresas</h2>
-    <p>Profissionais com selo <strong>Qualimentor</strong></p>
-    <p>Nossos QAs não são apenas alocados — são acompanhados.</p>
-    <p>Cada profissional da Qualimentor passa por um processo de formação, integração e acompanhamento contínuo. Isso garante que sua empresa receba um talento com padrão técnico, postura colaborativa e foco em resultados.</p>
-    <p>Ao investir conosco, você não contrata apenas um QA: você recebe alguém em constante evolução, com suporte da nossa liderança técnica e alinhamento com os objetivos do seu time.</p>
-
-    <ul>
-      <li>QAs treinados com o padrão Qualimentor</li>
-      <li>Acompanhamento técnico e comportamental contínuo</li>
-      <li>Foco total nas metas do cliente</li>
-      <li>Profissionais motivados, não apenas alocados</li>
-    </ul>
-  </section>
-
-  <section id="contato">
-    <h2>Contato</h2>
-    <p>Entre em contato pelo e-mail: <a href="mailto:contato@qualimentor.tec.br">contato@qualimentor.tec.br</a></p>
-    <p>Ou pelo WhatsApp: <a href="https://wa.me/55SEUNUMEROAQUI" target="_blank">(11) 91234-5678</a></p>
+  <section class="hero">
+    <div class="container">
+      <h2>Qualidade que transforma resultados</h2>
+      <p>Consultoria especializada em QA com profissionais treinados, acompanhados e comprometidos com os seus resultados.</p>
+      <a href="contato.html" class="btn">Fale com a Qualimentor</a>
+    </div>
   </section>
 
   <footer>
-    © 2025 Qualimentor. Todos os direitos reservados.
+    <div class="container">
+      <p>&copy; 2025 Qualimentor Treinamentos e Consultoria LTDA - CNPJ 59.758.519/0001-86</p>
+    </div>
   </footer>
-
-  <script>
-    // Rolagem suave
-    document.querySelectorAll('.menu-link').forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-  </script>
 </body>
 </html>
