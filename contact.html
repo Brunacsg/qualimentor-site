@@ -1,42 +1,34 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contato - QualiMentor</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>QualiMentor - Contato</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-  <header class="header">
-    <nav class="nav">
-      <a href="index.html" class="logo">QualiMentor</a>
-      <ul class="menu">
-        <li><a href="index.html">Início</a></li>
-        <li><a href="about.html">Sobre</a></li>
-        <li><a href="contact.html" class="btn-primary">Contato</a></li>
-      </ul>
-    </nav>
+  <header>
+    <div class="container">
+      <h1>QualiMentor</h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="about.html">Sobre</a></li>
+          <li><a href="contact.html" class="active">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <main class="hero">
-    <h1>Fale com a gente</h1>
-    <p>Preencha o formulário abaixo ou envie um e-mail para <a href="mailto:contato@qualimentor.tec.br">contato@qualimentor.tec.br</a></p>
-    <form style="max-width:500px;margin:2rem auto;text-align:left;">
-      <label for="nome">Nome:</label><br />
-      <input type="text" id="nome" name="nome" style="width:100%;padding:0.5rem;margin-bottom:1rem;"><br />
-      <label for="email">Email:</label><br />
-      <input type="email" id="email" name="email" style="width:100%;padding:0.5rem;margin-bottom:1rem;"><br />
-      <label for="mensagem">Mensagem:</label><br />
-      <textarea id="mensagem" name="mensagem" rows="5" style="width:100%;padding:0.5rem;"></textarea><br /><br />
-      <button type="submit" class="btn-primary">Enviar</button>
-    </form>
+  <main>
+    <section class="hero">
+      <h2>Entre em contato</h2>
+      <p>Estamos aqui para ajudar você a alcançar seu melhor!</p>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p>&copy; 2025 QualiMentor. Todos os direitos reservados.</p>
+  <footer>
+    <p>© 2025 QualiMentor. Todos os direitos reservados.</p>
   </footer>
-  </div>
 </body>
 </html>
