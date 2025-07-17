@@ -147,3 +147,19 @@ form textarea {
   background-color: #b19cd9; /* Roxo claro */
   color: #fff;
 }
+
+.logo-img {
+  height: 60px; /* ou ajuste conforme seu logo */
+  width: auto;
+  display: block;
+}
+.logo-img {
+  height: 60px;
+  width: auto;
+  max-width: 200px;
+  display: block;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
