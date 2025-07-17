@@ -47,9 +47,11 @@ nav {
 nav ul {
   list-style: none;
   display: flex;
+  flex-wrap: wrap; /* Permite quebra de linha se faltar espaço */
   gap: 20px;
   padding: 0;
   margin: 0;
+  justify-content: center; /* Centraliza os botões */
 }
 
 nav ul li a {
