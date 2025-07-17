@@ -54,10 +54,24 @@ ul {
 }
 
 .logo {
-  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
   font-weight: bold;
   color: var(--purple-dark);
+  padding: 0;
+  margin: 0;
+  height: 60px;           /* controla a altura do bloco do logo */
+  max-width: 180px;       /* limite da largura do texto */
+  overflow: hidden;       /* evita que quebre o layout */
+  white-space: nowrap;    /* evita quebra de linha */
 }
+.logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+}
+
 
 .menu {
   display: flex;
