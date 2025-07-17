@@ -130,36 +130,3 @@ form textarea {
   background-color: #fafafa;
   margin-top: 3rem;
 }
-
-.menu a {
-  padding: 10px 20px;
-  text-decoration: none;
-  color: #1a1a1a;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
-}
-
-.menu a.active {
-  background-color: #4b0082; /* Roxo escuro */
-  color: #fff;
-}
-.menu a:hover {
-  background-color: #b19cd9; /* Roxo claro */
-  color: #fff;
-}
-
-.logo-img {
-  height: 60px; /* ou ajuste conforme seu logo */
-  width: auto;
-  display: block;
-}
-.logo-img {
-  height: 60px;
-  width: auto;
-  max-width: 200px;
-  display: block;
-}
-.logo {
-  display: flex;
-  align-items: center;
-}
