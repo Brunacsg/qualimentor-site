@@ -1,121 +1,94 @@
-/* Fonte profissional */
-body {
+/* Reset básico */
+* {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  color: #333;
-  background-color: #fff;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.top-bar {
-  background: #000;
-  color: #fff;
-  text-align: center;
-  padding: 5px;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #333;
+  line-height: 1.6;
 }
 
 header {
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 1px solid #eee;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: bold;
   color: #5E3B94;
-  margin-bottom: 0.5rem;
+  text-transform: uppercase;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  padding: 0;
-  margin: 0;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 10px;
 }
 
-nav ul li a {
-  padding: 10px 18px;
-  background-color: transparent;
-  border: 2px solid #5E3B94;
-  color: #5E3B94;
-  font-weight: 600;
-  border-radius: 4px;
+nav a {
   text-decoration: none;
-  transition: 0.3s;
+  color: #5E3B94;
+  font-weight: 500;
+  transition: color 0.3s;
 }
 
-nav ul li a:hover {
-  background-color: #5E3B94;
-  color: #fff;
+nav a:hover {
+  color: #36255e;
 }
 
 .hero {
   text-align: center;
-  padding: 4rem 1rem;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #eee;
+  padding: 100px 20px 60px;
+  background-color: #f8f8fb;
 }
 
-.hero h2 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #4A2F7C;
-  margin-bottom: 1rem;
+.hero h1 {
+  font-size: 40px;
+  color: #111;
+  margin-bottom: 20px;
 }
 
 .hero p {
-  font-size: 1.1rem;
-  color: #555;
-  max-width: 700px;
-  margin: 0 auto 2rem;
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 40px;
 }
 
 .botao {
   background-color: #5E3B94;
   color: #fff;
+  border: none;
   padding: 12px 24px;
-  border-radius: 4px;
+  font-size: 16px;
+  border-radius: 5px;
   text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
+  transition: background-color 0.3s;
 }
 
 .botao:hover {
-  background-color: #452A78;
-}
-
-section {
-  padding: 3rem 1rem;
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-}
-
-section h3 {
-  color: #4A2F7C;
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-section ul li {
-  margin: 10px 0;
-  font-size: 1.05rem;
+  background-color: #472b75;
 }
 
 footer {
+  background-color: #f4f4f4;
+  padding: 20px 0;
   text-align: center;
-  padding: 1rem;
-  background-color: #f3f3f3;
-  font-size: 0.9rem;
+  font-size: 14px;
+  color: #555;
+  border-top: 1px solid #ddd;
 }
