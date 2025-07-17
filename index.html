@@ -1,65 +1,341 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qualimentor | Consultoria de QA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qualimentor - Consultoria e Formação de QAs</title>
   <style>
-    body {
+    /* Reset básico */
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #CCEAE5;
-      color: #333;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: #f9f9fb;
+      color: #2c2c2c;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
     }
     header {
-      background-color: #5E3B94;
+      background: #5E3B94;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       color: white;
-      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      cursor: default;
+    }
+    nav a {
+      margin-left: 30px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #CCEAE5;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #5E3B94 0%, #CCEAE5 100%);
+      color: white;
+      padding: 120px 20px 80px;
       text-align: center;
     }
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
+    .hero h1 {
+      font-size: 2.4rem;
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-weight: 600;
+      line-height: 1.3;
     }
-    section {
-      padding: 40px 20px;
-      text-align: center;
-    }
-    h1 {
-      color: #5E3B94;
+    .hero .btn-group {
+      margin-top: 20px;
     }
     .btn {
+      background: white;
+      color: #5E3B94;
+      padding: 14px 28px;
+      font-weight: 700;
+      border-radius: 30px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
       display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #5E3B94;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    footer {
-      background-color: #5E3B94;
-      color: white;
+      min-width: 180px;
       text-align: center;
-      padding: 15px;
-      font-size: 14px;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
+      user-select: none;
+    }
+    .btn:hover {
+      background: #4b2d77;
+      color: #e0d9f3;
+    }
+
+    /* Section Para Clientes */
+    .section-clientes {
+      max-width: 960px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+    .section-clientes h2 {
+      font-size: 2rem;
+      color: #5E3B94;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    .section-clientes p.intro {
+      max-width: 720px;
+      margin: 0 auto 40px;
+      font-size: 1.1rem;
+      color: #444;
+      text-align: center;
+    }
+    .bullets {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+    }
+    .bullet-item {
+      background: #ECE7F3;
+      border-radius: 12px;
+      padding: 20px 24px;
+      flex: 1 1 280px;
+      box-shadow: 0 3px 8px rgb(94 59 148 / 0.15);
+      color: #4a3b78;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-height: 80px;
+    }
+    .bullet-icon {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      background: #5E3B94;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      user-select: none;
+    }
+
+    /* Por que escolher a Qualimentor */
+    .why-qualimentor {
+      background: #5E3B94;
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .why-qualimentor h3 {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      font-weight: 700;
+    }
+    .why-list {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: left;
+      list-style: none;
+      font-size: 1.1rem;
+    }
+    .why-list li {
+      margin-bottom: 15px;
+      padding-left: 1.4em;
+      position: relative;
+      font-weight: 600;
+    }
+    .why-list li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #CCEAE5;
+      font-weight: 700;
+    }
+
+    /* Call to Action */
+    .cta-contact {
+      text-align: center;
+      margin: 60px 0 100px;
+    }
+    .cta-contact p {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* Missão, Visão e Valores */
+    .mv-section {
+      max-width: 960px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+    .mv-card {
+      background: #ECE7F3;
+      flex: 1 1 280px;
+      padding: 28px 24px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgb(94 59 148 / 0.12);
+      color: #4a3b78;
+    }
+    .mv-card h4 {
+      color: #5E3B94;
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 1.3rem;
+      text-align: center;
+    }
+    .mv-card ul {
+      list-style: disc inside;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .mv-card ul li {
+      margin-bottom: 10px;
+    }
+    .mv-card p {
+      font-weight: 600;
+      line-height: 1.4;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #5E3B94;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      nav a {
+        margin-left: 15px;
+        font-size: 0.9rem;
+      }
+      .hero h1 {
+        font-size: 1.7rem;
+      }
+      .bullets {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .mv-section {
+        flex-direction: column;
+      }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
     <div class="logo">Qualimentor</div>
-    <div>Consultoria em Qualidade de Software</div>
+    <nav>
+      <a href="#missao">Missão</a>
+      <a href="#clientes">Para Clientes</a>
+      <a href="#sobre">Sobre Nós</a>
+      <a href="#contato">Contato</a>
+    </nav>
   </header>
 
-  <section>
-    <h1>Transformamos QAs em profissionais de alta performance</h1>
-    <p>Treinamos, acompanhamos e entregamos QAs prontos para gerar resultados de verdade.</p>
-    <a href="mailto:contato@qualimentor.tec.br" class="btn">Fale com a Qualimentor</a>
+  <section class="hero">
+    <h1>“Formar profissionais de qualidade, entregando talentos motivados, bem acompanhados e preparados para elevar os resultados dos nossos clientes.”</h1>
+    <div class="btn-group">
+      <a href="#contato" class="btn">Quero contratar um QA</a>
+      <a href="#clientes" class="btn">Saiba mais sobre nossos profissionais</a>
+    </div>
+  </section>
+
+  <section id="clientes" class="section-clientes">
+    <h2>Profissionais com selo Qualimentor — o diferencial que sua empresa precisa</h2>
+    <p class="intro">Contratar um QA não é só preencher uma vaga. Na Qualimentor, entregamos talentos que realmente fazem a diferença no seu time e nos seus resultados.</p>
+    <div class="bullets">
+      <div class="bullet-item">
+        <div class="bullet-icon">✓</div>
+        Treinados e capacitados seguindo um padrão técnico rigoroso, para garantir qualidade desde o primeiro dia.
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">✓</div>
+        Acompanhados de perto com suporte técnico e comportamental, para que estejam alinhados às metas e cultura da sua empresa.
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">✓</div>
+        Motivados e engajados, porque cuidamos do crescimento e bem-estar deles — e isso reflete na entrega que você recebe.
+      </div>
+      <div class="bullet-item">
+        <div class="bullet-icon">✓</div>
+        Focados no resultado, atuando com proatividade, colaboração e responsabilidade, para acelerar a entrega e reduzir retrabalho.
+      </div>
+    </div>
+  </section>
+
+  <section class="why-qualimentor">
+    <h3>Por que escolher a Qualimentor?</h3>
+    <ul class="why-list">
+      <li>Reduza riscos na contratação, recebendo profissionais já formados e acompanhados, não apenas alocados.</li>
+      <li>Ganhe produtividade com QAs preparados para atuar em equipes ágeis e focadas.</li>
+      <li>Aumente a qualidade das entregas com profissionais que entendem os objetivos do seu negócio.</li>
+      <li>Conte com suporte contínuo, nossa liderança técnica acompanha o trabalho do QA para garantir resultados reais.</li>
+    </ul>
+  </section>
+
+  <section class="cta-contact" id="contato">
+    <p><strong>Quer transformar seu time de QA?</strong></p>
+    <a href="mailto:contato@qualimentor.tec.br" class="btn">Entre em contato conosco</a>
+  </section>
+
+  <section id="missao" class="mv-section">
+    <div class="mv-card">
+      <h4>Missão</h4>
+      <p>Conectar empresas a profissionais de qualidade, formando e acompanhando talentos que entregam excelência técnica com atitude colaborativa.</p>
+    </div>
+    <div class="mv-card">
+      <h4>Visão</h4>
+      <p>Ser referência nacional em consultoria e formação em QA, reconhecida pela seriedade, cuidado com os profissionais e impacto real nos resultados.</p>
+    </div>
+    <div class="mv-card">
+      <h4>Valores</h4>
+      <ul>
+        <li>Compromisso com a qualidade</li>
+        <li>Crescimento conjunto (cliente e QA)</li>
+        <li>Ética, clareza e transparência</li>
+        <li>Valorização do ser humano</li>
+        <li>Aprendizado contínuo</li>
+      </ul>
+    </div>
   </section>
 
   <footer>
-    © 2025 Qualimentor Treinamentos e Consultoria · Todos os direitos reservados
+    © 2025 Qualimentor - Todos os direitos reservados | contato@qualimentor.tec.br
   </footer>
 </body>
 </html>
