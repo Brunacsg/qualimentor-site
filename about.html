@@ -20,11 +20,28 @@
     </header>
 
     <main class="hero">
-      <h1>Sobre a QualiMentor</h1>
-      <p>Na QualiMentor, somos especialistas em qualidade de software e acreditamos no poder do aprendizado orientado por mentoria.</p>
+      <h1>Mais do que alocação. Evolução.</h1>
+      <p>A QualiMentor nasceu da experiência real no mercado de tecnologia, onde a alocação de profissionais muitas vezes ignora o mais importante: as pessoas.</p>
+
+      <p>Somos uma consultoria especializada em Qualidade de Software, focada no crescimento contínuo dos nossos QAs e na entrega de valor para nossos clientes.</p>
+
+      <p>Diferente do modelo tradicional, acompanhamos de perto nossos profissionais, promovendo treinamentos constantes, feedbacks estruturados e atuação ativa junto aos times. Nossos QAs não apenas executam testes — eles garantem a qualidade como parte do processo de desenvolvimento.</p>
+
+      <h2 style="margin-top: 3rem;">Nosso compromisso é com a evolução e o resultado</h2>
+      <ul style="text-align: left; max-width: 800px; margin: 2rem auto;">
+        <li><strong>Acompanhamento próximo:</strong> Mentorias e 1:1s com cada QA para garantir desenvolvimento técnico e comportamental.</li>
+        <li><strong>Treinamento contínuo:</strong> Capacitações práticas com foco em agilidade, automação e qualidade como cultura.</li>
+        <li><strong>Entrega com excelência:</strong> QAs que atuam estrategicamente para garantir processos de qualidade, desde o planejamento até a produção.</li>
+        <li><strong>Integração ao time:</strong> Nossos profissionais não atuam isolados. Trabalham lado a lado com times de desenvolvimento, produto e design.</li>
+      </ul>
+
+      <h2>Quer elevar a qualidade do seu produto?</h2>
+      <p>Entre em contato com a QualiMentor e descubra como podemos apoiar o seu time com profissionais comprometidos, preparados e acompanhados de verdade.</p>
+      <a href="contact.html" class="btn-primary">Solicite uma conversa</a>
     </main>
 
     <footer class="footer">
+      <p>QualiMentor: onde a qualidade começa pelas pessoas.</p>
       <p>&copy; 2025 QualiMentor. Todos os direitos reservados.</p>
     </footer>
   </div>
@@ -34,8 +51,11 @@
     const currentPage = window.location.pathname.split("/").pop();
 
     links.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href === currentPage || (href === "index.html" && (currentPage === "" || currentPage === "index.html"))) {
+      const href = link.getAttribute("href");
+      if (
+        href === currentPage ||
+        (href === "index.html" && (currentPage === "" || currentPage === "index.html"))
+      ) {
         link.classList.add("active");
       }
     });
