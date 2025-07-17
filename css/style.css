@@ -30,6 +30,13 @@ ul {
   list-style: none;
 }
 
+/* Layout container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 /* Header */
 .header {
   background: var(--white);
@@ -40,12 +47,10 @@ ul {
 }
 
 .nav {
-  max-width: 1200px;
-  margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 0;
 }
 
 .logo {
@@ -80,16 +85,13 @@ ul {
   font-weight: 500;
   transition: background 0.3s ease;
   display: inline-block;
-}
-
-.btn-primary:hover {
-  background: var(--purple-light);
+  text-align: center;
 }
 
 /* Hero section */
 .hero {
   text-align: center;
-  padding: 6rem 2rem 4rem 2rem;
+  padding: 6rem 1rem 4rem 1rem;
 }
 
 .hero h1 {
@@ -101,6 +103,22 @@ ul {
 .hero p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
+}
+
+/* Form */
+form label,
+form input,
+form textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+form input,
+form textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 /* Footer */
