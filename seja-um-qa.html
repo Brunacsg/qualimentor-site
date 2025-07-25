@@ -1,1 +1,86 @@
-q
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seja um QA Qualimentor</title>
+  <link rel="stylesheet" href="styles.css" /> <!-- seu CSS principal -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fdfdff;
+      color: #333;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #5E3B94;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      background: #CCEAE5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #5E3B94;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #4c2e7a;
+    }
+  </style>
+</head>
+<body>
+  <h1>Seja um QA Qualimentor</h1>
+
+  <p>Você ama qualidade, quer crescer na área de QA e fazer parte de um time que realmente investe em você?</p>
+  <p>Na Qualimentor, formamos QAs preparados para entregar resultados reais aos nossos clientes.</p>
+  <p>Aqui, você aprende na prática, com mentoria e acompanhamento de verdade.</p>
+  <p>Se você está começando ou quer se profissionalizar, venha com a gente!</p>
+
+  <form action="https://formspree.io/f/SEU_ID_AQUI" method="POST">
+    <label for="nome">Nome completo:</label>
+    <input type="text" id="nome" name="nome" required />
+
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="_replyto" required />
+
+    <label for="mensagem">Conte um pouco sobre você (opcional):</label>
+    <textarea id="mensagem" name="mensagem" rows="4"></textarea>
+
+    <button type="submit">Quero ser QA Qualimentor</button>
+  </form>
+</body>
+</html>
