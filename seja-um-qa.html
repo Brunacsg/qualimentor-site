@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Seja nosso QA</title>
-  <link rel="stylesheet" href="styles.css" /> <!-- seu CSS principal -->
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -70,7 +70,7 @@
   <p>Aqui, você aprende na prática, com mentoria e acompanhamento de verdade.</p>
   <p>Se você está começando ou quer se profissionalizar, venha com a gente!</p>
 
-  <form action="https://formspree.io/f/SEU_ID_AQUI" method="POST">
+  <form id="formQA">
     <label for="nome">Nome completo:</label>
     <input type="text" id="nome" name="nome" required />
 
@@ -82,5 +82,33 @@
 
     <button type="submit">Quero ser QA Qualimentor</button>
   </form>
+
+  <script>
+    document.getElementById('formQA').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Impede envio padrão
+
+      const form = event.target;
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch("https://formspree.io/f/SEU_ID_AQUI", {
+          method: "POST",
+          body: data,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          alert("Formulário enviado com sucesso! Em breve entraremos em contato.");
+          form.reset();
+        } else {
+          alert("Ocorreu um erro ao enviar o formulário. Tente novamente.");
+        }
+      } catch (error) {
+        alert("Erro de rede. Verifique sua conexão e tente novamente.");
+      }
+    });
+  </script>
 </body>
 </html>
