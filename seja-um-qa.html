@@ -61,8 +61,9 @@
       background-color: #4c2e7a;
     }
 
-    .voltar-topo {
+    .voltar-inicio {
       display: block;
+      width: fit-content;
       margin: 2rem auto 0;
       background-color: #e6d9f5;
       color: #5E3B94;
@@ -71,11 +72,11 @@
       border-radius: 4px;
       font-size: 1rem;
       text-align: center;
-      cursor: pointer;
+      text-decoration: none;
       transition: background-color 0.3s;
     }
 
-    .voltar-topo:hover {
+    .voltar-inicio:hover {
       background-color: #f3ecfc;
     }
   </style>
@@ -105,8 +106,7 @@
     <button type="submit">Quero ser QA Qualimentor</button>
   </form>
 
-  <button class="voltar-topo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
-    Voltar ao Início
-  </button>
+  <!-- Botão de voltar ao início -->
+  <a href="index.html" class="voltar-inicio">Voltar ao Início</a>
 </body>
 </html>
