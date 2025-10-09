@@ -1,14 +1,4 @@
-/* ---------------------------
-   QualiMentor - style.css
-   ---------------------------
-   - Coloque este arquivo em: /css/style.css
-   - Estrutura de imagens esperada:
-     /images/logo.png
-     /images/caneca.jpg, /images/camiseta.jpg, /images/brinde.jpg, /images/evento.jpg
-   - Ajuste o número do WhatsApp no link do HTML (wa.me)
-*/
 
-/* IMPORT FONT */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
 /* VARIABLES */
