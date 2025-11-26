@@ -139,29 +139,39 @@
 
         <div class="contact-form">
           <!-- formulário simples (se quiser, conectar a backend) -->
-          <form action="#" method="post" onsubmit="event.preventDefault(); alert('Enviar formulário (implemente backend)')">
-            <label>
-              Nome
-              <input type="text" name="nome" placeholder="Seu nome" required>
-            </label>
+          <form 
+  action="https://formsubmit.co/comercial@qualimentor.com.br"
+  method="POST"
+>
 
-            <label>
-              Empresa
-              <input type="text" name="empresa" placeholder="Sua empresa">
-            </label>
+    <input type="hidden" name="_subject" value="Nova solicitação de proposta - Site Qualimentor">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://www.qualimentor.tec.br/obrigado.html">
 
-            <label>
-              Email
-              <input type="email" name="email" placeholder="seu@exemplo.com" required>
-            </label>
+    <label>
+      Nome
+      <input type="text" name="nome" placeholder="Seu nome" required>
+    </label>
 
-            <label>
-              Mensagem
-              <textarea name="mensagem" rows="5" placeholder="Como podemos ajudar?" required></textarea>
-            </label>
+    <label>
+      Empresa
+      <input type="text" name="empresa" placeholder="Sua empresa">
+    </label>
 
-            <button class="btn-primary" type="submit">Solicitar Proposta</button>
-          </form>
+    <label>
+      Email
+      <input type="email" name="email" placeholder="seu@exemplo.com" required>
+    </label>
+
+    <label>
+      Mensagem
+      <textarea name="mensagem" rows="5" placeholder="Como podemos ajudar?" required></textarea>
+    </label>
+
+    <button class="btn-primary" type="submit">Solicitar Proposta</button>
+</form>
+
         </div>
       </div>
     </section>
