@@ -1,142 +1,183 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QualiMentor | Consultoria em Qualidade de Software</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
 
+  <!-- Font (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/favicon.png" />
+</head>
 <body>
 
-  <!-- HEADER FIXO -->
-  <header class="header">
-    <div class="container header-content">
-      <img src="images/logo.png" alt="Logo" class="header-logo" />
-      <nav class="header-nav">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <img src="images/logo.png" alt="QualiMentor" class="logo">
+        <span class="brand-text">QualiMentor</span>
+      </a>
+
+      <nav class="nav" id="nav">
         <a href="#sobre">Sobre</a>
         <a href="#servicos">Serviços</a>
         <a href="#diferenciais">Diferenciais</a>
-        <a href="#contato" class="btn-header">Contato</a>
+        <a href="#contato" class="btn-outline">Contato</a>
       </nav>
+
+      <button id="btn-menu" class="btn-menu" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
   <!-- HERO -->
-  <section class="hero fade-in">
-    <div class="hero-content">
-      <h1 class="fade-up">Qualidade que acelera seu produto</h1>
-      <p class="fade-up delay-1">
-        QA Manual • Automação • Squads de Qualidade • Treinamento Técnico
-      </p>
-      <a href="#contato" class="btn-primary fade-up delay-2">Fale com um Especialista</a>
-    </div>
-  </section>
-
-  <!-- SOBRE -->
-  <section class="sobre fade-in" id="sobre">
-    <div class="container">
-      <h2>Sobre a QualiMentor</h2>
-      <p class="fade-up">
-        A QualiMentor é uma consultoria especializada em elevar o nível de qualidade do seu software...
-      </p>
-
-      <div class="institucional">
-        <div class="card fade-up delay-1">
-          <h3>Missão</h3>
-          <p>Transformar equipes através da qualidade.</p>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1>Qualidade que acelera seu produto</h1>
+          <p>QA Manual • Automação • Squads de Qualidade • Treinamento Técnico</p>
+          <div class="hero-cta">
+            <a href="#contato" class="btn-primary">Fale com um Especialista</a>
+            <a href="#servicos" class="btn-ghost">Nossos Serviços</a>
+          </div>
         </div>
-        <div class="card fade-up delay-2">
-          <h3>Visão</h3>
-          <p>Ser referência nacional em QA e Automação.</p>
-        </div>
-        <div class="card fade-up delay-3">
-          <h3>Valores</h3>
-          <p>Excelência • Ética • Melhoria Contínua</p>
+
+        <div class="hero-right">
+          <!-- destaque visual / card com imagem -->
+          <div class="hero-card">
+            <img src="images/qa-manual.png" alt="QA Manual">
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SERVIÇOS -->
-  <section class="servicos fade-in" id="servicos">
-    <div class="container">
-      <h2>Nossos Serviços</h2>
-
-      <div class="grid-produtos">
-        <div class="produto fade-up">
-          <img src="images/qa-manual.jpg" alt="QA Manual" />
-          <h3>QA Manual</h3>
-          <p>Profissionais especializados...</p>
-        </div>
-
-        <div class="produto fade-up delay-1">
-          <img src="images/automacao.jpg" alt="Automação" />
-          <h3>Automação</h3>
-          <p>Testes Web, API e Mobile.</p>
-        </div>
-
-        <div class="produto fade-up delay-2">
-          <img src="images/squad-qa.jpg" alt="Squad" />
-          <h3>Squads Dedicadas</h3>
-          <p>Montamos equipes completas de QA.</p>
-        </div>
-
-        <div class="produto fade-up delay-3">
-          <img src="images/treinamento.jpg" alt="Treinamento" />
-          <h3>Treinamento</h3>
-          <p>Capacitação contínua para seu time.</p>
+    <!-- SOBRE -->
+    <section id="sobre" class="section sobre">
+      <div class="container">
+        <div class="split">
+          <div class="text">
+            <h2>Sobre a QualiMentor</h2>
+            <p>
+              A QualiMentor é uma consultoria especializada em elevar o nível de qualidade do seu software.
+              Atuamos com soluções de QA manual, automação, squads dedicados e capacitação técnica.
+            </p>
+          </div>
+          <div class="image">
+            <img src="images/treinamento.png" alt="Treinamento">
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- DIFERENCIAIS -->
-  <section class="diferenciais fade-in" id="diferenciais">
-    <div class="container">
-      <h2>Por que escolher a QualiMentor?</h2>
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="section servicos">
+      <div class="container">
+        <h2>Nossos Serviços</h2>
 
-      <div class="grid-diferenciais">
-        <div class="item fade-up">
-          <h3>Especialistas Sêniores</h3>
-          <p>Profissionais altamente qualificados.</p>
-        </div>
-        <div class="item fade-up delay-1">
-          <h3>Acompanhamento Contínuo</h3>
-          <p>Supervisão e evolução técnica.</p>
-        </div>
-        <div class="item fade-up delay-2">
-          <h3>Processos Otimizados</h3>
-          <p>Boas práticas e pipelines.</p>
-        </div>
-        <div class="item fade-up delay-3">
-          <h3>Resultados Reais</h3>
-          <p>Menos bugs e entregas mais rápidas.</p>
+        <div class="grid-produtos">
+          <article class="produto">
+            <img src="images/qa-manual.png" alt="QA Manual">
+            <div class="produto-body">
+              <h3>QA Manual</h3>
+              <p>Testes exploratórios, casos de teste e validação funcional com profissionais experientes.</p>
+            </div>
+          </article>
+
+          <article class="produto">
+            <img src="images/automacao.png" alt="Automação">
+            <div class="produto-body">
+              <h3>Automação</h3>
+              <p>Frameworks, pipelines CI/CD, testes de regressão e integração (web, API, mobile).</p>
+            </div>
+          </article>
+
+          <article class="produto">
+            <img src="images/squad-qa.png" alt="Squads">
+            <div class="produto-body">
+              <h3>Squads Dedicadas</h3>
+              <p>Equipes sob demanda integradas ao seu fluxo de desenvolvimento.</p>
+            </div>
+          </article>
+
+          <article class="produto">
+            <img src="images/treinamento.png" alt="Treinamento">
+            <div class="produto-body">
+              <h3>Treinamento</h3>
+              <p>Capacitação prática para times de QA e desenvolvimento em metodologias e ferramentas atuais.</p>
+            </div>
+          </article>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CONTATO -->
-  <section class="contato fade-in" id="contato">
-    <div class="container">
-      <h2>Entre em Contato</h2>
-      <p>Fale com um especialista e receba uma proposta personalizada.</p>
+    <!-- DIFERENCIAIS -->
+    <section id="diferenciais" class="section diferenciais">
+      <div class="container">
+        <h2>Por que escolher a QualiMentor?</h2>
+        <div class="grid-diferenciais">
+          <div class="item"><h3>Especialistas Sêniores</h3><p>Profissionais altamente qualificados.</p></div>
+          <div class="item"><h3>Acompanhamento Contínuo</h3><p>Supervisão e evolução técnica.</p></div>
+          <div class="item"><h3>Processos Otimizados</h3><p>Boas práticas e pipelines eficientes.</p></div>
+          <div class="item"><h3>Resultados Reais</h3><p>Menos bugs e entregas mais rápidas.</p></div>
+        </div>
+      </div>
+    </section>
 
-      <a href="https://wa.me/5511999999999" class="btn-whatsapp fade-up">
-        💬 Fale no WhatsApp
-      </a>
+    <!-- CONTATO -->
+    <section id="contato" class="section contato">
+      <div class="container contato-grid">
+        <div class="contact-card">
+          <h2>Entre em Contato</h2>
+          <p>Fale com um especialista e receba uma proposta personalizada.</p>
+          <a class="btn-whatsapp" href="https://wa.me/5511999999999">💬 Fale no WhatsApp</a>
+          <p class="email">ou mande um email para <strong>contato@qualimentor.com.br</strong></p>
+        </div>
 
-      <p class="email fade-up delay-1">
-        ou mande um email para <strong>contato@qualimentor.com.br</strong>
-      </p>
-    </div>
-  </section>
+        <div class="contact-form">
+          <!-- formulário simples (se quiser, conectar a backend) -->
+          <form action="#" method="post" onsubmit="event.preventDefault(); alert('Enviar formulário (implemente backend)')">
+            <label>
+              Nome
+              <input type="text" name="nome" placeholder="Seu nome" required>
+            </label>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2025 QualiMentor. Consultoria em Qualidade de Software.</p>
-  </footer>
+            <label>
+              Empresa
+              <input type="text" name="empresa" placeholder="Sua empresa">
+            </label>
+
+            <label>
+              Email
+              <input type="email" name="email" placeholder="seu@exemplo.com" required>
+            </label>
+
+            <label>
+              Mensagem
+              <textarea name="mensagem" rows="5" placeholder="Como podemos ajudar?" required></textarea>
+            </label>
+
+            <button class="btn-primary" type="submit">Solicitar Proposta</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p>© <span id="ano"></span> QualiMentor. Consultoria em Qualidade de Software.</p>
+        <nav class="footer-nav">
+          <a href="#sobre">Sobre</a>
+          <a href="#servicos">Serviços</a>
+          <a href="#contato">Contato</a>
+        </nav>
+      </div>
+    </footer>
+  </main>
 
   <script src="js/animacoes.js"></script>
 </body>
