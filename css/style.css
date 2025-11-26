@@ -17,7 +17,7 @@ html,body{ height:100%; font-family: "Inter", system-ui, -apple-system, "Segoe U
 .site-header{ position:fixed; top:0; left:0; right:0; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,12,28,0.7), rgba(10,12,28,0.55)); padding:14px 0; z-index:999; border-bottom: 1px solid rgba(255,255,255,0.03); }
 .header-inner{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
-.logo{ width:42px; height:42px; object-fit:contain; border-radius:8px; background:var(--glass); padding:6px; }
+.logo{ width:70px; height:70px; object-fit:contain; border-radius:8px; background:var(--glass); padding:6px; }
 .brand-text{ font-weight:700; font-size:1.05rem; letter-spacing:0.2px; }
 
 /* Nav */
