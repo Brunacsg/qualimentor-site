@@ -1,69 +1,86 @@
-/* ------------------------------------------
-   RESET
-------------------------------------------- */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* TIPOGRAFIA */
 body {
   font-family: "Inter", Arial, sans-serif;
-  color: #333;
-  background: #f8f9fb;
-  line-height: 1.6;
+  background: #0f1020;
+  color: #e5e5e5;
+  overflow-x: hidden;
 }
 
-img {
-  max-width: 100%;
-  display: block;
+h1, h2, h3 {
+  font-weight: 600;
 }
 
-/* ------------------------------------------
-   CONTAINERS
-------------------------------------------- */
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: auto;
+/* HEADER FIXO */
+.header {
+  position: fixed;
+  width: 100%;
+  background: rgba(10, 12, 28, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 15px 0;
+  z-index: 1000;
 }
 
-/* ------------------------------------------
-   HERO
-------------------------------------------- */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-nav a {
+  margin-left: 25px;
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.header-nav a:hover {
+  color: #4ea1ff;
+}
+
+.btn-header {
+  background: #4ea1ff;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+/* HERO */
 .hero {
-  background: linear-gradient(to bottom right, #1b2a4e, #243b6b);
-  color: white;
-  padding: 120px 20px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #131533, #0c0d1a);
   text-align: center;
-}
-
-.hero .logo {
-  width: 120px;
-  margin-bottom: 20px;
+  padding-top: 80px;
 }
 
 .hero h1 {
-  font-size: 2.8rem;
-  font-weight: 600;
-  margin-bottom: 15px;
+  font-size: 3rem;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  font-size: 1.2rem;
-  max-width: 750px;
-  margin: auto;
-  opacity: 0.9;
-  margin-bottom: 25px;
+  font-size: 1.3rem;
+  opacity: 0.8;
 }
 
 .btn-primary {
+  display: inline-block;
+  margin-top: 20px;
   background: #4ea1ff;
-  color: #fff;
   padding: 14px 28px;
-  border-radius: 6px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  color: #fff;
   text-decoration: none;
+  font-size: 1.1rem;
   transition: 0.3s;
 }
 
@@ -71,195 +88,82 @@ img {
   background: #1f7de0;
 }
 
-/* ------------------------------------------
-   SEÇÕES BASE
-------------------------------------------- */
-section {
-  padding: 80px 0;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #1b2a4e;
-  text-align: center;
-}
-
-h3 {
-  color: #243b6b;
-  margin-bottom: 10px;
-}
-
-/* ------------------------------------------
-   SOBRE
-------------------------------------------- */
-.sobre p {
-  max-width: 900px;
-  margin: 15px auto;
-  text-align: center;
-}
-
-.institucional {
-  margin-top: 40px;
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.institucional div {
-  background: white;
+/* CARDS */
+.card, .produto, .item, .depoimento {
+  background: #16172b;
   padding: 25px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: center;
+  border-radius: 12px;
+  border: 1px solid #26273c;
+  transition: transform .3s, box-shadow .3s;
 }
 
-.institucional ul {
-  list-style: none;
-  padding: 0;
+.card:hover, .produto:hover, .item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
-.institucional li {
-  margin: 8px 0;
-}
-
-/* ------------------------------------------
-   SERVIÇOS / PRODUTOS
-------------------------------------------- */
-.grid-produtos {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-}
-
-.produto {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: 0.3s;
-}
-
-.produto:hover {
-  transform: translateY(-5px);
-}
-
-.produto h3 {
-  margin: 15px 0 10px;
-  font-size: 1.3rem;
-}
-
-/* ------------------------------------------
-   DIFERENCIAIS
-------------------------------------------- */
-.grid-diferenciais {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-}
-
-.item {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: 0.3s;
-}
-
-.item:hover {
-  transform: translateY(-5px);
-}
-
-/* ------------------------------------------
-   DEPOIMENTOS
-------------------------------------------- */
+/* GRID */
+.grid-produtos,
+.grid-diferenciais,
 .grid-depoimentos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
   margin-top: 40px;
 }
 
-.depoimento {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-style: italic;
+.grid-produtos {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
-.depoimento span {
-  display: block;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  text-align: right;
-  color: #243b6b;
-}
-
-/* ------------------------------------------
-   CONTATO
-------------------------------------------- */
-.contato {
-  text-align: center;
-}
-
+/* CONTATO */
 .btn-whatsapp {
-  display: inline-block;
-  background: #26d366;
-  color: white;
+  background: #25d366;
   padding: 14px 28px;
-  border-radius: 6px;
-  font-size: 1.1rem;
+  border-radius: 8px;
   text-decoration: none;
-  transition: 0.3s;
-  margin-top: 15px;
+  color: white;
+  font-size: 1.2rem;
+  transition: .3s;
 }
 
 .btn-whatsapp:hover {
-  background: #1caa52;
+  background: #1aaa53;
 }
 
-.email {
-  margin-top: 15px;
-  font-size: 1rem;
-}
-
-/* ------------------------------------------
-   FOOTER
-------------------------------------------- */
+/* FOOTER */
 .footer {
-  background: #1b2a4e;
-  color: white;
   text-align: center;
   padding: 25px;
+  background: #0a0b18;
   margin-top: 40px;
 }
 
 /* ------------------------------------------
-   RESPONSIVIDADE
+   ANIMAÇÕES DE APARECIMENTO (dinâmico)
 ------------------------------------------- */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  section {
-    padding: 60px 0;
-  }
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 1s ease-out;
 }
 
-@media (max-width: 480px) {
-  .hero {
-    padding: 80px 20px;
-  }
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* EFEITO STAGGER */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 1s cubic-bezier(.23,1,.32,1);
+}
+
+.fade-up.delay-1 { transition-delay: .2s; }
+.fade-up.delay-2 { transition-delay: .4s; }
+.fade-up.delay-3 { transition-delay: .6s; }
+
+.fade-up.show {
+  opacity: 1;
+  transform: translateY(0);
 }
