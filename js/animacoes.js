@@ -1,16 +1,25 @@
-// Animações de scroll
-const elementos = document.querySelectorAll('.fade-in, .fade-up');
+// Menu mobile toggle
+const btnMenu = document.getElementById('btn-menu');
+const nav = document.getElementById('nav');
 
-function animarScroll() {
-  const gatilho = window.innerHeight * 0.85;
+btnMenu.addEventListener('click', () => {
+  nav.classList.toggle('show');
+  btnMenu.classList.toggle('open');
+});
 
-  elementos.forEach(el => {
+// Simple scroll reveal
+const revealItems = document.querySelectorAll('.section, .produto, .item, .hero-card');
+
+function reveal() {
+  const trigger = window.innerHeight * 0.85;
+  revealItems.forEach(el => {
     const top = el.getBoundingClientRect().top;
-    if (top < gatilho) {
-      el.classList.add("show");
-    }
+    if (top < trigger) el.classList.add('visible');
   });
 }
 
-window.addEventListener("scroll", animarScroll);
-window.addEventListener("load", animarScroll);
+window.addEventListener('scroll', reveal);
+window.addEventListener('load', () => {
+  reveal();
+  document.getElementById('ano').textContent = new Date().getFullYear();
+});
