@@ -9,188 +9,135 @@
 
 <body>
 
+  <!-- HEADER FIXO -->
+  <header class="header">
+    <div class="container header-content">
+      <img src="images/logo.png" alt="Logo" class="header-logo" />
+      <nav class="header-nav">
+        <a href="#sobre">Sobre</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#contato" class="btn-header">Contato</a>
+      </nav>
+    </div>
+  </header>
+
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero fade-in">
     <div class="hero-content">
-      <img src="images/logo.png" alt="Logo QualiMentor" class="logo" />
-      <h1>Consultoria em Qualidade de Software</h1>
-      <p>
-        Especialistas em QA Manual, Automação de Testes e Formação de Times de Qualidade.
-        Elevamos o nível do seu produto e garantimos entregas seguras, eficientes e com alta performance.
+      <h1 class="fade-up">Qualidade que acelera seu produto</h1>
+      <p class="fade-up delay-1">
+        QA Manual • Automação • Squads de Qualidade • Treinamento Técnico
       </p>
-      <a href="#contato" class="btn-primary">Fale com um Especialista</a>
+      <a href="#contato" class="btn-primary fade-up delay-2">Fale com um Especialista</a>
     </div>
   </section>
 
   <!-- SOBRE -->
-  <section class="sobre">
+  <section class="sobre fade-in" id="sobre">
     <div class="container">
       <h2>Sobre a QualiMentor</h2>
-      <p>
-        A <strong>QualiMentor</strong> é uma consultoria focada em acelerar a maturidade de qualidade dentro das empresas.
-        Atuamos com equipes de <strong>QA Manual</strong>, <strong>Automação de Testes</strong> e
-        <strong>especialistas em treinamento e acompanhamento técnico</strong>.
-      </p>
-      <p>
-        Nosso objetivo é simples: garantir que o seu produto seja entregue com a mais alta confiabilidade, reduzindo riscos, prevenindo falhas e acelerando o ciclo de desenvolvimento.
+      <p class="fade-up">
+        A QualiMentor é uma consultoria especializada em elevar o nível de qualidade do seu software...
       </p>
 
       <div class="institucional">
-        <div class="missao">
+        <div class="card fade-up delay-1">
           <h3>Missão</h3>
-          <p>
-            Transformar equipes de tecnologia por meio da qualidade, reduzindo falhas em produção
-            e melhorando a experiência do usuário final.
-          </p>
+          <p>Transformar equipes através da qualidade.</p>
         </div>
-
-        <div class="visao">
+        <div class="card fade-up delay-2">
           <h3>Visão</h3>
-          <p>
-            Ser referência nacional em consultoria de Qualidade de Software, combinando tecnologia,
-            pessoas e processos para criar produtos robustos e de alta performance.
-          </p>
+          <p>Ser referência nacional em QA e Automação.</p>
         </div>
-
-        <div class="valores">
+        <div class="card fade-up delay-3">
           <h3>Valores</h3>
-          <ul>
-            <li>✔ Excelência técnica</li>
-            <li>✔ Ética e transparência</li>
-            <li>✔ Foco no cliente e em resultados</li>
-            <li>✔ Mentalidade de melhoria contínua</li>
-            <li>✔ Colaboração e comunicação clara</li>
-          </ul>
+          <p>Excelência • Ética • Melhoria Contínua</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- SERVIÇOS -->
-  <section class="servicos">
+  <section class="servicos fade-in" id="servicos">
     <div class="container">
       <h2>Nossos Serviços</h2>
-      <p>Oferecemos soluções completas em Qualidade de Software para empresas de todos os tamanhos e segmentos.</p>
 
       <div class="grid-produtos">
-
-        <div class="produto">
+        <div class="produto fade-up">
           <img src="images/qa-manual.jpg" alt="QA Manual" />
           <h3>QA Manual</h3>
-          <p>
-            Profissionais experientes para testes funcionais, exploratórios, regressão,
-            análise de requisitos e construção de casos de teste.
-          </p>
+          <p>Profissionais especializados...</p>
         </div>
 
-        <div class="produto">
-          <img src="images/automacao.jpg" alt="Automação de Testes" />
-          <h3>Automação de Testes</h3>
-          <p>
-            Frameworks modernos, pipelines otimizados e automação para Web, API e Mobile,
-            garantindo velocidade e repetibilidade nas entregas.
-          </p>
+        <div class="produto fade-up delay-1">
+          <img src="images/automacao.jpg" alt="Automação" />
+          <h3>Automação</h3>
+          <p>Testes Web, API e Mobile.</p>
         </div>
 
-        <div class="produto">
-          <img src="images/squad-qa.jpg" alt="Squad de Qualidade" />
+        <div class="produto fade-up delay-2">
+          <img src="images/squad-qa.jpg" alt="Squad" />
           <h3>Squads Dedicadas</h3>
-          <p>
-            Montamos e alocamos times completos de QA sob demanda,
-            com profissionais treinados e acompanhados de perto.
-          </p>
+          <p>Montamos equipes completas de QA.</p>
         </div>
 
-        <div class="produto">
-          <img src="images/treinamento.jpg" alt="Treinamento QA" />
-          <h3>Treinamento & Mentoria</h3>
-          <p>
-            Programas de capacitação contínua para sua equipe, melhorando processos,
-            práticas e mindset de qualidade dentro da empresa.
-          </p>
+        <div class="produto fade-up delay-3">
+          <img src="images/treinamento.jpg" alt="Treinamento" />
+          <h3>Treinamento</h3>
+          <p>Capacitação contínua para seu time.</p>
         </div>
-
       </div>
     </div>
   </section>
 
   <!-- DIFERENCIAIS -->
-  <section class="diferenciais">
+  <section class="diferenciais fade-in" id="diferenciais">
     <div class="container">
       <h2>Por que escolher a QualiMentor?</h2>
 
       <div class="grid-diferenciais">
-        <div class="item">
+        <div class="item fade-up">
           <h3>Especialistas Sêniores</h3>
-          <p>Profissionais com experiência real no mercado e histórico sólido em projetos complexos.</p>
+          <p>Profissionais altamente qualificados.</p>
         </div>
-
-        <div class="item">
+        <div class="item fade-up delay-1">
           <h3>Acompanhamento Contínuo</h3>
-          <p>Supervisão e monitoramento da performance dos QAs para garantir evolução técnica constante.</p>
+          <p>Supervisão e evolução técnica.</p>
         </div>
-
-        <div class="item">
+        <div class="item fade-up delay-2">
           <h3>Processos Otimizados</h3>
-          <p>Implementamos boas práticas de QA, pipelines, documentação e cultura de qualidade.</p>
+          <p>Boas práticas e pipelines.</p>
         </div>
-
-        <div class="item">
+        <div class="item fade-up delay-3">
           <h3>Resultados Reais</h3>
-          <p>Redução de bugs em produção, aceleração do desenvolvimento e melhora da experiência do usuário.</p>
+          <p>Menos bugs e entregas mais rápidas.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DEPOIMENTOS -->
-  <section class="depoimentos">
-    <div class="container">
-      <h2>Depoimentos de Clientes</h2>
-      <div class="grid-depoimentos">
-
-        <div class="depoimento">
-          <p>
-            “A QualiMentor transformou nosso processo de QA. A qualidade aumentou, os bugs reduziram e o time ganhou maturidade.”
-          </p>
-          <span>- Ana Ribeiro, Head de Tecnologia</span>
-        </div>
-
-        <div class="depoimento">
-          <p>
-            “Finalmente encontramos uma consultoria que não só entrega profissionais,
-            mas acompanha, treina e garante evolução real.”
-          </p>
-          <span>- Marcos Dias, CTO</span>
-        </div>
-
       </div>
     </div>
   </section>
 
   <!-- CONTATO -->
-  <section class="contato" id="contato">
+  <section class="contato fade-in" id="contato">
     <div class="container">
       <h2>Entre em Contato</h2>
-      <p>
-        Quer elevar o nível de qualidade do seu produto?
-        Fale com nossos especialistas e receba uma proposta personalizada.
-      </p>
+      <p>Fale com um especialista e receba uma proposta personalizada.</p>
 
-      <a href="https://wa.me/5511999999999" target="_blank" class="btn-whatsapp">
-        💬 Falar com a QualiMentor
+      <a href="https://wa.me/5511999999999" class="btn-whatsapp fade-up">
+        💬 Fale no WhatsApp
       </a>
 
-      <p class="email">
-        ou envie um e-mail para: <strong>contato@qualimentor.com.br</strong>
+      <p class="email fade-up delay-1">
+        ou mande um email para <strong>contato@qualimentor.com.br</strong>
       </p>
     </div>
   </section>
 
-  <!-- RODAPÉ -->
+  <!-- FOOTER -->
   <footer class="footer">
-    <p>&copy; 2025 QualiMentor Consultoria | Excelência em Qualidade de Software.</p>
+    <p>© 2025 QualiMentor. Consultoria em Qualidade de Software.</p>
   </footer>
 
+  <script src="js/animacoes.js"></script>
 </body>
 </html>
