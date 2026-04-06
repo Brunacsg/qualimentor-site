@@ -1,4 +1,4 @@
-const API_ORIGIN = 'https://qualimentor-site.up.railway.app';
+const API_ORIGIN = 'https://qualimentor-site.onrender.com';
 const MODULES = [
   'module-1',
   'module-2',
