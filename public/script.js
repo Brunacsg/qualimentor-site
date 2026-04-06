@@ -1,4 +1,4 @@
-const API_ORIGIN = '';
+const API_ORIGIN = 'https://qualimentor-site.vercel.app';
 const MODULES = [
   'module-1',
   'module-2',
