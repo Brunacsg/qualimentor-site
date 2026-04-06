@@ -432,10 +432,20 @@ main.dashboard-grid {
   .site-header {
     flex-direction: column;
     align-items: flex-start;
+    padding: 16px 16px 0;
   }
 
   .site-header nav {
     width: 100%;
+    justify-content: center;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .site-logo {
+    width: 36px;
   }
 }
 
@@ -797,16 +807,41 @@ main.dashboard-grid {
   }
 
   .hero-landing {
-    padding: 50px 24px;
+    padding: 40px 20px;
+  }
+
+  .hero-landing h1 {
+    font-size: 2rem;
+  }
+
+  .hero-landing p {
+    font-size: 1rem;
   }
 
   .landing-section {
-    padding: 50px 24px;
+    padding: 40px 20px;
+  }
+
+  .landing-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
   }
 
   .benefits-grid,
   .modules-preview,
   .highlights-list {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .site-header nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .site-header a,
+  .site-header button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
 }
