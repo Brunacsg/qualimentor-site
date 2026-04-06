@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Ferramentas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-5">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>05</span>
+        <div>
+          <h2>Ferramentas e Ecossistema</h2>
+          <p>Conheça as principais ferramentas usadas por QA.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Conhecer as ferramentas essenciais de QA</li>
+            <li>Entender o papel de cada ferramenta no fluxo de qualidade</li>
+            <li>Identificar integrações entre testes, rastreamento e CI/CD</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Mapeie quais ferramentas você usaria para um projeto com testes manuais, automação e gestão de defeitos.</p>
+        </div>
+
+        <h3>Gestão de testes (Test Management)</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>TestRail</h4>
+            <p>Completo para gestão de casos, execução e relatórios. Integra com Jira e ferramentas de CI.</p>
+          </div>
+          <div class="info-card">
+            <h4>Zephyr Scale</h4>
+            <p>Plugin para Jira. Gerencia casos, ciclos de teste e métricas diretamente no Jira.</p>
+          </div>
+          <div class="info-card">
+            <h4>Xray</h4>
+            <p>Poderoso para testes manuais e automatizados. Suporte a Gherkin e integrações.</p>
+          </div>
+          <div class="info-card">
+            <h4>qTest</h4>
+            <p>Plataforma completa com gestão de requisitos, testes e defeitos.</p>
+          </div>
+        </div>
+
+        <h3>Rastreamento de defeitos (Bug Tracking)</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Jira</h4>
+            <p>Padrão da indústria. Workflows customizáveis, integrações e automação.</p>
+          </div>
+          <div class="info-card">
+            <h4>Azure DevOps</h4>
+            <p>Solução Microsoft integrada com boards, repositórios e pipelines.</p>
+          </div>
+          <div class="info-card">
+            <h4>GitHub Issues</h4>
+            <p>Simples e integrado com repositórios. Bom para projetos open source.</p>
+          </div>
+          <div class="info-card">
+            <h4>MantisBT</h4>
+            <p>Open source, leve e customizável para equipes menores.</p>
+          </div>
+        </div>
+
+        <h3>Automação Web e UI</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Selenium WebDriver</h4>
+            <p>Padrão para automação web. Suporta Java, C#, Python, JavaScript.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cypress</h4>
+            <p>Rápido e confiável. JavaScript nativo, debugging integrado.</p>
+          </div>
+          <div class="info-card">
+            <h4>Playwright</h4>
+            <p>Multi-browser, auto-wait, suporte a APIs modernas.</p>
+          </div>
+          <div class="info-card">
+            <h4>TestCafe</h4>
+            <p>No setup necessário, suporta todos os browsers modernos.</p>
+          </div>
+        </div>
+
+        <h3>API Testing</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Postman</h4>
+            <p>Interface amigável, collections, environments, Newman para CI.</p>
+          </div>
+          <div class="info-card">
+            <h4>Insomnia</h4>
+            <p>Open source, design moderno, GraphQL support.</p>
+          </div>
+          <div class="info-card">
+            <h4>RestAssured</h4>
+            <p>Framework Java para testes de API automatizados.</p>
+          </div>
+          <div class="info-card">
+            <h4>SoapUI</h4>
+            <p>Especializado em SOAP e REST, data-driven testing.</p>
+          </div>
+        </div>
+
+        <h3>Performance e Load Testing</h3>
+        <ul>
+          <li><strong>JMeter:</strong> Open source, protocolos diversos, extensível.</li>
+          <li><strong>LoadRunner:</strong> Empresarial, protocolos proprietários.</li>
+          <li><strong>k6:</strong> Moderno, JavaScript, cloud-native.</li>
+          <li><strong>Gatling:</strong> Scala-based, alta performance.</li>
+          <li><strong>Locust:</strong> Python, distributed load testing.</li>
+        </ul>
+
+        <h3>Unit Testing Frameworks</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Java</h4>
+            <p>JUnit, TestNG, Spock</p>
+          </div>
+          <div class="info-card">
+            <h4>JavaScript</h4>
+            <p>Jest, Mocha, Jasmine, Vitest</p>
+          </div>
+          <div class="info-card">
+            <h4>Python</h4>
+            <p>PyTest, Unittest, Robot Framework</p>
+          </div>
+          <div class="info-card">
+            <h4>C#</h4>
+            <p>NUnit, xUnit, MSTest</p>
+          </div>
+        </div>
+
+        <h3>CI/CD e Integração</h3>
+        <ul>
+          <li><strong>Jenkins:</strong> Open source, extensível, pipeline as code.</li>
+          <li><strong>GitHub Actions:</strong> Integrado com GitHub, YAML.</li>
+          <li><strong>GitLab CI:</strong> Completo, integrado com GitLab.</li>
+          <li><strong>Azure Pipelines:</strong> Microsoft, integração com Azure DevOps.</li>
+          <li><strong>CircleCI:</strong> Cloud-native, configuração simples.</li>
+        </ul>
+
+        <h3>Exemplo prático: Usando Postman</h3>
+        <div class="resource-card">
+          <h4>Criando coleção de testes de API</h4>
+          <p><strong>1. Criar Collection:</strong> "API Usuários"</p>
+          <p><strong>2. Adicionar Request:</strong> POST /api/users</p>
+          <p><strong>3. Body (JSON):</strong></p>
+          <pre><code>{
+  "name": "João Silva",
+  "email": "joao@teste.com",
+  "password": "senha123"
+}</code></pre>
+          <p><strong>4. Tests (JavaScript):</strong></p>
+          <pre><code>pm.test("Status code is 201", function () {
+    pm.response.to.have.status(201);
+});
+
+pm.test("Response has user id", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property('id');
+});</code></pre>
+        </div>
+
+        <h3>Exemplo: Query SQL para testes de dados</h3>
+        <div class="resource-card">
+          <h4>Verificar integridade de dados</h4>
+          <pre><code>-- Verificar usuários duplicados
+SELECT email, COUNT(*) as count
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+-- Verificar pedidos sem usuário
+SELECT o.id, o.user_id
+FROM orders o
+LEFT JOIN users u ON o.user_id = u.id
+WHERE u.id IS NULL;
+
+-- Verificar produtos com preço inválido
+SELECT id, name, price
+FROM products
+WHERE price <= 0 OR price > 99999.99;</code></pre>
+        </div>
+
+        <h3>Exemplo: Configuração Jenkins Pipeline</h3>
+        <div class="resource-card">
+          <h4>Jenkinsfile para QA</h4>
+          <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Test') {
+            steps {
+                sh 'npm install'
+                sh 'npm run test:unit'
+                sh 'npm run test:e2e'
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                sh 'npm run security-scan'
+            }
+        }
+        stage('Performance Test') {
+            steps {
+                sh 'npm run performance-test'
+            }
+        }
+    }
+    post {
+        always {
+            publishTestResults()
+            sendNotifications()
+        }
+    }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

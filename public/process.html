@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Processo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-2">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>02</span>
+        <div>
+          <h2>Ciclo de Teste e Processos</h2>
+          <p>Entenda o fluxo completo do QA em um projeto.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Aprender o ciclo completo do STLC</li>
+            <li>Entender como métricas de qualidade são usadas para decisões</li>
+            <li>Reconhecer os principais artefatos de planejamento de QA</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Crie um mini-plano de teste para uma funcionalidade de carrinho de compras, incluindo objetivos, escopo e critérios de saída.</p>
+        </div>
+
+        <h3>Software Testing Life Cycle (STLC)</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>1. Planejamento</h4>
+            <p>Definir escopo, estratégia, recursos e cronograma.</p>
+          </div>
+          <div class="info-card">
+            <h4>2. Análise de Requisitos</h4>
+            <p>Revisar e validar requisitos, identificar riscos.</p>
+          </div>
+          <div class="info-card">
+            <h4>3. Design de Teste</h4>
+            <p>Criar casos de teste, cenários e dados de teste.</p>
+          </div>
+          <div class="info-card">
+            <h4>4. Configuração Ambiente</h4>
+            <p>Preparar ambientes de teste e ferramentas.</p>
+          </div>
+          <div class="info-card">
+            <h4>5. Execução</h4>
+            <p>Executar testes e registrar resultados.</p>
+          </div>
+          <div class="info-card">
+            <h4>6. Relatório</h4>
+            <p>Gerar relatórios e métricas de qualidade.</p>
+          </div>
+        </div>
+
+        <h3>Atividades importantes do QA</h3>
+        <ul>
+          <li><strong>Análise de requisitos:</strong> Garantir clareza e testabilidade.</li>
+          <li><strong>Definição de critérios de aceitação:</strong> O que define "pronto".</li>
+          <li><strong>Mapeamento de riscos:</strong> Identificar áreas críticas.</li>
+          <li><strong>Planejamento de ambientes:</strong> Test, staging, produção.</li>
+          <li><strong>Gestão de dados de teste:</strong> Dados realistas e diversos.</li>
+          <li><strong>Elaboração de relatórios:</strong> Métricas e dashboards.</li>
+        </ul>
+
+        <h3>Métricas de qualidade essenciais</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Taxa de Detecção</h4>
+            <p>Defeitos encontrados vs liberados para produção.</p>
+          </div>
+          <div class="info-card">
+            <h4>Tempo Médio de Resolução</h4>
+            <p>Quanto tempo leva para corrigir defeitos.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cobertura de Testes</h4>
+            <p>Porcentagem do código/funcionalidades testadas.</p>
+          </div>
+          <div class="info-card">
+            <h4>Defeitos por Severidade</h4>
+            <p>Classificação: Blocker, Critical, Major, Minor.</p>
+          </div>
+        </div>
+
+        <h3>Exemplo prático: Plano de Teste</h3>
+        <div class="resource-card">
+          <h4>Template de Plano de Teste</h4>
+          <p><strong>Objetivo:</strong> Validar funcionalidade de carrinho de compras</p>
+          <p><strong>Escopo:</strong> Adicionar/remover produtos, calcular total, aplicar cupons</p>
+          <p><strong>Critérios de entrada:</strong> Ambiente de teste configurado, dados de teste disponíveis</p>
+          <p><strong>Critérios de saída:</strong> Cobertura > 90%, taxa de defeitos < 5%</p>
+          <p><strong>Riscos:</strong> Integração com gateway de pagamento pode falhar</p>
+        </div>
+
+        <h3>Exemplo de métricas em ação</h3>
+        <div class="resource-card">
+          <h4>Relatório de Sprint</h4>
+          <p><strong>Casos executados:</strong> 45/50 (90%)</p>
+          <p><strong>Defeitos encontrados:</strong> 8 (4 blocker, 3 major, 1 minor)</p>
+          <p><strong>Taxa de detecção:</strong> 85% dos defeitos encontrados antes da produção</p>
+          <p><strong>Tempo médio de resolução:</strong> 2.3 dias para defeitos críticos</p>
+        </div>
+
+        <h3>Template de Relatório de Teste</h3>
+        <div class="resource-card">
+          <h4>Estrutura recomendada</h4>
+          <p><strong>Resumo Executivo:</strong> Status geral e recomendações</p>
+          <p><strong>Cobertura de Teste:</strong> Funcionalidades testadas vs total</p>
+          <p><strong>Defeitos por Severidade:</strong> Gráfico de distribuição</p>
+          <p><strong>Riscos Remanescentes:</strong> Itens não testados ou com ressalvas</p>
+          <p><strong>Recomendações:</strong> Próximos passos e melhorias</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

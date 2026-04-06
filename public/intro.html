@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Introdução</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-1">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>01</span>
+        <div>
+          <h2>Introdução ao QA</h2>
+          <p>Conhecimentos essenciais para qualquer profissional de Qualidade de Software.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Entender o papel do QA em projetos de software</li>
+            <li>Reconhecer a diferença entre prevenção e correção de defeitos</li>
+            <li>Identificar responsabilidades comuns de um analista de QA</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Liste 3 responsabilidades de QA para um aplicativo de e-commerce e crie um mini-plano para validar o fluxo de checkout.</p>
+        </div>
+
+        <h3>O papel do QA na engenharia de software</h3>
+        <p>O profissional de QA garante que o produto entregue seja confiável, funcional e esteja alinhado aos requisitos do cliente. QA não é apenas "quebrar" o software, mas prevenir problemas e melhorar processos.</p>
+
+        <h3>Por que QA existe?</h3>
+        <ul>
+          <li>Detectar defeitos antes da entrega ao cliente.</li>
+          <li>Reduzir riscos e retrabalho custoso.</li>
+          <li>Aumentar a confiança e satisfação do cliente.</li>
+          <li>Melhorar processos de desenvolvimento.</li>
+          <li>Garantir conformidade com padrões e regulamentações.</li>
+        </ul>
+
+        <h3>Princípios da qualidade de software</h3>
+        <div class=\"card-grid\">
+          <div class=\"info-card\">
+            <h4>Prevenção vs Correção</h4>
+            <p>É mais eficiente prevenir defeitos do que corrigi-los depois.</p>
+          </div>
+          <div class=\"info-card\">
+            <h4>Testes desde o início</h4>
+            <p>QA deve participar desde a concepção do projeto.</p>
+          </div>
+          <div class=\"info-card\">
+            <h4>Transparência</h4>
+            <p>Documentação clara e comunicação aberta são essenciais.</p>
+          </div>
+          <div class=\"info-card\">
+            <h4>Melhoria contínua</h4>
+            <p>Processos devem ser constantemente avaliados e aprimorados.</p>
+          </div>
+        </div>
+
+        <h3>Responsabilidades do QA</h3>
+        <ul>
+          <li>Revisar e validar requisitos funcionais e não-funcionais.</li>
+          <li>Criar estratégias e planos de teste abrangentes.</li>
+          <li>Desenvolver casos de teste e cenários de validação.</li>
+          <li>Executar testes manuais e automatizados.</li>
+          <li>Registrar, rastrear e acompanhar defeitos.</li>
+          <li>Gerar relatórios de qualidade e métricas.</li>
+          <li>Colaborar com equipes de desenvolvimento e produto.</li>
+          <li>Garantir conformidade com padrões de qualidade.</li>
+        </ul>
+
+        <h3>Exemplo prático: Dia a dia de um QA</h3>
+        <div class="resource-card">
+          <h4>Cenário: Lançamento de nova funcionalidade</h4>
+          <p><strong>Manhã:</strong> Revisar requisitos da nova feature de login social</p>
+          <p><strong>Tarde:</strong> Criar casos de teste para Facebook/Google OAuth</p>
+          <p><strong>Tarde:</strong> Executar testes manuais em diferentes browsers</p>
+          <p><strong>Final do dia:</strong> Reportar bug encontrado no fluxo de erro</p>
+        </div>
+
+        <h3>Exemplo de responsabilidade crítica</h3>
+        <div class="resource-card">
+          <h4>Antes do QA:</h4>
+          <p>Desenvolvedor implementa feature de pagamento sem validações</p>
+          <p><strong>QA intervém:</strong> Identifica vulnerabilidades de SQL injection</p>
+          <p><strong>Resultado:</strong> Evita vazamento de dados de 10.000 usuários</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

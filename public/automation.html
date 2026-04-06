@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Automação de Testes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-4">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>04</span>
+        <div>
+          <h2>Automação de Testes</h2>
+          <p>Quando e como automatizar corretamente.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Entender quando e por que automatizar testes</li>
+            <li>Conhecer abordagens e frameworks de automação</li>
+            <li>Aprender a separar testes manuais dos automatizados</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Escolha 2 casos manuais do módulo anterior e justifique por que eles devem ser automatizados.</p>
+
+        </div>
+
+        <h3>Por que automatizar testes?</h3>
+        <ul>
+          <li>Redução significativa de tempo em testes repetitivos e regressão.</li>
+          <li>Maior confiabilidade e consistência na execução.</li>
+          <li>Execução contínua em pipelines de CI/CD.</li>
+          <li>Validação rápida de integrações críticas.</li>
+          <li>Liberação de QA para testes exploratórios e de valor agregado.</li>
+          <li>Feedback mais rápido para desenvolvedores.</li>
+          <li>Redução de custos a longo prazo.</li>
+        </ul>
+
+        <h3>Quando NÃO automatizar</h3>
+        <ul>
+          <li>Testes que serão executados apenas uma vez.</li>
+          <li>Testes com requisitos voláteis e mudanças frequentes.</li>
+          <li>Testes exploratórios que dependem de criatividade humana.</li>
+          <li>Testes de usabilidade que envolvem opinião subjetiva.</li>
+          <li>Situações onde o custo de manutenção supera o benefício.</li>
+        </ul>
+
+        <h3>Abordagens de automação</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Unitários</h4>
+            <p>Testam pequenas unidades de código isoladamente. Frameworks: JUnit, NUnit, Jest, PyTest.</p>
+          </div>
+          <div class="info-card">
+            <h4>Integração</h4>
+            <p>Testam comunicação entre módulos ou serviços. Focam em APIs e bancos de dados.</p>
+          </div>
+          <div class="info-card">
+            <h4>API</h4>
+            <p>Validam endpoints, contratos e respostas. Ferramentas: Postman, RestAssured, Axios.</p>
+          </div>
+          <div class="info-card">
+            <h4>UI/E2E</h4>
+            <p>Simulam jornada completa do usuário. Frameworks: Selenium, Cypress, Playwright.</p>
+          </div>
+          <div class="info-card">
+            <h4>Performance</h4>
+            <p>Avaliam carga, stress e escalabilidade. Ferramentas: JMeter, LoadRunner, k6.</p>
+          </div>
+          <div class="info-card">
+            <h4>Contrato</h4>
+            <p>Validam contratos entre serviços. Frameworks: Pact, Spring Cloud Contract.</p>
+          </div>
+        </div>
+
+        <h3>Estratégia de automação</h3>
+        <ul>
+          <li><strong>Comece pequeno:</strong> Automatize testes críticos e repetitivos primeiro.</li>
+          <li><strong>Escolha ferramentas adequadas:</strong> Considere stack tecnológico e expertise da equipe.</li>
+          <li><strong>Mantenha código limpo:</strong> Aplique boas práticas de desenvolvimento.</li>
+          <li><strong>Page Objects/Modelos:</strong> Para testes UI, crie abstrações reutilizáveis.</li>
+          <li><strong>Dados de teste:</strong> Use fixtures, factories ou geração dinâmica.</li>
+          <li><strong>Relatórios:</strong> Integre com ferramentas de CI para dashboards.</li>
+        </ul>
+
+        <h3>Frameworks populares</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Selenium WebDriver</h4>
+            <p>Padrão para automação web. Suporta múltiplas linguagens.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cypress</h4>
+            <p>Rápido e confiável para aplicações modernas. JavaScript nativo.</p>
+          </div>
+          <div class="info-card">
+            <h4>Playwright</h4>
+            <p>Multi-browser, multi-contexto. Suporte nativo a APIs modernas.</p>
+          </div>
+          <div class="info-card">
+            <h4>Appium</h4>
+            <p>Automação mobile cross-platform para iOS e Android.</p>
+          </div>
+        </div>
+
+        <h3>Exemplo prático: Teste automatizado com Selenium</h3>
+        <div class="resource-card">
+          <h4>Teste de Login - Java + Selenium</h4>
+          <pre><code>// Exemplo de teste automatizado
+@Test
+public void testLoginValido() {
+    driver.get("https://minhaapp.com/login");
+
+    WebElement emailField = driver.findElement(By.id("email"));
+    WebElement passwordField = driver.findElement(By.id("password"));
+    WebElement loginButton = driver.findElement(By.id("login-btn"));
+
+    emailField.sendKeys("usuario@teste.com");
+    passwordField.sendKeys("senha123");
+    loginButton.click();
+
+    WebElement dashboard = wait.until(ExpectedConditions
+        .visibilityOfElementLocated(By.className("dashboard")));
+    Assert.assertTrue(dashboard.isDisplayed());
+}</code></pre>
+        </div>
+
+        <h3>Exemplo: Page Object Model</h3>
+        <div class="resource-card">
+          <h4>LoginPage.java</h4>
+          <pre><code>public class LoginPage {
+    private WebDriver driver;
+
+    @FindBy(id = "email")
+    private WebElement emailField;
+
+    @FindBy(id = "password")
+    private WebElement passwordField;
+
+    @FindBy(id = "login-btn")
+    private WebElement loginButton;
+
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+    public DashboardPage login(String email, String password) {
+        emailField.sendKeys(email);
+        passwordField.sendKeys(password);
+        loginButton.click();
+        return new DashboardPage(driver);
+    }
+}</code></pre>
+        </div>
+
+        <h3>Exemplo: Teste de API com RestAssured</h3>
+        <div class="resource-card">
+          <h4>Teste de API - Java</h4>
+          <pre><code>@Test
+public void testGetUser() {
+    given()
+        .header("Authorization", "Bearer " + token)
+        .when()
+        .get("/api/users/123")
+        .then()
+        .statusCode(200)
+        .body("name", equalTo("João Silva"))
+        .body("email", equalTo("joao@teste.com"));
+}</code></pre>
+        </div>
+
+        <h3>Exemplo: Teste de Performance com JMeter</h3>
+        <div class="resource-card">
+          <h4>Script JMeter - Cenário de Load</h4>
+          <p><strong>Thread Group:</strong> 100 usuários, ramp-up 10s</p>
+          <p><strong>HTTP Request:</strong> POST /api/login</p>
+          <p><strong>JSON Body:</strong> {"email":"user@test.com","password":"pass"}</p>
+          <p><strong>Assertions:</strong> Response Code 200, Response Time < 2000ms</p>
+          <p><strong>Resultados esperados:</strong> Throughput > 50 req/s, Error Rate < 1%</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Portal QA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="logo">Portal QA - Admin</div>
+    <nav>
+      <a href="admin.html" class="active">Compras</a>
+      <button class="logout-button" onclick="logoutAdmin()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid admin-dashboard">
+    <section class="content-section">
+      <div class="section-header">
+        <span>📋</span>
+        <div>
+          <h2>Gerenciar Compras</h2>
+          <p>Veja e aprove solicitações de compra do curso.</p>
+        </div>
+      </div>
+
+      <div class="section-body">
+        <div id="purchasesContainer" class="purchases-table-container">
+          <p style="text-align: center; color: var(--text-muted);">Carregando solicitações...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const ADMIN_SECRET = prompt('Digite a senha de administrador:');
+    if (!ADMIN_SECRET) {
+      alert('Acesso negado');
+      window.location.href = 'login.html';
+    }
+
+    async function fetchPurchases() {
+      try {
+        const res = await fetch('/purchase-requests', {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          renderPurchases(data.requests);
+        } else {
+          document.getElementById('purchasesContainer').innerHTML = 
+            `<p style="color: red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById('purchasesContainer').innerHTML = 
+          `<p style="color: red;">Erro ao carregar compras: ${err.message}</p>`;
+      }
+    }
+
+    function renderPurchases(requests) {
+      if (!requests || requests.length === 0) {
+        document.getElementById('purchasesContainer').innerHTML = 
+          '<p style="text-align: center; color: var(--text-muted);">Nenhuma solicitação de compra ainda.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="purchases-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Nome</th>
+              <th>Link de Pagamento</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      requests.forEach(req => {
+        const date = new Date(req.createdAt).toLocaleDateString('pt-BR');
+        const statusClass = req.status === 'approved' ? 'status-approved' : 'status-pending';
+        const statusText = req.status === 'approved' ? 'Aprovada' : 'Pendente';
+        const actionBtn = req.status === 'approved' 
+          ? '<span style="color: var(--text-muted);">Já aprovada</span>'
+          : `<button onclick="approveRequest(${req.id}, '${ADMIN_SECRET}')" class="approve-button">Aprovar</button>`;
+
+        html += `
+          <tr>
+            <td>${req.email}</td>
+            <td>${req.name || '-'}</td>
+            <td><code>${req.pixKey}</code></td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${date}</td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('purchasesContainer').innerHTML = html;
+    }
+
+    async function approveRequest(requestId, secret) {
+      if (!confirm('Tem certeza que deseja aprovar esta compra?')) return;
+
+      try {
+        const res = await fetch('/approve-purchase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-secret': secret
+          },
+          body: JSON.stringify({ requestId })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          alert('Compra aprovada! Email enviado ao cliente.');
+          fetchPurchases();
+        } else {
+          alert(`Erro: ${data.message}`);
+        }
+      } catch (err) {
+        alert(`Erro ao aprovar: ${err.message}`);
+      }
+    }
+
+    function logoutAdmin() {
+      window.location.href = 'login.html';
+    }
+
+    // Load on page load
+    window.addEventListener('DOMContentLoaded', fetchPurchases);
+  </script>
+
+  <style>
+    .admin-dashboard {
+      max-width: 1200px;
+    }
+
+    .purchases-table-container {
+      overflow-x: auto;
+    }
+
+    .purchases-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .purchases-table thead {
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .purchases-table th {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 2px solid rgba(148, 163, 184, 0.2);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .purchases-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .purchases-table tbody tr:hover {
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .purchases-table code {
+      background: rgba(148, 163, 184, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: rgba(234, 179, 8, 0.2);
+      color: #fbbf24;
+    }
+
+    .status-approved {
+      background: rgba(34, 197, 94, 0.2);
+      color: #a7f3d0;
+    }
+
+    .approve-button {
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s ease;
+    }
+
+    .approve-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</body>
+</html>

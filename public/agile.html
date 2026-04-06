@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Metodologias Ágeis</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-6">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>07</span>
+        <div>
+          <h2>Metodologias Ágeis</h2>
+          <p>Como QA se integra em processos ágeis e DevOps.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Aprender como QA se integra em times ágeis</li>
+            <li>Entender TDD, BDD e o papel de QA em DevOps</li>
+            <li>Praticar cerimônias ágeis e definição de pronto</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Escreva um exemplo de roteiro para um daily standup em que o QA apresenta bloqueios e metas de teste.</p>
+        </div>
+
+        <h3>Scrum para QA</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Daily Standup</h4>
+            <p>Relatar progresso, bloqueios e plano para o dia.</p>
+          </div>
+          <div class="info-card">
+            <h4>Sprint Planning</h4>
+            <p>Definir escopo de testes e estimar esforço.</p>
+          </div>
+          <div class="info-card">
+            <h4>Sprint Review</h4>
+            <p>Demonstrar qualidade do produto entregue.</p>
+          </div>
+          <div class="info-card">
+            <h4>Retrospective</h4>
+            <p>Melhorar processos de qualidade continuamente.</p>
+          </div>
+        </div>
+
+        <h3>TDD, BDD e ATDD</h3>
+        <ul>
+          <li><strong>TDD (Test Driven Development):</strong> Escreva testes antes do código. QA participa criando testes de aceitação.</li>
+          <li><strong>BDD (Behavior Driven Development):</strong> Cenários em linguagem natural. Gherkin para especificação executável.</li>
+          <li><strong>ATDD (Acceptance Test Driven Development):</strong> Testes de aceitação definem requisitos.</li>
+        </ul>
+
+        <h3>QA em DevOps</h3>
+        <ul>
+          <li><strong>Shift Left Testing:</strong> Testes desde o início do desenvolvimento.</li>
+          <li><strong>Continuous Testing:</strong> Testes automatizados em pipelines CI/CD.</li>
+          <li><strong>Infrastructure as Code:</strong> Testes de infraestrutura e configurações.</li>
+          <li><strong>Monitoring:</strong> Observabilidade e testes em produção.</li>
+        </ul>
+
+        <h3>Exemplo prático: Daily Standup</h3>
+        <div class="resource-card">
+          <h4>Formato de Daily Standup</h4>
+          <p><strong>João (Dev):</strong> "Ontem implementei o endpoint de login. Hoje vou trabalhar na validação. Sem bloqueios."</p>
+          <p><strong>Maria (QA):</strong> "Ontem testei a funcionalidade de cadastro. Hoje vou criar casos de teste para login. Bloqueada esperando deploy."</p>
+          <p><strong>Pedro (PO):</strong> "Ontem revisei requisitos. Hoje vou priorizar backlog. Sem bloqueios."</p>
+          <p><strong>Duração:</strong> 15 minutos máximo</p>
+        </div>
+
+        <h3>Exemplo: Definition of Done</h3>
+        <div class="resource-card">
+          <h4>DoD para User Story</h4>
+          <ul>
+            <li>Código implementado e revisado</li>
+            <li>Testes unitários criados (>80% cobertura)</li>
+            <li>Testes de integração passando</li>
+            <li>QA manual executado sem defeitos críticos</li>
+            <li>Documentação atualizada</li>
+            <li>Aprovado pelo Product Owner</li>
+            <li>Deployed em staging sem erros</li>
+          </ul>
+        </div>
+
+        <h3>Exemplo: BDD com Gherkin</h3>
+        <div class="resource-card">
+          <h4>User Story em Gherkin</h4>
+          <pre><code>Feature: Login de usuário
+  Como usuário registrado
+  Quero fazer login no sistema
+  Para acessar minhas informações
+
+  Scenario: Login com credenciais válidas
+    Given que estou na página de login
+    When preencho email "usuario@teste.com"
+    And preencho senha "senha123"
+    And clico em "Entrar"
+    Then devo ver o dashboard
+    And devo estar logado no sistema
+
+  Scenario: Login com senha inválida
+    Given que estou na página de login
+    When preencho email válido
+    And preencho senha incorreta
+    And clico em "Entrar"
+    Then devo ver mensagem "Senha inválida"</code></pre>
+        </div>
+
+        <h3>Exemplo: Three Amigos</h3>
+        <div class="resource-card">
+          <h4>Reunião Three Amigos</h4>
+          <p><strong>Product Owner:</strong> "Esta feature precisa validar CPF e permitir apenas maiores de 18 anos"</p>
+          <p><strong>Developer:</strong> "Vou implementar validação no frontend e backend. Preciso de API de validação de CPF"</p>
+          <p><strong>QA:</strong> "Vou testar casos válidos/inválidos de CPF, idade, mensagens de erro. Preciso de dados de teste"</p>
+          <p><strong>Resultado:</strong> Requisitos clarificados, riscos identificados, plano de teste definido</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

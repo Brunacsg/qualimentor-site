@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Segurança</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-7">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>08</span>
+        <div>
+          <h2>Testes de Segurança</h2>
+          <p>Protegendo aplicações contra vulnerabilidades e ataques.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Entender vulnerabilidades comuns em aplicações web</li>
+            <li>Aprender a usar ferramentas de segurança para QA</li>
+            <li>Praticar análise e documentação de riscos</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Escolha 2 itens do OWASP Top 10 e descreva como você testaria cada um em um aplicativo de cadastro.</p>
+        </div>
+
+        <h3>OWASP Top 10</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Injection</h4>
+            <p>SQL Injection, Command Injection, LDAP Injection.</p>
+          </div>
+          <div class="info-card">
+            <h4>Broken Authentication</h4>
+            <p>Sessões fracas, credential stuffing, session fixation.</p>
+          </div>
+          <div class="info-card">
+            <h4>Sensitive Data Exposure</h4>
+            <p>Dados não criptografados, weak encryption.</p>
+          </div>
+          <div class="info-card">
+            <h4>XML External Entities</h4>
+            <p>XXE attacks em parsers XML.</p>
+          </div>
+          <div class="info-card">
+            <h4>Broken Access Control</h4>
+            <p>IDOR, privilege escalation, insecure direct object references.</p>
+          </div>
+          <div class="info-card">
+            <h4>Security Misconfiguration</h4>
+            <p>Configurações padrão, headers inseguros, verbose errors.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cross-Site Scripting</h4>
+            <p>XSS reflected, stored, DOM-based.</p>
+          </div>
+          <div class="info-card">
+            <h4>Insecure Deserialization</h4>
+            <p>Object injection, remote code execution.</p>
+          </div>
+          <div class="info-card">
+            <h4>Vulnerable Components</h4>
+            <p>Libraries desatualizadas com vulnerabilidades conhecidas.</p>
+          </div>
+          <div class="info-card">
+            <h4>Insufficient Logging</h4>
+            <p>Falta de logs para detecção de ataques.</p>
+          </div>
+        </div>
+
+        <h3>Ferramentas de segurança</h3>
+        <ul>
+          <li><strong>Burp Suite:</strong> Web vulnerability scanner e proxy.</li>
+          <li><strong>OWASP ZAP:</strong> Open source web app scanner.</li>
+          <li><strong>Nessus:</strong> Vulnerability scanner comercial.</li>
+          <li><strong>SQLMap:</strong> Automated SQL injection tool.</li>
+          <li><strong>Nmap:</strong> Network discovery and security auditing.</li>
+          <li><strong>Wireshark:</strong> Network protocol analyzer.</li>
+        </ul>
+
+        <h3>Testes de segurança comuns</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Penetration Testing</h4>
+            <p>Simulação de ataques reais ao sistema.</p>
+          </div>
+          <div class="info-card">
+            <h4>Security Code Review</h4>
+            <p>Análise estática do código fonte.</p>
+          </div>
+          <div class="info-card">
+            <h4>Vulnerability Assessment</h4>
+            <p>Identificação de vulnerabilidades conhecidas.</p>
+          </div>
+          <div class="info-card">
+            <h4>Compliance Testing</h4>
+            <p>Verificação contra padrões (GDPR, PCI DSS, etc.).</p>
+          </div>
+        </div>
+
+        <h3>Exemplo prático: SQL Injection</h3>
+        <div class="resource-card">
+          <h4>Ataque SQL Injection</h4>
+          <p><strong>Input malicioso:</strong> ' OR '1'='1</p>
+          <p><strong>Query original:</strong> SELECT * FROM users WHERE email = '$email' AND password = '$password'</p>
+          <p><strong>Query resultante:</strong> SELECT * FROM users WHERE email = '' OR '1'='1' AND password = ''</p>
+          <p><strong>Resultado:</strong> Login sem credenciais válidas</p>
+          <p><strong>Prevenção:</strong> Usar prepared statements ou ORMs</p>
+        </div>
+
+        <h3>Exemplo: XSS Attack</h3>
+        <div class="resource-card">
+          <h4>Cross-Site Scripting</h4>
+          <p><strong>Input malicioso:</strong> &lt;script&gt;alert('XSS')&lt;/script&gt;</p>
+          <p><strong>Resultado:</strong> Script executado no browser do usuário</p>
+          <p><strong>Teste:</strong> Inserir payloads em campos de input e verificar se são executados</p>
+          <p><strong>Prevenção:</strong> Sanitizar inputs, usar Content Security Policy (CSP)</p>
+        </div>
+
+        <h3>Exemplo: Teste com OWASP ZAP</h3>
+        <div class="resource-card">
+          <h4>Automated Scan com ZAP</h4>
+          <p><strong>1. Configurar contexto:</strong> Definir URLs da aplicação</p>
+          <p><strong>2. Spider:</strong> Mapear todas as páginas e endpoints</p>
+          <p><strong>3. Active Scan:</strong> Executar ataques automatizados</p>
+          <p><strong>4. Relatório:</strong> Vulnerabilidades encontradas por severidade</p>
+          <p><strong>Exemplo de alerta:</strong> SQL Injection em /api/users?id=1'</p>
+        </div>
+
+        <h3>Exemplo: Penetration Test Checklist</h3>
+        <div class="resource-card">
+          <h4>Checklist de Pentest</h4>
+          <ul>
+            <li>✅ Reconhecimento (nmap, dns enumeration)</li>
+            <li>✅ Scanning (port scanning, service detection)</li>
+            <li>✅ Gaining Access (exploit vulnerabilities)</li>
+            <li>✅ Maintaining Access (backdoors, persistence)</li>
+            <li>✅ Covering Tracks (log cleaning)</li>
+            <li>✅ Reporting (findings, risks, recommendations)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

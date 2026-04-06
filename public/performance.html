@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Performance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-8">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>09</span>
+        <div>
+          <h2>Testes de Performance</h2>
+          <p>Avaliando velocidade, escalabilidade e confiabilidade.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Compreender os diferentes tipos de teste de performance</li>
+            <li>Aprender métricas importantes e como interpretá-las</li>
+            <li>Conhecer ferramentas e estratégias de otimização</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Desenhe um plano de load test para uma API de busca, incluindo métricas chave e thresholds aceitos.</p>
+        </div>
+
+        <h3>Tipos de teste de performance</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Load Testing</h4>
+            <p>Avalia comportamento sob carga esperada normal.</p>
+          </div>
+          <div class="info-card">
+            <h4>Stress Testing</h4>
+            <p>Testa limites do sistema sob carga extrema.</p>
+          </div>
+          <div class="info-card">
+            <h4>Spike Testing</h4>
+            <p>Simula picos repentinos de carga.</p>
+          </div>
+          <div class="info-card">
+            <h4>Volume Testing</h4>
+            <p>Testa com grandes volumes de dados.</p>
+          </div>
+          <div class="info-card">
+            <h4>Endurance Testing</h4>
+            <p>Testa estabilidade por longos períodos.</p>
+          </div>
+          <div class="info-card">
+            <h4>Scalability Testing</h4>
+            <p>Avalia capacidade de escalar recursos.</p>
+          </div>
+        </div>
+
+        <h3>Exemplo prático: Load Test com JMeter</h3>
+        <div class="resource-card">
+          <h4>Script JMeter para API Load Test</h4>
+          <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1"&gt;
+  &lt;hashTree&gt;
+    &lt;TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="API Load Test" enabled="true"&gt;
+      &lt;elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true"&gt;
+        &lt;collectionProp name="Arguments.arguments"/&gt;
+      &lt;/elementProp&gt;
+    &lt;/TestPlan&gt;
+    &lt;hashTree&gt;
+      &lt;ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Users" enabled="true"&gt;
+        &lt;stringProp name="ThreadGroup.on_sample_error"&gt;continue&lt;/stringProp&gt;
+        &lt;elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControllerGui" testclass="LoopController" testname="Loop Controller" enabled="true"&gt;
+          &lt;boolProp name="LoopController.continue_forever"&gt;false&lt;/boolProp&gt;
+          &lt;intProp name="LoopController.loops"&gt;1&lt;/intProp&gt;
+        &lt;/elementProp&gt;
+        &lt;stringProp name="ThreadGroup.num_threads"&gt;100&lt;/stringProp&gt;
+        &lt;stringProp name="ThreadGroup.ramp_time"&gt;10&lt;/stringProp&gt;
+        &lt;longProp name="ThreadGroup.start_time"&gt;1&lt;/longProp&gt;
+        &lt;longProp name="ThreadGroup.end_time"&gt;1&lt;/longProp&gt;
+        &lt;boolProp name="ThreadGroup.scheduler"&gt;false&lt;/boolProp&gt;
+        &lt;stringProp name="ThreadGroup.duration"&gt;&lt;/stringProp&gt;
+        &lt;stringProp name="ThreadGroup.delay"&gt;&lt;/stringProp&gt;
+      &lt;/ThreadGroup&gt;
+      &lt;hashTree&gt;
+        &lt;HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /api/users" enabled="true"&gt;
+          &lt;elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true"&gt;
+            &lt;collectionProp name="Arguments.arguments"/&gt;
+          &lt;/elementProp&gt;
+          &lt;stringProp name="HTTPSampler.domain"&gt;api.example.com&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.port"&gt;443&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.protocol"&gt;https&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.contentEncoding"&gt;&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.path"&gt;/api/users&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.method"&gt;GET&lt;/stringProp&gt;
+          &lt;boolProp name="HTTPSampler.follow_redirects"&gt;true&lt;/boolProp&gt;
+          &lt;boolProp name="HTTPSampler.auto_redirects"&gt;false&lt;/boolProp&gt;
+          &lt;boolProp name="HTTPSampler.use_keepalive"&gt;true&lt;/boolProp&gt;
+          &lt;boolProp name="HTTPSampler.DO_MULTIPART_POST"&gt;false&lt;/boolProp&gt;
+          &lt;stringProp name="HTTPSampler.embedded_url_re"&gt;&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.connect_timeout"&gt;&lt;/stringProp&gt;
+          &lt;stringProp name="HTTPSampler.response_timeout"&gt;&lt;/stringProp&gt;
+        &lt;/HTTPSamplerProxy&gt;
+        &lt;hashTree/&gt;
+      &lt;/hashTree&gt;
+    &lt;/hashTree&gt;
+  &lt;/hashTree&gt;
+&lt;/jmeterTestPlan&gt;</code></pre>
+          <p><strong>Configuração:</strong> 100 usuários simultâneos, ramp-up de 10 segundos</p>
+          <p><strong>Objetivo:</strong> Testar performance da API sob carga</p>
+        </div>
+
+        <h3>Exemplo: Interpretação de Resultados</h3>
+        <div class="resource-card">
+          <h4>Análise de Load Test Results</h4>
+          <table class="metrics-table">
+            <tr><th>Métrica</th><th>Valor</th><th>Status</th></tr>
+            <tr><td>Response Time (avg)</td><td>245ms</td><td>✅ Bom</td></tr>
+            <tr><td>Throughput</td><td>450 req/sec</td><td>✅ Excelente</td></tr>
+            <tr><td>Error Rate</td><td>0.5%</td><td>⚠️ Aceitável</td></tr>
+            <tr><td>CPU Usage</td><td>75%</td><td>⚠️ Monitorar</td></tr>
+            <tr><td>Memory Usage</td><td>85%</td><td>❌ Alto</td></tr>
+          </table>
+          <p><strong>Conclusão:</strong> Sistema performa bem sob carga, mas precisa de otimização de memória</p>
+        </div>
+
+        <h3>Exemplo: Stress Test Scenario</h3>
+        <div class="resource-card">
+          <h4>Teste de Estresse com k6</h4>
+          <pre><code>import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export let options = {
+  stages: [
+    { duration: '2m', target: 100 }, // Ramp up to 100 users
+    { duration: '5m', target: 100 }, // Stay at 100 users
+    { duration: '2m', target: 200 }, // Ramp up to 200 users
+    { duration: '5m', target: 200 }, // Stay at 200 users
+    { duration: '2m', target: 0 },   // Ramp down to 0 users
+  ],
+};
+
+export default function () {
+  let response = http.get('https://api.example.com/users');
+  check(response, { 'status is 200': (r) => r.status === 200 });
+  sleep(1);
+}</code></pre>
+          <p><strong>Objetivo:</strong> Encontrar o ponto de quebra do sistema</p>
+          <p><strong>Métricas críticas:</strong> Response time degradation, error rate increase</p>
+        </div>
+
+        <h3>Exemplo: Monitoramento em Produção</h3>
+        <div class="resource-card">
+          <h4>Dashboard Grafana com Prometheus</h4>
+          <ul>
+            <li><strong>Response Time:</strong> P95 = 500ms (threshold: 1000ms)</li>
+            <li><strong>Error Rate:</strong> 0.1% (threshold: 1%)</li>
+            <li><strong>Throughput:</strong> 1000 req/min (baseline: 800 req/min)</li>
+            <li><strong>Resource Usage:</strong> CPU 60%, Memory 70%</li>
+            <li><strong>Database Connections:</strong> 45/100 (threshold: 80)</li>
+          </ul>
+          <p><strong>Alertas configurados:</strong> Quando métricas ultrapassam thresholds</p>
+        </div>
+
+        <h3>Ferramentas de performance</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>JMeter</h4>
+            <p>Open source, protocolos diversos, relatórios detalhados.</p>
+          </div>
+          <div class="info-card">
+            <h4>LoadRunner</h4>
+            <p>Comercial, enterprise-grade, suporte a protocolos proprietários.</p>
+          </div>
+          <div class="info-card">
+            <h4>k6</h4>
+            <p>Moderno, JavaScript, cloud-native, fácil integração CI/CD.</p>
+          </div>
+          <div class="info-card">
+            <h4>Gatling</h4>
+            <p>Scala-based, alta performance, DSL expressivo.</p>
+          </div>
+        </div>
+
+        <h3>Monitoramento em produção</h3>
+        <ul>
+          <li><strong>Application Performance Monitoring (APM):</strong> New Relic, DataDog, Dynatrace.</li>
+          <li><strong>Infrastructure Monitoring:</strong> Prometheus, Grafana, Nagios.</li>
+          <li><strong>Real User Monitoring (RUM):</strong> Google Analytics, Pingdom.</li>
+          <li><strong>Log Analysis:</strong> ELK Stack, Splunk.</li>
+        </ul>
+
+        <h3>Otimização de performance</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Frontend</h4>
+            <p>Minificação, compressão, CDN, lazy loading, caching.</p>
+          </div>
+          <div class="info-card">
+            <h4>Backend</h4>
+            <p>Database optimization, connection pooling, async processing.</p>
+          </div>
+          <div class="info-card">
+            <h4>Infrastructure</h4>
+            <p>Load balancing, auto-scaling, caching layers (Redis, Memcached).</p>
+          </div>
+          <div class="info-card">
+            <h4>Database</h4>
+            <p>Indexing, query optimization, read replicas, sharding.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

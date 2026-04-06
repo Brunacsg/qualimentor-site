@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Testes Manuais</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="content" data-module="module-3">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="agile.html">Ágeis</a>
+      <a href="security.html">Segurança</a>
+      <a href="performance.html">Performance</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="content-section">
+      <div class="section-header">
+        <span>03</span>
+        <div>
+          <h2>Testes Manuais</h2>
+          <p>Como planejar e executar testes sem automação.</p>
+        </div>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-summary">
+          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+        </div>
+        <div class="progress-actions">
+          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Objetivos deste módulo</h4>
+          <ul>
+            <li>Identificar os principais tipos de teste manual</li>
+            <li>Aprender a escrever casos de teste claros</li>
+            <li>Praticar a documentação de defeitos e relatórios</li>
+          </ul>
+        </div>
+        <div class="resource-card">
+          <h4>Atividade prática</h4>
+          <p>Escreva 3 casos de teste para o fluxo de cadastro de usuário e descreva 2 defeitos que você esperaria encontrar.</p>
+        </div>
+
+        <h3>Tipos de teste manual</h3>
+        <div class="card-grid">
+          <div class="info-card">
+            <h4>Funcionais</h4>
+            <p>Validam se o sistema faz o que deve fazer conforme requisitos.</p>
+          </div>
+          <div class="info-card">
+            <h4>Não-Funcionais</h4>
+            <p>Performance, usabilidade, segurança, compatibilidade.</p>
+          </div>
+          <div class="info-card">
+            <h4>Regressão</h4>
+            <p>Reverifica funcionalidades após mudanças no código.</p>
+          </div>
+          <div class="info-card">
+            <h4>Aceitação</h4>
+            <p>Confere se o produto atende aos critérios de negócio.</p>
+          </div>
+          <div class="info-card">
+            <h4>Exploratórios</h4>
+            <p>Testes livres para descobrir comportamentos inesperados.</p>
+          </div>
+          <div class="info-card">
+            <h4>Usabilidade</h4>
+            <p>Avalia a experiência do usuário e facilidade de uso.</p>
+          </div>
+          <div class="info-card">
+            <h4>Compatibilidade</h4>
+            <p>Testa em diferentes browsers, dispositivos e sistemas.</p>
+          </div>
+          <div class="info-card">
+            <h4>Localização</h4>
+            <p>Verifica adaptação para diferentes idiomas e culturas.</p>
+          </div>
+        </div>
+
+        <h3>Como escrever um caso de teste eficaz</h3>
+        <div class="resource-card">
+          <h4>Estrutura recomendada</h4>
+          <p><strong>ID:</strong> Identificador único</p>
+          <p><strong>Título:</strong> Descrição concisa do que será testado</p>
+          <p><strong>Objetivo:</strong> O que o teste visa validar</p>
+          <p><strong>Pré-condições:</strong> Estado necessário antes do teste</p>
+          <p><strong>Passos:</strong> Sequência clara e objetiva de ações</p>
+          <p><strong>Dados de entrada:</strong> Valores específicos a serem usados</p>
+          <p><strong>Resultado esperado:</strong> Comportamento correto</p>
+          <p><strong>Pós-condições:</strong> Estado após o teste</p>
+        </div>
+
+        <h3>Técnicas de teste</h3>
+        <ul>
+          <li><strong>Caixa Preta:</strong> Testa sem conhecer o código interno.</li>
+          <li><strong>Caixa Branca:</strong> Testa conhecendo a estrutura do código.</li>
+          <li><strong>Caixa Cinza:</strong> Combinação dos dois anteriores.</li>
+          <li><strong>Particionamento por Equivalência:</strong> Divide entradas em classes válidas/inválidas.</li>
+          <li><strong>Análise de Valor Limite:</strong> Testa valores nos limites das classes.</li>
+          <li><strong>Tabela de Decisão:</strong> Testa combinações de condições.</li>
+        </ul>
+
+        <h3>Boas práticas para testes manuais</h3>
+        <ul>
+          <li>Escreva casos de teste claros e reprodutíveis.</li>
+          <li>Use linguagem objetiva, evite ambiguidades.</li>
+          <li>Priorize cenários críticos e de alto risco.</li>
+          <li>Mantenha casos de teste atualizados com mudanças.</li>
+          <li>Documente evidências e screenshots quando necessário.</li>
+          <li>Execute testes em ambientes controlados.</li>
+          <li>Registre defeitos com detalhes suficientes para reprodução.</li>
+        </ul>
+
+        <h3>Exemplo prático: Caso de teste completo</h3>
+        <div class="resource-card">
+          <h4>Caso de Teste: Login de usuário</h4>
+          <p><strong>ID:</strong> TC_LOGIN_001</p>
+          <p><strong>Título:</strong> Login com credenciais válidas</p>
+          <p><strong>Objetivo:</strong> Verificar se usuário consegue fazer login com email e senha corretos</p>
+          <p><strong>Pré-condições:</strong> Usuário cadastrado no sistema</p>
+          <p><strong>Passos:</strong></p>
+          <ol>
+            <li>Acessar página de login</li>
+            <li>Inserir email válido no campo "Email"</li>
+            <li>Inserir senha correta no campo "Senha"</li>
+            <li>Clicar no botão "Entrar"</li>
+          </ol>
+          <p><strong>Resultado esperado:</strong> Usuário redirecionado para dashboard, sessão iniciada</p>
+        </div>
+
+        <h3>Exemplo de bug report</h3>
+        <div class="resource-card">
+          <h4>Template de Bug Report</h4>
+          <p><strong>Título:</strong> [BUG] Botão "Salvar" não funciona no Firefox 95</p>
+          <p><strong>Severidade:</strong> Major</p>
+          <p><strong>Descrição:</strong> Ao clicar em "Salvar perfil", nada acontece e nenhum erro é exibido</p>
+          <p><strong>Passos para reproduzir:</strong></p>
+          <ol>
+            <li>Fazer login no sistema</li>
+            <li>Acessar "Meu Perfil"</li>
+            <li>Alterar nome e clicar "Salvar"</li>
+          </ol>
+          <p><strong>Resultado esperado:</strong> Dados salvos e mensagem de sucesso</p>
+          <p><strong>Resultado atual:</strong> Nada acontece</p>
+          <p><strong>Ambiente:</strong> Firefox 95.0, Windows 11, URL: /profile</p>
+          <p><strong>Evidências:</strong> Screenshot anexado, console mostra erro JS</p>
+        </div>
+
+        <h3>Exemplo de teste exploratório</h3>
+        <div class="resource-card">
+          <h4>Sessão de Teste Exploratório</h4>
+          <p><strong>Charter:</strong> Explorar funcionalidade de busca com diferentes tipos de dados</p>
+          <p><strong>Duração:</strong> 45 minutos</p>
+          <p><strong>Notas:</strong></p>
+          <ul>
+            <li>Busca por nome funciona bem</li>
+            <li>Busca por email diferencia maiúsculas/minúsculas (problema?)</li>
+            <li>Caracteres especiais na busca quebram a query</li>
+            <li>Busca vazia retorna todos os resultados (OK)</li>
+          </ul>
+          <p><strong>Defeitos encontrados:</strong> 2 (1 major, 1 minor)</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

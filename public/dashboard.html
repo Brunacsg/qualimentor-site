@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal QA - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="dashboard">
+  <header class="site-header">
+    <div class="logo">Portal QA</div>
+    <nav>
+      <a href="intro.html">Introdução</a>
+      <a href="process.html">Processo</a>
+      <a href="manual.html">Manual</a>
+      <a href="automation.html">Automação</a>
+      <a href="tools.html">Ferramentas</a>
+      <a href="career.html">Carreira</a>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="hero">
+      <h1>Curso Completo de QA</h1>
+      <p>Uma trilha prática de aprendizado para se tornar um profissional de qualidade de software do início ao avançado.</p>
+      <div class="hero-cards">
+        <div>
+          <strong>Conteúdo modular</strong>
+          <p>Trabalhe módulo a módulo com objetivos e atividades práticas.</p>
+        </div>
+        <div>
+          <strong>Exemplos reais</strong>
+          <p>Casos de uso, scripts e situações do dia a dia de QA.</p>
+        </div>
+        <div>
+          <strong>Resultados aplicáveis</strong>
+          <p>Use o conhecimento em projetos, automação e entrevistas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="overview">
+      <div class="section-header">
+        <span>01</span>
+        <div>
+          <h2>Visão Geral do Curso</h2>
+          <p>Conheça a trilha de aprendizado e a ordem recomendada de estudo.</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="resource-card">
+          <h4>Como usar o curso</h4>
+          <p>Estude cada módulo na sequência, complete os exercícios práticos e revise com exemplos reais. Use as páginas do curso como material de referência contínua.</p>
+        </div>
+        <div class="resource-card">
+          <h4>Objetivos gerais</h4>
+          <ul>
+            <li>Compreender o papel do QA em todas as etapas do desenvolvimento</li>
+            <li>Aprender a planejar, executar e automatizar testes</li>
+            <li>Dominar ferramentas e metodologias de qualidade</li>
+            <li>Preparar-se para entrevistas e crescimento profissional em QA</li>
+          </ul>
+        </div>
+
+        <h3>Estrutura do curso</h3>
+        <div class="course-progress-card">
+          <div class="course-progress-label">
+            <strong>Progresso do curso</strong>
+            <span id="progress-count">0 de 9 módulos concluídos</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <a class="module-card" href="intro.html" data-module="module-1">
+            <div>
+              <h4>Módulo 01</h4>
+              <p>Introdução ao QA: papel, responsabilidades e princípios.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="process.html" data-module="module-2">
+            <div>
+              <h4>Módulo 02</h4>
+              <p>Processo e STLC: planejamento, análise de requisitos e métricas.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="manual.html" data-module="module-3">
+            <div>
+              <h4>Módulo 03</h4>
+              <p>Testes manuais: técnicas, casos de teste e registros de defeito.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="automation.html" data-module="module-4">
+            <div>
+              <h4>Módulo 04</h4>
+              <p>Automação: estratégias, frameworks e melhores práticas.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="tools.html" data-module="module-5">
+            <div>
+              <h4>Módulo 05</h4>
+              <p>Ferramentas: ecossistema de QA e integração com pipelines.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="agile.html" data-module="module-6">
+            <div>
+              <h4>Módulo 06</h4>
+              <p>Metodologias Ágeis: QA em Scrum, TDD, BDD e DevOps.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="security.html" data-module="module-7">
+            <div>
+              <h4>Módulo 07</h4>
+              <p>Segurança: OWASP, pentest e proteção de aplicações.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="performance.html" data-module="module-8">
+            <div>
+              <h4>Módulo 08</h4>
+              <p>Performance: load testing, análise de métricas e otimização.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+          <a class="module-card" href="career.html" data-module="module-9">
+            <div>
+              <h4>Módulo 09</h4>
+              <p>Carreira: certificações, CV, entrevistas e desenvolvimento profissional.</p>
+              <div class="module-status-badge"><span class="status-text">Não iniciado</span></div>
+            </div>
+          </a>
+        </div>
+
+        <h3>Conclusão do curso</h3>
+        <ul>
+          <li>Revisar todos os módulos após completar o conteúdo.</li>
+          <li>Praticar com exemplos reais e exercícios sugeridos.</li>
+          <li>Aplicar os conceitos em um projeto prático ou estudo de caso.</li>
+          <li>Documentar aprendizados e preparar um portfólio de QA.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
