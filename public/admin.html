@@ -121,7 +121,7 @@
         const data = await res.json();
 
         if (data.success) {
-          renderUsersProgress(data.users);
+          renderUsersProgress(data.summaries);
         } else {
           document.getElementById('usersProgressContainer').innerHTML =
             `<p style="color: red;">${data.message}</p>`;
@@ -194,6 +194,7 @@
           <thead>
             <tr>
               <th>ID</th>
+              <th>Nome</th>
               <th>Email</th>
               <th>Expira em</th>
               <th>Sessão</th>
@@ -210,6 +211,7 @@
         html += `
           <tr>
             <td>${user.id}</td>
+            <td>${user.name || '-'}</td>
             <td>${user.email}</td>
             <td>${expiresAt}</td>
             <td><span class="status-badge ${sessionClass}">${sessionText}</span></td>
@@ -236,6 +238,7 @@
         <table class="purchases-table">
           <thead>
             <tr>
+              <th>Nome</th>
               <th>Email</th>
               <th>Módulos concluídos</th>
               <th>Média quizzes</th>
@@ -255,6 +258,7 @@
 
         html += `
           <tr>
+            <td>${user.name || '-'}</td>
             <td>${user.email}</td>
             <td>${user.completedModules} / ${user.totalModules}</td>
             <td>${user.quizAverage}%</td>

@@ -73,6 +73,7 @@ const db = new sqlite3.Database(databasePath, (error) => {
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
     email TEXT UNIQUE,
     password TEXT,
     expiresAt TEXT,
@@ -109,6 +110,16 @@ db.serialize(() => {
     }
 
     const hasActiveSessionId = columns.some((column) => column.name === 'activeSessionId');
+    const hasName = columns.some((column) => column.name === 'name');
+
+    if (!hasName) {
+      db.run('ALTER TABLE users ADD COLUMN name TEXT', (alterErr) => {
+        if (alterErr) {
+          console.error('Erro ao adicionar name em users:', alterErr);
+        }
+      });
+    }
+
     if (!hasActiveSessionId) {
       db.run('ALTER TABLE users ADD COLUMN activeSessionId TEXT', (alterErr) => {
         if (alterErr) {
@@ -166,6 +177,10 @@ function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
 }
 
+function normalizeName(name) {
+  return String(name || '').trim().replace(/\s+/g, ' ');
+}
+
 function mapProgressRows(rows) {
   return rows.reduce((acc, row) => {
     acc[row.moduleId] = {
@@ -193,7 +208,7 @@ function auth(req, res, next) {
     const decoded = jwt.verify(token, SECRET);
 
     db.get(
-      'SELECT id, email, expiresAt, activeSessionId FROM users WHERE id = ?',
+      'SELECT id, name, email, expiresAt, activeSessionId FROM users WHERE id = ?',
       [decoded.id],
       (err, user) => {
         if (err) {
@@ -212,7 +227,12 @@ function auth(req, res, next) {
           return res.status(401).json({ error: 'Acesso expirado' });
         }
 
-        req.user = { id: user.id, email: user.email, sessionId: user.activeSessionId };
+        req.user = {
+          id: user.id,
+          name: user.name || '',
+          email: user.email,
+          sessionId: user.activeSessionId,
+        };
         next();
       }
     );
@@ -303,6 +323,7 @@ function authAdmin(req, res, next) {
 
 app.post('/create-user', authAdmin, async (req, res) => {
   const email = normalizeEmail(req.body.email);
+  const name = normalizeName(req.body.name);
   const { password, days } = req.body;
 
   if (!email || !password || !days) {
@@ -327,8 +348,8 @@ app.post('/create-user', authAdmin, async (req, res) => {
   expiresAt.setDate(expiresAt.getDate() + days);
 
   db.run(
-    'INSERT INTO users (email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, NULL)',
-    [email, hash, expiresAt.toISOString()],
+    'INSERT INTO users (name, email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, ?, NULL)',
+    [name, email, hash, expiresAt.toISOString()],
     function (err) {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao criar usuário' });
@@ -392,7 +413,7 @@ app.get('/purchase-requests', authAdmin, (req, res) => {
 
 app.get('/users', authAdmin, (req, res) => {
   db.all(
-    `SELECT id, email, expiresAt, activeSessionId
+    `SELECT id, name, email, expiresAt, activeSessionId
      FROM users
      ORDER BY email COLLATE NOCASE ASC`,
     (err, rows) => {
@@ -402,6 +423,7 @@ app.get('/users', authAdmin, (req, res) => {
 
       const users = rows.map((user) => ({
         id: user.id,
+        name: user.name || '',
         email: user.email,
         expiresAt: user.expiresAt,
         isActive: Boolean(user.activeSessionId),
@@ -416,6 +438,7 @@ app.get('/users-progress', authAdmin, (req, res) => {
   db.all(
     `SELECT
       u.id,
+      u.name,
       u.email,
       u.expiresAt,
       COUNT(up.moduleId) AS touchedModules,
@@ -425,7 +448,7 @@ app.get('/users-progress', authAdmin, (req, res) => {
       COALESCE(ROUND(AVG(CASE WHEN up.quizTotal > 0 THEN (CAST(up.quizScore AS REAL) / up.quizTotal) * 100 END), 1), 0) AS averageScore
      FROM users u
      LEFT JOIN user_progress up ON up.userId = u.id
-     GROUP BY u.id, u.email, u.expiresAt
+    GROUP BY u.id, u.name, u.email, u.expiresAt
      ORDER BY u.email COLLATE NOCASE ASC`,
     (err, rows) => {
       if (err) {
@@ -434,14 +457,16 @@ app.get('/users-progress', authAdmin, (req, res) => {
 
       const summaries = rows.map((row) => ({
         id: row.id,
+        name: row.name || '',
         email: row.email,
         expiresAt: row.expiresAt,
         touchedModules: Number(row.touchedModules || 0),
         completedModules: Number(row.completedModules || 0),
         passedQuizzes: Number(row.passedQuizzes || 0),
-        averageScore: Number(row.averageScore || 0),
+        totalModules: COURSE_MODULE_IDS.length,
+        quizAverage: Number(row.averageScore || 0),
         certificateEligible: Number(row.completedModules || 0) >= COURSE_MODULE_IDS.length,
-        lastActivity: row.lastActivity || null,
+        lastUpdatedAt: row.lastActivity || null,
       }));
 
       res.json({ success: true, summaries });
@@ -560,8 +585,8 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
 
             if (existingUser) {
               db.run(
-                'UPDATE users SET password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?',
-                [hashedPassword, expiresAt.toISOString(), existingUser.id],
+                "UPDATE users SET name = COALESCE(NULLIF(?, ''), name), password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?",
+                [normalizeName(request.name), hashedPassword, expiresAt.toISOString(), existingUser.id],
                 function (updateUserErr) {
                   if (updateUserErr) {
                     console.error('Erro ao atualizar usuário:', updateUserErr);
@@ -570,8 +595,8 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
               );
             } else {
               db.run(
-                'INSERT INTO users (email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, NULL)',
-                [normalizeEmail(request.email), hashedPassword, expiresAt.toISOString()],
+                'INSERT INTO users (name, email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, ?, NULL)',
+                [normalizeName(request.name), normalizeEmail(request.email), hashedPassword, expiresAt.toISOString()],
                 function (insertErr) {
                   if (insertErr) {
                     console.error('Erro ao criar usuário:', insertErr);
@@ -600,6 +625,30 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
       }
     );
   });
+});
+
+app.post('/profile', auth, (req, res) => {
+  const name = normalizeName(req.body.name);
+
+  if (!name || name.length < 3) {
+    return res.status(400).json({ success: false, message: 'Informe o nome completo para o certificado.' });
+  }
+
+  db.run(
+    'UPDATE users SET name = ? WHERE id = ?',
+    [name, req.user.id],
+    (err) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao salvar nome do aluno.' });
+      }
+
+      res.json({ success: true, user: { ...req.user, name } });
+    }
+  );
+});
+
+app.get('/checkout', (req, res) => {
+  res.redirect(PAGSEGURO_LINK);
 });
 
 // =========================

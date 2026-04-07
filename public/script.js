@@ -1036,6 +1036,24 @@ function getAuthHeaders(extraHeaders = {}) {
   return token ? { ...extraHeaders, Authorization: token } : extraHeaders;
 }
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getStudentDisplayName() {
+  const rawName = String(currentUserProfile?.name || '').trim();
+  if (rawName) {
+    return rawName;
+  }
+
+  return '';
+}
+
 function showLoginMessage() {
   const message = localStorage.getItem(LOGIN_MESSAGE_KEY);
   const messageElement = document.getElementById('msg');
@@ -1254,11 +1272,31 @@ function buildCertificateMarkup() {
   }
 
   const issuedAt = new Date(getCourseCompletionDate(progress)).toLocaleDateString('pt-BR');
-  const studentName = currentUserProfile?.email || 'Aluno(a) do curso';
+  const studentName = getStudentDisplayName();
+
+  if (!studentName) {
+    return `
+      <div class="certificate-card certificate-card-pending-name">
+        <div class="certificate-frame certificate-frame-pending">
+          <p class="certificate-label">Último passo</p>
+          <h3>Emita o certificado com o nome do aluno</h3>
+          <p class="certificate-text">Informe o nome completo que deve aparecer no certificado. Esse nome ficará salvo no perfil do aluno.</p>
+          <form class="certificate-name-form" onsubmit="handleCertificateNameSubmit(event)">
+            <label for="certificateStudentName">Nome completo no certificado</label>
+            <input id="certificateStudentName" name="certificateStudentName" type="text" placeholder="Ex.: Maria Fernanda Souza" minlength="3" required>
+            <button type="submit" class="primary-button">Salvar nome e emitir certificado</button>
+          </form>
+          <p id="certificate-name-message" class="certificate-status"></p>
+        </div>
+      </div>
+    `;
+  }
 
   return `
     <div class="certificate-card" id="certificate-card">
       <div class="certificate-frame">
+        <div class="certificate-corner certificate-corner-left"></div>
+        <div class="certificate-corner certificate-corner-right"></div>
         <div class="certificate-brand">
           <img src="imagens/favicon.png" alt="Logo Qualimentor" class="certificate-logo">
           <div>
@@ -1269,8 +1307,9 @@ function buildCertificateMarkup() {
         <p class="certificate-label">Certificado de Conclusão</p>
         <h3>Curso Completo de QA</h3>
         <p class="certificate-text">Certificamos que</p>
-        <p class="certificate-student">${studentName}</p>
-        <p class="certificate-text">concluiu com aproveitamento a trilha completa do curso de Qualidade de Software, cumprindo os 9 módulos e os critérios de avaliação propostos.</p>
+        <p class="certificate-student">${escapeHtml(studentName)}</p>
+        <p class="certificate-text">concluiu com aproveitamento a trilha completa de Qualidade de Software, validando o aprendizado com exercícios e questionários ao longo dos 9 módulos do programa.</p>
+        <div class="certificate-seal">Qualimentor</div>
         <div class="certificate-footer">
           <div>
             <strong>Emitido em</strong>
@@ -1280,6 +1319,14 @@ function buildCertificateMarkup() {
             <strong>Instituição</strong>
             <p>${CERTIFICATE_ORGANIZATION}</p>
           </div>
+          <div>
+            <strong>Validação</strong>
+            <p>Exercícios + questionários</p>
+          </div>
+        </div>
+        <div class="certificate-signature">
+          <span></span>
+          <p>Qualimentor</p>
         </div>
       </div>
       <div class="certificate-actions">
@@ -1299,6 +1346,47 @@ function renderCertificateSection() {
   container.innerHTML = buildCertificateMarkup();
 }
 
+async function handleCertificateNameSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const input = form.querySelector('input[name="certificateStudentName"]');
+  const message = document.getElementById('certificate-name-message');
+  const name = input?.value?.trim() || '';
+
+  if (!name) {
+    if (message) {
+      message.textContent = 'Informe o nome completo para emitir o certificado.';
+    }
+    return;
+  }
+
+  if (message) {
+    message.textContent = 'Salvando nome do aluno...';
+  }
+
+  const res = await fetch(`${API_ORIGIN}/profile`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({ name })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    if (message) {
+      message.textContent = data.message || 'Não foi possível salvar o nome do certificado.';
+    }
+    return;
+  }
+
+  currentUserProfile = data.user;
+  renderCertificateSection();
+}
+
 function printCertificate() {
   const certificateMarkup = document.getElementById('certificate-card')?.innerHTML;
   if (!certificateMarkup) {
@@ -1315,15 +1403,22 @@ function printCertificate() {
       <head>
         <title>Certificado Qualimentor</title>
         <style>
-          body { font-family: Georgia, serif; margin: 0; padding: 32px; background: #f8fafc; }
-          .certificate-frame { border: 12px solid #0f172a; padding: 48px; background: white; min-height: 80vh; }
+          body { font-family: Georgia, serif; margin: 0; padding: 32px; background: linear-gradient(135deg, #e2e8f0, #f8fafc); }
+          .certificate-frame { position: relative; border: 14px solid #0f172a; padding: 56px; background: linear-gradient(145deg, #ffffff, #eff6ff); min-height: 80vh; overflow: hidden; }
+          .certificate-corner { position: absolute; width: 120px; height: 120px; border: 2px solid #0369a1; opacity: 0.2; }
+          .certificate-corner-left { top: 18px; left: 18px; border-right: 0; border-bottom: 0; }
+          .certificate-corner-right { top: 18px; right: 18px; border-left: 0; border-bottom: 0; }
           .certificate-brand { display: flex; align-items: center; gap: 18px; margin-bottom: 32px; }
           .certificate-logo { width: 72px; height: 72px; object-fit: contain; }
           .certificate-org { margin: 0; font-size: 1.4rem; font-weight: 700; }
           .certificate-cnpj, .certificate-label, .certificate-text { margin: 0; color: #334155; }
           h3 { font-size: 2.5rem; margin: 24px 0 16px; color: #0f172a; }
-          .certificate-student { font-size: 2rem; margin: 16px 0; color: #0369a1; font-weight: 700; }
+          .certificate-student { font-size: 2.3rem; margin: 16px 0; color: #0369a1; font-weight: 700; }
+          .certificate-seal { position: absolute; right: 48px; bottom: 148px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #0369a1; display: grid; place-items: center; color: #0369a1; font-weight: 700; opacity: 0.8; }
           .certificate-footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 48px; }
+          .certificate-signature { margin-top: 42px; max-width: 240px; }
+          .certificate-signature span { display: block; border-top: 1px solid #0f172a; margin-bottom: 10px; }
+          .certificate-signature p { margin: 0; font-weight: 700; }
           .certificate-actions, .certificate-status { display: none; }
         </style>
       </head>
