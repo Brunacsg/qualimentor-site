@@ -21,15 +21,15 @@
         <span>📋</span>
         <div>
           <h2>Gerenciar Compras</h2>
-          <p>Confirme o pagamento no app do PagBank e depois clique em Simular webhook para liberar o acesso.</p>
+          <p>Confirme o pagamento no Mercado Pago e depois clique em Simular webhook para liberar o acesso.</p>
         </div>
       </div>
 
       <div class="section-body">
         <p id="adminStatusMessage" class="admin-status-message" aria-live="polite"></p>
         <div class="admin-flow-card">
-          <strong>Fluxo recomendado com app PagBank</strong>
-          <p>1. O aluno paga pelo link. 2. Você confirma no app do banco que o valor caiu. 3. No admin, clique em Simular webhook. 4. O sistema gera senha, libera acesso, envia email e registra a credencial.</p>
+          <strong>Fluxo recomendado com Mercado Pago</strong>
+          <p>1. O aluno paga pelo link. 2. Você confirma no Mercado Pago que o pagamento foi aprovado. 3. No admin, clique em Simular webhook. 4. O sistema libera o acesso, envia o email e registra os dados no painel.</p>
         </div>
         <div id="purchasesContainer" class="purchases-table-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando solicitações...</p>
@@ -90,7 +90,7 @@
         <span>🔐</span>
         <div>
           <h2>Credenciais Geradas</h2>
-          <p>Senhas aleatórias enviadas aos alunos após aprovação de compra.</p>
+          <p>Dados de acesso enviados aos alunos após aprovação da compra.</p>
         </div>
       </div>
 
@@ -412,7 +412,7 @@
             <tr>
               <th>Nome</th>
               <th>Email</th>
-              <th>Senha gerada</th>
+              <th>Senha de acesso</th>
               <th>Data</th>
             </tr>
           </thead>
@@ -480,7 +480,7 @@
             'Content-Type': 'application/json',
             'x-admin-secret': secret
           },
-          body: JSON.stringify({ requestId, paymentProvider: 'pagseguro-simulado' })
+          body: JSON.stringify({ requestId, paymentProvider: 'mercado-pago-simulado' })
         });
 
         const data = await res.json();
