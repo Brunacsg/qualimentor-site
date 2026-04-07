@@ -775,6 +775,198 @@ const MODULE_DETAILED_CONTENT = {
   }
 };
 
+const MODULE_LEARNING_EXTRAS = {
+  'module-1': {
+    caseTitle: 'Estudo de caso: checkout com alta taxa de abandono',
+    caseScenario: 'Uma loja virtual percebe queda de conversão no checkout após uma atualização. O QA precisa analisar o fluxo, identificar riscos e propor validações prioritárias antes de um novo release.',
+    caseTasks: [
+      'Levante hipóteses de falha com impacto direto em conversão, como cálculo incorreto, falha no botão de pagamento ou mensagem confusa.',
+      'Defina quais cenários devem ser testados primeiro com base em risco de negócio.',
+      'Explique como você apresentaria esse risco para produto e desenvolvimento.'
+    ],
+    checklist: [
+      'Consigo explicar o papel de QA além de “testar bugs”.',
+      'Sei relacionar risco técnico com impacto de negócio.',
+      'Entendo o conceito de prevenção versus correção.',
+      'Consigo listar responsabilidades centrais de QA.',
+      'Sei priorizar validações com foco no cliente final.'
+    ],
+    recap: [
+      'QA protege valor de negócio, não apenas qualidade técnica isolada.',
+      'Prioridade de teste deve considerar impacto, frequência e criticidade.',
+      'Comunicação clara é parte essencial do trabalho de QA.'
+    ]
+  },
+  'module-2': {
+    caseTitle: 'Estudo de caso: release com prazo curto e ambiente instável',
+    caseScenario: 'A equipe tem apenas dois dias para validar uma nova versão do carrinho, mas o ambiente de homologação apresenta instabilidade e o escopo mudou na última hora.',
+    caseTasks: [
+      'Defina o que entra e o que sai do escopo de testes dessa rodada.',
+      'Monte critérios mínimos de entrada e saída realistas.',
+      'Escolha as métricas que ajudam a comunicar risco remanescente ao time.'
+    ],
+    checklist: [
+      'Entendo as etapas do STLC e o objetivo de cada uma.',
+      'Sei definir critérios de entrada e saída.',
+      'Consigo montar um mini-plano de teste objetivo.',
+      'Sei usar métricas para apoiar decisão.',
+      'Consigo comunicar risco residual com clareza.'
+    ],
+    recap: [
+      'Planejamento organiza escopo, dependências e risco.',
+      'Métricas devem orientar decisão, não apenas relatório.',
+      'Critérios claros reduzem subjetividade na liberação.'
+    ]
+  },
+  'module-3': {
+    caseTitle: 'Estudo de caso: cadastro com múltiplas validações quebradas',
+    caseScenario: 'Um formulário de cadastro começou a aceitar dados inválidos e a equipe não consegue reproduzir todos os problemas relatados pelo suporte.',
+    caseTasks: [
+      'Crie três casos de teste cobrindo cenário positivo, negativo e valor limite.',
+      'Escreva um bug report com passos de reprodução e evidência esperada.',
+      'Defina como você diferenciaria um defeito funcional de um problema de usabilidade.'
+    ],
+    checklist: [
+      'Consigo estruturar um caso de teste completo.',
+      'Sei diferenciar testes funcionais, exploratórios e de regressão.',
+      'Consigo registrar defeitos com clareza e contexto.',
+      'Entendo o valor de evidências e ambiente no bug report.',
+      'Sei planejar cobertura de teste manual com critério.'
+    ],
+    recap: [
+      'Teste manual precisa de estratégia, não de cliques aleatórios.',
+      'Caso de teste bom é claro, reproduzível e verificável.',
+      'Bug report forte acelera triagem e correção.'
+    ]
+  },
+  'module-4': {
+    caseTitle: 'Estudo de caso: regressão longa e repetitiva toda sprint',
+    caseScenario: 'A equipe perde muitas horas validando os mesmos fluxos em toda sprint e quer decidir o que automatizar primeiro sem desperdiçar esforço.',
+    caseTasks: [
+      'Escolha dois fluxos com alto retorno para automação e justifique a escolha.',
+      'Defina a camada ideal de automação para cada fluxo.',
+      'Liste os principais cuidados para manter a suíte confiável ao longo do tempo.'
+    ],
+    checklist: [
+      'Sei avaliar retorno sobre investimento em automação.',
+      'Consigo escolher entre UI, API, integração ou unitário.',
+      'Entendo o que não vale a pena automatizar.',
+      'Conheço riscos de flakiness e manutenção.',
+      'Consigo desenhar uma estratégia mínima de suíte.'
+    ],
+    recap: [
+      'Automação deve começar pelo que é crítico e repetitivo.',
+      'Nem todo teste precisa ir para UI.',
+      'Suíte sustentável depende de dados, padronização e observabilidade.'
+    ]
+  },
+  'module-5': {
+    caseTitle: 'Estudo de caso: time com ferramentas desconectadas',
+    caseScenario: 'Os casos de teste ficam em um lugar, os bugs em outro, o pipeline não publica resultados e ninguém confia nos relatórios de QA.',
+    caseTasks: [
+      'Desenhe uma stack mínima conectando gestão, execução, bugs e CI/CD.',
+      'Explique quais integrações são prioritárias e por quê.',
+      'Liste riscos de operar com ferramentas sem padronização.'
+    ],
+    checklist: [
+      'Consigo explicar o papel de cada categoria de ferramenta.',
+      'Entendo o valor de integrações entre plataformas.',
+      'Sei escolher ferramentas com base em contexto e não só popularidade.',
+      'Consigo organizar um fluxo operacional entre requisito e evidência.',
+      'Sei identificar excesso de complexidade no ecossistema.'
+    ],
+    recap: [
+      'Ferramenta boa é a que melhora o processo real do time.',
+      'Integração reduz retrabalho e aumenta rastreabilidade.',
+      'Padronização é essencial para confiança em métricas e evidências.'
+    ]
+  },
+  'module-6': {
+    caseTitle: 'Estudo de caso: user story ambígua perto do fim da sprint',
+    caseScenario: 'Uma história de login social está quase pronta, mas os critérios de aceitação não deixam claro como lidar com conta já existente e falha do provedor externo.',
+    caseTasks: [
+      'Escreva perguntas que o QA faria no refinement.',
+      'Transforme a história em cenários testáveis.',
+      'Defina uma mini Definition of Done para essa entrega.'
+    ],
+    checklist: [
+      'Entendo o papel do QA em cerimônias ágeis.',
+      'Consigo transformar critérios em cenários de teste.',
+      'Sei explicar BDD, TDD e shift left com exemplos.',
+      'Entendo o valor de DoD bem definida.',
+      'Consigo comunicar risco em ciclos curtos de entrega.'
+    ],
+    recap: [
+      'QA em ágil atua cedo para reduzir retrabalho.',
+      'BDD ajuda a alinhar requisito e comportamento esperado.',
+      'Definition of Done forte melhora previsibilidade e qualidade.'
+    ]
+  },
+  'module-7': {
+    caseTitle: 'Estudo de caso: suspeita de falha de autenticação e exposição de dados',
+    caseScenario: 'Usuários relatam comportamentos estranhos em recuperação de senha e o time teme vazamento de informações ou exploração do fluxo por atacantes.',
+    caseTasks: [
+      'Escolha dois riscos do OWASP Top 10 que mais se aplicam ao cenário.',
+      'Descreva como testaria autenticação, sessão e mensagens de erro.',
+      'Escreva um mini-relatório com impacto e recomendação inicial.'
+    ],
+    checklist: [
+      'Consigo relacionar vulnerabilidade com impacto de negócio.',
+      'Sei testar autenticação, autorização e sessão separadamente.',
+      'Entendo o básico de ferramentas como ZAP e Burp.',
+      'Sei registrar achados com responsabilidade.',
+      'Consigo diferenciar risco real de ruído técnico.'
+    ],
+    recap: [
+      'Segurança precisa ser tratada com contexto e risco.',
+      'Nem toda vulnerabilidade tem o mesmo impacto.',
+      'Relatório técnico bom acelera resposta e correção.'
+    ]
+  },
+  'module-8': {
+    caseTitle: 'Estudo de caso: API crítica degradando em horário de pico',
+    caseScenario: 'A API de busca apresenta lentidão em campanhas promocionais. O time precisa saber se o problema está em aplicação, banco ou infraestrutura.',
+    caseTasks: [
+      'Defina o objetivo do teste de performance para esse cenário.',
+      'Escolha métricas e thresholds que realmente ajudem a investigar.',
+      'Descreva como transformaria os resultados em recomendação prática para o time.'
+    ],
+    checklist: [
+      'Sei diferenciar load, stress, spike e endurance.',
+      'Entendo baseline e threshold.',
+      'Consigo montar um plano de performance objetivo.',
+      'Sei ler resultado além da média de tempo de resposta.',
+      'Consigo conectar dado técnico ao impacto no usuário.'
+    ],
+    recap: [
+      'Teste de performance começa pelo objetivo, não pela ferramenta.',
+      'Métrica isolada raramente conta a história completa.',
+      'Relatório bom precisa apontar hipótese e próximos passos.'
+    ]
+  },
+  'module-9': {
+    caseTitle: 'Estudo de caso: preparação para vaga de QA pleno',
+    caseScenario: 'Um aluno já conhece fundamentos, mas precisa organizar currículo, portfólio e discurso técnico para disputar vagas melhores em QA.',
+    caseTasks: [
+      'Monte três evidências concretas para colocar no currículo ou portfólio.',
+      'Defina um plano de 90 dias com foco em evolução técnica.',
+      'Escreva uma resposta curta para “como você estruturaria testes para login?”.'
+    ],
+    checklist: [
+      'Consigo explicar minhas habilidades com clareza.',
+      'Tenho plano de evolução técnica realista.',
+      'Entendo trilhas de carreira em QA.',
+      'Sei transformar estudo em evidência prática.',
+      'Consigo me posicionar melhor em entrevistas.'
+    ],
+    recap: [
+      'Carreira forte exige estudo, prática e evidência.',
+      'Base sólida vem antes da especialização profunda.',
+      'Currículo e portfólio precisam mostrar resultado, não só intenção.'
+    ]
+  }
+};
+
 const LOGIN_MESSAGE_KEY = 'loginMessage';
 
 function getQuizRequiredCorrectAnswers(totalQuestions) {
@@ -1118,6 +1310,54 @@ function buildDetailedSectionMarkup(moduleId) {
   `;
 }
 
+function buildLearningExtrasMarkup(moduleId) {
+  const extras = MODULE_LEARNING_EXTRAS[moduleId];
+  if (!extras) {
+    return '';
+  }
+
+  const caseTasksMarkup = extras.caseTasks.map((item) => `<li>${item}</li>`).join('');
+  const checklistMarkup = extras.checklist.map((item) => `<li>${item}</li>`).join('');
+  const recapMarkup = extras.recap.map((item) => `<li>${item}</li>`).join('');
+
+  return `
+    <div class="course-learning-extras" id="module-learning-extras">
+      <div class="resource-card case-study-card">
+        <h3>Estudo de caso guiado</h3>
+        <h4>${extras.caseTitle}</h4>
+        <p>${extras.caseScenario}</p>
+        <ol class="step-list">${caseTasksMarkup}</ol>
+      </div>
+      <div class="learning-extras-grid">
+        <div class="resource-card checklist-card">
+          <h3>Checklist de revisão</h3>
+          <ul class="detail-list">${checklistMarkup}</ul>
+        </div>
+        <div class="resource-card recap-card">
+          <h3>Resumo final do módulo</h3>
+          <ul class="detail-list">${recapMarkup}</ul>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderModuleLearningExtras() {
+  const moduleId = document.body.dataset.module;
+  const sectionBody = document.querySelector('.section-body');
+
+  if (!moduleId || !sectionBody || document.getElementById('module-learning-extras')) {
+    return;
+  }
+
+  const markup = buildLearningExtrasMarkup(moduleId);
+  if (!markup) {
+    return;
+  }
+
+  sectionBody.insertAdjacentHTML('beforeend', markup);
+}
+
 function renderModuleDetailedContent() {
   const moduleId = document.body.dataset.module;
   const sectionBody = document.querySelector('.section-body');
@@ -1336,6 +1576,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateDashboardProgress();
   updateModulePageProgress();
   renderModuleDetailedContent();
+  renderModuleLearningExtras();
   renderModuleQuiz();
 
   const completeButton = document.getElementById('complete-module-button');

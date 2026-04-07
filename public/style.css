@@ -549,6 +549,11 @@ main.dashboard-grid {
   gap: 22px;
 }
 
+.course-learning-extras {
+  display: grid;
+  gap: 22px;
+}
+
 .detailed-summary-card p,
 .detailed-card p,
 .exercise-walkthrough-card p {
@@ -567,6 +572,26 @@ main.dashboard-grid {
 .detailed-summary-card {
   background: rgba(2, 6, 23, 0.72);
   border: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.case-study-card,
+.checklist-card,
+.recap-card {
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.case-study-card p,
+.checklist-card p,
+.recap-card p {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.learning-extras-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .detail-list,
