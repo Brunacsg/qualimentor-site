@@ -11,6 +11,8 @@ const MODULES = [
   'module-9'
 ];
 
+const QUIZ_PASSING_PERCENT = 60;
+
 const MODULE_QUIZZES = {
   'module-1': {
     title: 'Questionário do módulo',
@@ -367,6 +369,53 @@ const MODULE_QUIZZES = {
 
 const LOGIN_MESSAGE_KEY = 'loginMessage';
 
+function getQuizRequiredCorrectAnswers(totalQuestions) {
+  return Math.ceil(totalQuestions * (QUIZ_PASSING_PERCENT / 100));
+}
+
+function getModuleProgressEntry(progress, moduleId) {
+  const entry = progress[moduleId];
+
+  if (typeof entry === 'boolean') {
+    return {
+      completed: entry,
+      quizPassed: entry,
+      quizScore: entry ? getQuizRequiredCorrectAnswers(MODULE_QUIZZES[moduleId]?.questions.length || 0) : 0,
+      quizTotal: MODULE_QUIZZES[moduleId]?.questions.length || 0,
+      quizAttempted: entry,
+    };
+  }
+
+  return {
+    completed: Boolean(entry?.completed),
+    quizPassed: Boolean(entry?.quizPassed),
+    quizScore: Number(entry?.quizScore || 0),
+    quizTotal: Number(entry?.quizTotal || MODULE_QUIZZES[moduleId]?.questions.length || 0),
+    quizAttempted: Boolean(entry?.quizAttempted),
+  };
+}
+
+function setModuleProgressEntry(progress, moduleId, updates) {
+  const currentEntry = getModuleProgressEntry(progress, moduleId);
+  progress[moduleId] = { ...currentEntry, ...updates };
+}
+
+function getModuleStatus(entry) {
+  if (entry.completed) {
+    return 'Concluído';
+  }
+
+  if (entry.quizPassed) {
+    return 'Quiz aprovado';
+  }
+
+  if (entry.quizAttempted) {
+    return 'Quiz pendente';
+  }
+
+  return 'Não iniciado';
+}
+
 function setLoginMessage(message) {
   if (message) {
     localStorage.setItem(LOGIN_MESSAGE_KEY, message);
@@ -468,7 +517,7 @@ function saveCourseProgress(progress) {
 }
 
 function getCompletedCount(progress) {
-  return MODULES.filter((moduleId) => progress[moduleId]).length;
+  return MODULES.filter((moduleId) => getModuleProgressEntry(progress, moduleId).completed).length;
 }
 
 function updateDashboardProgress() {
@@ -490,14 +539,21 @@ function updateDashboardProgress() {
   document.querySelectorAll('.module-card').forEach((card) => {
     const moduleId = card.dataset.module;
     const statusText = card.querySelector('.status-text');
-    if (progress[moduleId]) {
+    const entry = getModuleProgressEntry(progress, moduleId);
+    const badge = card.querySelector('.module-status-badge');
+
+    card.classList.remove('completed');
+    badge?.classList.remove('completed', 'in-progress');
+
+    if (entry.completed) {
       card.classList.add('completed');
       if (statusText) statusText.textContent = 'Concluído';
-      card.querySelector('.module-status-badge')?.classList.add('completed');
+      badge?.classList.add('completed');
     } else {
-      card.classList.remove('completed');
-      if (statusText) statusText.textContent = 'Não iniciado';
-      card.querySelector('.module-status-badge')?.classList.remove('completed');
+      if (statusText) statusText.textContent = getModuleStatus(entry);
+      if (entry.quizPassed || entry.quizAttempted) {
+        badge?.classList.add('in-progress');
+      }
     }
   });
 }
@@ -507,21 +563,30 @@ function updateModulePageProgress() {
   if (!moduleId) return;
 
   const progress = loadCourseProgress();
-  const completed = progress[moduleId] === true;
+  const entry = getModuleProgressEntry(progress, moduleId);
+  const completed = entry.completed;
+  const quiz = MODULE_QUIZZES[moduleId];
+  const quizTotal = quiz?.questions.length || 0;
+  const requiredCorrectAnswers = getQuizRequiredCorrectAnswers(quizTotal);
   const statusText = document.getElementById('module-status-text');
   const percentText = document.getElementById('module-progress-percent');
   const button = document.getElementById('complete-module-button');
   const nextLink = document.getElementById('next-module-link');
 
   if (statusText) {
-    statusText.textContent = completed ? 'Concluído' : 'Em andamento';
+    statusText.textContent = getModuleStatus(entry);
   }
   if (percentText) {
-    const percent = completed ? 100 : 0;
+    const percent = completed ? 100 : entry.quizPassed ? 85 : entry.quizAttempted ? 55 : 0;
     percentText.textContent = `${percent}%`;
   }
   if (button) {
-    button.textContent = completed ? 'Marcar como não concluído' : 'Marcar módulo como concluído';
+    button.disabled = !completed && Boolean(quiz) && !entry.quizPassed;
+    button.textContent = completed
+      ? 'Marcar como não concluído'
+      : entry.quizPassed
+        ? 'Marcar módulo como concluído'
+        : `Concluir após acertar ${requiredCorrectAnswers} de ${quizTotal}`;
   }
 
   const nextModulePage = {
@@ -549,6 +614,8 @@ function buildQuizMarkup(moduleId) {
   const quiz = MODULE_QUIZZES[moduleId];
   if (!quiz) return '';
 
+  const requiredCorrectAnswers = getQuizRequiredCorrectAnswers(quiz.questions.length);
+
   const questionsMarkup = quiz.questions.map((question, index) => {
     const optionsMarkup = question.options.map((option, optionIndex) => `
       <label class="quiz-option">
@@ -571,6 +638,7 @@ function buildQuizMarkup(moduleId) {
       <div class="quiz-header">
         <h3>${quiz.title}</h3>
         <p>${quiz.description}</p>
+        <p class="quiz-requirement">Aproveitamento mínimo para concluir o módulo: ${requiredCorrectAnswers} de ${quiz.questions.length} acertos.</p>
       </div>
       <form id="module-quiz-form" class="quiz-form">
         ${questionsMarkup}
@@ -601,12 +669,41 @@ function renderModuleQuiz() {
 
   document.getElementById('module-quiz-form')?.addEventListener('submit', handleQuizSubmit);
   document.getElementById('reset-quiz-button')?.addEventListener('click', resetQuiz);
+  restoreQuizState(moduleId);
+}
+
+function setQuizResultMessage(message, tone = 'success') {
+  const resultElement = document.getElementById('quiz-result');
+  if (!resultElement) {
+    return;
+  }
+
+  resultElement.textContent = message;
+  resultElement.classList.remove('success', 'warning');
+  resultElement.classList.add('visible', tone);
+}
+
+function restoreQuizState(moduleId) {
+  const progress = loadCourseProgress();
+  const entry = getModuleProgressEntry(progress, moduleId);
+  const quiz = MODULE_QUIZZES[moduleId];
+  if (!quiz || !entry.quizAttempted) {
+    return;
+  }
+
+  const requiredCorrectAnswers = getQuizRequiredCorrectAnswers(quiz.questions.length);
+  const message = entry.quizPassed
+    ? `Último resultado: ${entry.quizScore} de ${entry.quizTotal}. Você já atingiu a nota mínima de ${requiredCorrectAnswers} acertos.`
+    : `Último resultado: ${entry.quizScore} de ${entry.quizTotal}. Você precisa de ${requiredCorrectAnswers} acertos para concluir o módulo.`;
+
+  setQuizResultMessage(message, entry.quizPassed ? 'success' : 'warning');
 }
 
 function handleQuizSubmit(event) {
   event.preventDefault();
 
   const form = event.currentTarget;
+  const moduleId = document.body.dataset.module;
   const questionElements = form.querySelectorAll('.quiz-question');
   let correctAnswers = 0;
   let answeredQuestions = 0;
@@ -641,15 +738,30 @@ function handleQuizSubmit(event) {
     }
   });
 
-  const resultElement = document.getElementById('quiz-result');
-  if (resultElement) {
-    const totalQuestions = questionElements.length;
-    const unansweredCount = totalQuestions - answeredQuestions;
-    resultElement.classList.add('visible');
-    resultElement.textContent = unansweredCount > 0
-      ? `Você acertou ${correctAnswers} de ${totalQuestions}. Ainda faltaram ${unansweredCount} pergunta(s) sem resposta.`
-      : `Você acertou ${correctAnswers} de ${totalQuestions} pergunta(s).`;
-  }
+  const totalQuestions = questionElements.length;
+  const unansweredCount = totalQuestions - answeredQuestions;
+  const requiredCorrectAnswers = getQuizRequiredCorrectAnswers(totalQuestions);
+  const quizPassed = unansweredCount === 0 && correctAnswers >= requiredCorrectAnswers;
+
+  const progress = loadCourseProgress();
+  setModuleProgressEntry(progress, moduleId, {
+    quizScore: correctAnswers,
+    quizTotal: totalQuestions,
+    quizPassed,
+    quizAttempted: true,
+    completed: quizPassed ? getModuleProgressEntry(progress, moduleId).completed : false,
+  });
+  saveCourseProgress(progress);
+
+  const message = unansweredCount > 0
+    ? `Você acertou ${correctAnswers} de ${totalQuestions}. Ainda faltaram ${unansweredCount} pergunta(s) sem resposta.`
+    : quizPassed
+      ? `Você acertou ${correctAnswers} de ${totalQuestions}. Nota mínima atingida. Agora você pode concluir o módulo.`
+      : `Você acertou ${correctAnswers} de ${totalQuestions}. São necessários ${requiredCorrectAnswers} acertos para concluir o módulo.`;
+
+  setQuizResultMessage(message, quizPassed ? 'success' : 'warning');
+  updateModulePageProgress();
+  updateDashboardProgress();
 }
 
 function resetQuiz() {
@@ -672,7 +784,7 @@ function resetQuiz() {
 
   if (resultElement) {
     resultElement.textContent = '';
-    resultElement.classList.remove('visible');
+    resultElement.classList.remove('visible', 'success', 'warning');
   }
 }
 
@@ -681,9 +793,24 @@ function toggleModuleCompletion() {
   if (!moduleId) return;
 
   const progress = loadCourseProgress();
-  progress[moduleId] = !progress[moduleId];
+  const entry = getModuleProgressEntry(progress, moduleId);
+  const quiz = MODULE_QUIZZES[moduleId];
+
+  if (!entry.completed && quiz && !entry.quizPassed) {
+    const requiredCorrectAnswers = getQuizRequiredCorrectAnswers(quiz.questions.length);
+    setQuizResultMessage(
+      `Antes de concluir o módulo, você precisa acertar pelo menos ${requiredCorrectAnswers} de ${quiz.questions.length} perguntas.`,
+      'warning'
+    );
+    return;
+  }
+
+  setModuleProgressEntry(progress, moduleId, {
+    completed: !entry.completed,
+  });
   saveCourseProgress(progress);
   updateModulePageProgress();
+  updateDashboardProgress();
 }
 
 async function logout() {

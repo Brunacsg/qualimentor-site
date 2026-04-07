@@ -353,6 +353,11 @@ main.dashboard-grid {
   color: #a7f3d0;
 }
 
+.module-status-badge.in-progress {
+  background: rgba(234, 179, 8, 0.18);
+  color: #fde68a;
+}
+
 .course-progress-card {
   padding: 22px;
   margin-bottom: 24px;
@@ -428,6 +433,12 @@ main.dashboard-grid {
   color: var(--text);
 }
 
+.primary-button:disabled,
+.secondary-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .quiz-card {
   display: grid;
   gap: 20px;
@@ -445,6 +456,12 @@ main.dashboard-grid {
 .quiz-header p {
   margin: 0;
   color: var(--text-muted);
+}
+
+.quiz-requirement {
+  margin-top: 8px;
+  color: #fde68a;
+  font-weight: 600;
 }
 
 .quiz-form {
@@ -516,6 +533,14 @@ main.dashboard-grid {
 }
 
 .quiz-result.visible {
+  color: #a3e635;
+}
+
+.quiz-result.warning {
+  color: #fbbf24;
+}
+
+.quiz-result.success {
   color: #a3e635;
 }
 
