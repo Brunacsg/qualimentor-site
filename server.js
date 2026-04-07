@@ -388,7 +388,7 @@ function auth(req, res, next) {
     const decoded = jwt.verify(token, SECRET);
 
     db.get(
-      'SELECT id, name, email, expiresAt, activeSessionId FROM users WHERE id = ?',
+      'SELECT id, name, email, expiresat AS "expiresAt", activesessionid AS "activeSessionId" FROM users WHERE id = ?',
       [decoded.id],
       (err, user) => {
         if (err) {
@@ -432,7 +432,7 @@ app.post('/login', (req, res) => {
     return res.json({ success: false, message: 'Email e senha são obrigatórios' });
   }
 
-  db.get('SELECT * FROM users WHERE lower(trim(email)) = ?', [email], async (err, user) => {
+  db.get('SELECT id, name, email, password, expiresat AS "expiresAt", activesessionid AS "activeSessionId" FROM users WHERE lower(trim(email)) = ?', [email], async (err, user) => {
     if (err) {
       return res.json({ success: false, message: 'Erro no servidor' });
     }
@@ -592,19 +592,35 @@ app.post('/purchase-request', async (req, res) => {
 });
 
 app.get('/purchase-requests', authAdmin, (req, res) => {
-  db.all('SELECT * FROM purchase_requests ORDER BY createdAt DESC', (err, rows) => {
+  db.all(
+    `SELECT
+      id,
+      email,
+      name,
+      status,
+      pixkey AS "pixKey",
+      paymentprovider AS "paymentProvider",
+      paymentreference AS "paymentReference",
+      approvalsource AS "approvalSource",
+      lastwebhookat AS "lastWebhookAt",
+      createdat AS "createdAt",
+      approvedat AS "approvedAt"
+     FROM purchase_requests
+     ORDER BY createdat DESC`,
+    (err, rows) => {
     if (err) {
       return res.status(500).json({ success: false, message: 'Erro ao buscar solicitações' });
     }
     res.json({ success: true, requests: rows });
-  });
+    }
+  );
 });
 
 app.get('/users', authAdmin, (req, res) => {
   db.all(
-    `SELECT id, name, email, expiresAt, activeSessionId
+    `SELECT id, name, email, expiresat AS "expiresAt", activesessionid AS "activeSessionId"
      FROM users
-     ORDER BY email COLLATE NOCASE ASC`,
+     ORDER BY lower(email) ASC`,
     (err, rows) => {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao buscar usuários' });
@@ -629,16 +645,16 @@ app.get('/users-progress', authAdmin, (req, res) => {
       u.id,
       u.name,
       u.email,
-      u.expiresAt,
-      COUNT(up.moduleId) AS touchedModules,
-      COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS completedModules,
-      COALESCE(SUM(CASE WHEN up.quizPassed = 1 THEN 1 ELSE 0 END), 0) AS passedQuizzes,
-      COALESCE(MAX(up.updatedAt), '') AS lastActivity,
-      COALESCE(ROUND(AVG(CASE WHEN up.quizTotal > 0 THEN (CAST(up.quizScore AS REAL) / up.quizTotal) * 100 END), 1), 0) AS averageScore
+      u.expiresat AS "expiresAt",
+      COUNT(up.moduleid) AS "touchedModules",
+      COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS "completedModules",
+      COALESCE(SUM(CASE WHEN up.quizpassed = 1 THEN 1 ELSE 0 END), 0) AS "passedQuizzes",
+      COALESCE(MAX(up.updatedat), '') AS "lastActivity",
+      COALESCE(ROUND(AVG(CASE WHEN up.quiztotal > 0 THEN (CAST(up.quizscore AS REAL) / up.quiztotal) * 100 END), 1), 0) AS "averageScore"
      FROM users u
-     LEFT JOIN user_progress up ON up.userId = u.id
-    GROUP BY u.id, u.name, u.email, u.expiresAt
-     ORDER BY u.email COLLATE NOCASE ASC`,
+     LEFT JOIN user_progress up ON up.userid = u.id
+    GROUP BY u.id, u.name, u.email, u.expiresat
+     ORDER BY lower(u.email) ASC`,
     (err, rows) => {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao buscar progresso dos usuários' });
@@ -665,9 +681,9 @@ app.get('/users-progress', authAdmin, (req, res) => {
 
 app.get('/credential-deliveries', authAdmin, (req, res) => {
   db.all(
-    `SELECT id, userId, name, email, plainPassword, createdAt
+    `SELECT id, userid AS "userId", name, email, plainpassword AS "plainPassword", createdat AS "createdAt"
      FROM credential_deliveries
-     ORDER BY createdAt DESC`,
+     ORDER BY createdat DESC`,
     (err, rows) => {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao buscar credenciais geradas' });
@@ -684,9 +700,9 @@ app.get('/system-status', authAdmin, (req, res) => {
 
 app.get('/progress', auth, (req, res) => {
   db.all(
-    `SELECT moduleId, completed, quizPassed, quizScore, quizTotal, quizAttempted, updatedAt
+    `SELECT moduleid AS "moduleId", completed, quizpassed AS "quizPassed", quizscore AS "quizScore", quiztotal AS "quizTotal", quizattempted AS "quizAttempted", updatedat AS "updatedAt"
      FROM user_progress
-     WHERE userId = ?`,
+     WHERE userid = ?`,
     [req.user.id],
     (err, rows) => {
       if (err) {
