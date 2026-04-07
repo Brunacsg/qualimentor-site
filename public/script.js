@@ -370,6 +370,729 @@ const MODULE_QUIZZES = {
   }
 };
 
+const MODULE_QUIZ_EXPANSIONS = {
+  'module-1': [
+    {
+      prompt: 'Quando o QA participa cedo da descoberta de requisitos, o principal ganho é:',
+      options: [
+        'Aumentar a quantidade de bugs em produção',
+        'Reduzir ambiguidades e detectar riscos antes da construção',
+        'Eliminar a necessidade de alinhamento com produto',
+        'Substituir completamente a documentação'
+      ],
+      answer: 1,
+      explanation: 'Participar cedo ajuda a esclarecer expectativas e evita que defeitos sejam construídos no produto.'
+    },
+    {
+      prompt: 'Qual atitude mostra visão de negócio em QA?',
+      options: [
+        'Priorizar todos os defeitos da mesma forma',
+        'Avaliar impacto do defeito sobre cliente, receita e operação',
+        'Reportar apenas erros visuais',
+        'Testar sem considerar contexto de uso'
+      ],
+      answer: 1,
+      explanation: 'QA maduro prioriza risco com base em impacto real para cliente e negócio.'
+    },
+    {
+      prompt: 'Uma boa colaboração entre QA e desenvolvimento depende de:',
+      options: [
+        'Comunicação clara e evidências objetivas',
+        'Mensagens vagas sobre o problema',
+        'Evitar registrar detalhes do ambiente',
+        'Validar apenas no final da sprint'
+      ],
+      answer: 0,
+      explanation: 'Evidência, contexto e comunicação clara aceleram a correção dos problemas.'
+    },
+    {
+      prompt: 'Qual cenário representa um risco não funcional?',
+      options: [
+        'Campo obrigatório sem validação',
+        'Página lenta no horário de pico',
+        'Botão com texto incorreto',
+        'Link quebrado no rodapé'
+      ],
+      answer: 1,
+      explanation: 'Performance é um atributo não funcional relacionado à experiência e estabilidade do sistema.'
+    },
+    {
+      prompt: 'Qual frase resume melhor a qualidade como responsabilidade compartilhada?',
+      options: [
+        'Somente o QA deve garantir qualidade',
+        'Qualidade depende da colaboração entre produto, desenvolvimento e QA',
+        'O cliente identifica todos os problemas importantes',
+        'Testes substituem decisões de engenharia'
+      ],
+      answer: 1,
+      explanation: 'Qualidade sustentável depende de colaboração multidisciplinar, não de um único papel.'
+    },
+    {
+      prompt: 'Em um fluxo de checkout, qual item costuma ser mais crítico para priorização de testes?',
+      options: [
+        'Cor do botão de ajuda',
+        'Regra de cálculo do valor final',
+        'Posição do logo no topo',
+        'Texto do rodapé institucional'
+      ],
+      answer: 1,
+      explanation: 'Cálculo incorreto no checkout afeta diretamente receita, confiança e operação.'
+    },
+    {
+      prompt: 'Um bom registro de defeito deve permitir que outra pessoa:',
+      options: [
+        'Adivinhe o problema',
+        'Reproduza o comportamento com os dados fornecidos',
+        'Ignore a severidade do caso',
+        'Resolva sem contexto algum'
+      ],
+      answer: 1,
+      explanation: 'Reprodução consistente é base para correção eficiente e priorização adequada.'
+    }
+  ],
+  'module-2': [
+    {
+      prompt: 'Qual atividade acontece antes da execução de testes no STLC?',
+      options: [
+        'Análise e desenho de testes',
+        'Retrospectiva de release',
+        'Descontinuação do produto',
+        'Encerramento financeiro'
+      ],
+      answer: 0,
+      explanation: 'Antes de executar, o time precisa analisar requisitos e desenhar os testes necessários.'
+    },
+    {
+      prompt: 'Critérios de entrada ajudam o time a decidir se:',
+      options: [
+        'Já existe base suficiente para iniciar a etapa de testes',
+        'O QA deve ignorar ambientes instáveis',
+        'Todos os defeitos foram corrigidos',
+        'O roadmap do semestre foi encerrado'
+      ],
+      answer: 0,
+      explanation: 'Critérios de entrada definem as condições mínimas para começar a testar com segurança.'
+    },
+    {
+      prompt: 'Uma métrica de cobertura de testes ajuda a responder:',
+      options: [
+        'Quanto do escopo planejado foi validado',
+        'Qual é o salário médio do QA',
+        'Quantas reuniões ocorreram na sprint',
+        'Quem aprovou o deploy'
+      ],
+      answer: 0,
+      explanation: 'Cobertura mede quanto do escopo recebeu validação frente ao planejado.'
+    },
+    {
+      prompt: 'Configuração de ambiente no STLC é importante porque:',
+      options: [
+        'Ambientes inconsistentes geram falsos resultados e retrabalho',
+        'Elimina a necessidade de evidência',
+        'Substitui planejamento de testes',
+        'Torna defeitos impossíveis'
+      ],
+      answer: 0,
+      explanation: 'Ambiente ruim gera falhas artificiais e compromete a confiança nos resultados.'
+    },
+    {
+      prompt: 'Uma boa estratégia de teste deve refletir principalmente:',
+      options: [
+        'Riscos, prioridades e objetivos do produto',
+        'Preferência pessoal de quem testa',
+        'Apenas o cronograma de férias do time',
+        'Somente a tecnologia do frontend'
+      ],
+      answer: 0,
+      explanation: 'Estratégia de teste deve ser guiada por risco e objetivo de negócio.'
+    },
+    {
+      prompt: 'Qual documento geralmente concentra escopo, abordagem e recursos necessários?',
+      options: [
+        'Plano de testes',
+        'Contrato comercial',
+        'Pauta da daily',
+        'Manual do usuário final'
+      ],
+      answer: 0,
+      explanation: 'Plano de testes reúne a visão operacional da fase de validação.'
+    },
+    {
+      prompt: 'Quando uma métrica mostra aumento constante de defeitos reabertos, isso sugere:',
+      options: [
+        'Correções possivelmente incompletas ou validação insuficiente',
+        'Maior estabilidade do produto',
+        'Redução do risco técnico',
+        'Fim da necessidade de regressão'
+      ],
+      answer: 0,
+      explanation: 'Defeitos reabertos em excesso indicam fragilidade na correção ou no reteste.'
+    }
+  ],
+  'module-3': [
+    {
+      prompt: 'Teste exploratório é especialmente útil quando:',
+      options: [
+        'O produto precisa de investigação guiada por experiência e observação',
+        'Não existe nenhuma interface para validar',
+        'Todos os casos já estão automatizados e estáveis',
+        'O objetivo é apenas executar scripts fixos'
+      ],
+      answer: 0,
+      explanation: 'Exploratórios ajudam a descobrir comportamentos inesperados e lacunas não previstas.'
+    },
+    {
+      prompt: 'Qual item ajuda a tornar um bug report mais útil para desenvolvimento?',
+      options: [
+        'Ambiente, passos, evidências e comportamento esperado',
+        'Somente severidade',
+        'Apenas um print sem contexto',
+        'Somente opinião do cliente'
+      ],
+      answer: 0,
+      explanation: 'Relatórios completos aceleram análise, reprodução e correção.'
+    },
+    {
+      prompt: 'Um caso de teste negativo normalmente verifica:',
+      options: [
+        'Como o sistema reage a entradas inválidas ou exceções',
+        'Se o ambiente de produção foi desligado',
+        'Apenas fluxos felizes com dados corretos',
+        'Somente a performance do banco'
+      ],
+      answer: 0,
+      explanation: 'Testes negativos avaliam resiliência do sistema diante de dados ou ações inválidas.'
+    },
+    {
+      prompt: 'A severidade de um defeito representa:',
+      options: [
+        'O impacto técnico/funcional do problema',
+        'Quem encontrou o erro',
+        'A quantidade de prints anexados',
+        'O humor do time no dia'
+      ],
+      answer: 0,
+      explanation: 'Severidade mede o impacto do defeito na solução.'
+    },
+    {
+      prompt: 'A prioridade de um defeito normalmente considera:',
+      options: [
+        'Urgência de negócio para correção',
+        'Apenas o nome do módulo afetado',
+        'Somente o tamanho do print anexado',
+        'A preferência do QA por um tipo de teste'
+      ],
+      answer: 0,
+      explanation: 'Prioridade combina impacto, urgência e contexto de negócio.'
+    },
+    {
+      prompt: 'Uma boa suíte manual de regressão deve focar em:',
+      options: [
+        'Fluxos críticos e áreas mais suscetíveis a impacto por mudanças',
+        'Somente telas raramente usadas',
+        'Apenas casos irrelevantes para o cliente',
+        'Tudo com a mesma profundidade, sem priorização'
+      ],
+      answer: 0,
+      explanation: 'Regressão eficiente prioriza os cenários mais importantes e mais arriscados.'
+    },
+    {
+      prompt: 'Ao validar um formulário, um cuidado essencial é testar:',
+      options: [
+        'Campos obrigatórios, formatos inválidos e mensagens de erro',
+        'Apenas o botão enviar',
+        'Somente a cor do plano de fundo',
+        'O nome interno do componente CSS'
+      ],
+      answer: 0,
+      explanation: 'Formulários exigem validação completa de regras, feedback e tratamento de erro.'
+    }
+  ],
+  'module-4': [
+    {
+      prompt: 'Automação costuma gerar mais valor quando:',
+      options: [
+        'Reduz esforço repetitivo e aumenta confiança em regressões críticas',
+        'É usada em qualquer cenário sem avaliar retorno',
+        'Substitui toda análise humana do produto',
+        'É criada mesmo sem estabilidade mínima da funcionalidade'
+      ],
+      answer: 0,
+      explanation: 'Retorno da automação cresce em cenários repetitivos, críticos e estáveis.'
+    },
+    {
+      prompt: 'A pirâmide de testes sugere que a maior base deve estar em:',
+      options: [
+        'Testes unitários',
+        'Testes E2E pesados',
+        'Testes manuais de aceite',
+        'Validação em produção'
+      ],
+      answer: 0,
+      explanation: 'A base ampla em unitários tende a ser mais rápida, barata e estável.'
+    },
+    {
+      prompt: 'Um sinal de automação frágil é quando o teste:',
+      options: [
+        'Falha com frequência por detalhes visuais ou sincronização mal tratada',
+        'Executa rápido e com assertivas claras',
+        'Usa dados previsíveis e isolados',
+        'Valida uma API estável com bom setup'
+      ],
+      answer: 0,
+      explanation: 'Flakiness costuma indicar problema de sincronização, dependência externa ou seletor ruim.'
+    },
+    {
+      prompt: 'Qual benefício de Page Objects ou abstrações similares?',
+      options: [
+        'Reduz duplicação e facilita manutenção da suíte',
+        'Aumenta acoplamento e dificulta leitura',
+        'Elimina a necessidade de asserts',
+        'Impede testes de API'
+      ],
+      answer: 0,
+      explanation: 'Abstrações bem feitas ajudam a centralizar interação com elementos e reduzir retrabalho.'
+    },
+    {
+      prompt: 'Testes de API automatizados ajudam porque:',
+      options: [
+        'Validam regras de negócio com rapidez e menos fragilidade que UI',
+        'Dependem sempre de navegador',
+        'Nunca precisam de dados controlados',
+        'Substituem completamente testes unitários'
+      ],
+      answer: 0,
+      explanation: 'API costuma ser uma camada eficiente para validar regras com bom custo-benefício.'
+    },
+    {
+      prompt: 'Uma boa prática ao automatizar dados de teste é:',
+      options: [
+        'Criar dados previsíveis e limpar dependências quando necessário',
+        'Reutilizar o mesmo cadastro para tudo sem controle',
+        'Depender de ambiente manualmente preparado',
+        'Ignorar isolamento entre cenários'
+      ],
+      answer: 0,
+      explanation: 'Dados previsíveis deixam os testes mais confiáveis e mais simples de diagnosticar.'
+    },
+    {
+      prompt: 'Quando não automatizar pode ser uma escolha melhor?',
+      options: [
+        'Quando o cenário é altamente exploratório e muda constantemente',
+        'Quando o fluxo é crítico e repetido semanalmente',
+        'Quando a regra de negócio é estável',
+        'Quando o teste precisa rodar em CI/CD'
+      ],
+      answer: 0,
+      explanation: 'Automatizar cenários muito instáveis ou criativos demais pode trazer baixo retorno.'
+    }
+  ],
+  'module-5': [
+    {
+      prompt: 'Ferramentas como TestRail e Zephyr são úteis para:',
+      options: [
+        'Organizar casos, execuções e rastreabilidade de testes',
+        'Desenvolver interfaces web do zero',
+        'Monitorar uso de CPU do servidor apenas',
+        'Substituir pipelines de CI/CD'
+      ],
+      answer: 0,
+      explanation: 'Essas ferramentas ajudam na gestão estruturada da operação de testes.'
+    },
+    {
+      prompt: 'Em um board de defeitos no Jira, um bom workflow ajuda a:',
+      options: [
+        'Dar visibilidade do status de cada problema e da responsabilidade atual',
+        'Remover a necessidade de priorização',
+        'Evitar qualquer evidência em tickets',
+        'Eliminar comunicação com produto'
+      ],
+      answer: 0,
+      explanation: 'Workflow bem definido melhora acompanhamento e previsibilidade da correção.'
+    },
+    {
+      prompt: 'Qual ferramenta é mais associada a carga e performance entre as citadas?',
+      options: [
+        'JMeter',
+        'Jira',
+        'Postman',
+        'Miro'
+      ],
+      answer: 0,
+      explanation: 'JMeter é referência tradicional para testes de carga e análise de performance.'
+    },
+    {
+      prompt: 'Collections e environments no Postman ajudam a:',
+        options: [
+        'Reutilizar requisições e parametrizar diferentes contextos de teste',
+        'Apagar automaticamente o banco em produção',
+        'Criar interfaces mobile nativas',
+        'Substituir toda autenticação da API'
+      ],
+      answer: 0,
+      explanation: 'Esses recursos aceleram testes repetitivos e melhoram organização.'
+    },
+    {
+      prompt: 'Uma integração de QA com CI/CD traz como ganho principal:',
+      options: [
+        'Feedback rápido sobre regressões antes da entrega',
+        'Fim da necessidade de análise de logs',
+        'Eliminação de todos os testes manuais',
+        'Redução total do monitoramento'
+      ],
+      answer: 0,
+      explanation: 'Pipelines ajudam a detectar problemas cedo e evitar falhas chegando ao release.'
+    },
+    {
+      prompt: 'Versionar coleções, scripts e suites de teste no Git é importante porque:',
+      options: [
+        'Permite rastreabilidade e colaboração segura entre os times',
+        'Impede qualquer revisão de código',
+        'Substitui a necessidade de branches',
+        'Evita usar ambientes separados'
+      ],
+      answer: 0,
+      explanation: 'Versionamento ajuda a controlar mudanças, colaborar e voltar para estados confiáveis.'
+    },
+    {
+      prompt: 'Ao escolher uma ferramenta de QA, um critério relevante é:',
+      options: [
+        'Adequação ao problema, integração com o time e custo operacional',
+        'Apenas a cor da interface',
+        'Se o nome parece moderno',
+        'Se ninguém do time sabe usar'
+      ],
+      answer: 0,
+      explanation: 'Boa escolha considera contexto, maturidade do time e retorno prático.'
+    }
+  ],
+  'module-6': [
+    {
+      prompt: 'Em times ágeis, QA agrega valor ao participar de refinamentos porque:',
+      options: [
+        'Ajuda a antecipar critérios, riscos e cenários de teste',
+        'Elimina a necessidade de backlog',
+        'Substitui o papel do PO',
+        'Evita qualquer documentação'
+      ],
+      answer: 0,
+      explanation: 'Refinamentos são ótimos momentos para prevenir ambiguidades e riscos.'
+    },
+    {
+      prompt: 'Uma boa definição de pronto tende a incluir:',
+      options: [
+        'Critérios claros de qualidade e evidência de validação',
+        'Somente desenvolvimento concluído',
+        'Apenas merge no repositório',
+        'Nenhum teste realizado'
+      ],
+      answer: 0,
+      explanation: 'Done sem critérios de qualidade deixa o conceito incompleto.'
+    },
+    {
+      prompt: 'No contexto de BDD, um cenário Gherkin bem escrito deve ser:',
+      options: [
+        'Claros, observável e alinhado ao comportamento esperado',
+        'Cheio de detalhes técnicos irrelevantes para o negócio',
+        'Ambíguo para acomodar qualquer resultado',
+        'Usado apenas por QA, sem participação do time'
+      ],
+      answer: 0,
+      explanation: 'BDD funciona melhor quando descreve comportamento de forma clara e colaborativa.'
+    },
+    {
+      prompt: 'Em uma retrospectiva, o olhar de QA pode contribuir para:',
+      options: [
+        'Melhorar processo, fluxo de defeitos e qualidade da entrega',
+        'Cancelar todo planejamento seguinte',
+        'Remover o uso de métricas',
+        'Desligar a CI/CD'
+      ],
+      answer: 0,
+      explanation: 'Retrospectiva é espaço para ajustes de processo, comunicação e qualidade.'
+    },
+    {
+      prompt: 'Integração contínua favorece QA porque:',
+      options: [
+        'Entrega feedback frequente sobre quebras logo após mudanças',
+        'Reduz a visibilidade sobre defeitos',
+        'Torna desnecessária qualquer revisão',
+        'Impede testes automatizados'
+      ],
+      answer: 0,
+      explanation: 'CI ajuda a detectar regressões cedo e diminuir o custo da correção.'
+    },
+    {
+      prompt: 'Uma squad ágil madura trata qualidade como:',
+      options: [
+        'Um objetivo compartilhado ao longo de toda a sprint',
+        'Uma etapa isolada no final',
+        'Tema exclusivo de reuniões mensais',
+        'Responsabilidade do cliente final'
+      ],
+      answer: 0,
+      explanation: 'Em times maduros, qualidade é construída continuamente.'
+    },
+    {
+      prompt: 'DevSecOps amplia a visão do QA ao incluir também:',
+      options: [
+        'Segurança e conformidade no fluxo contínuo de entrega',
+        'Somente testes manuais de interface',
+        'Apenas documentação estática',
+        'Desligamento de logs e alertas'
+      ],
+      answer: 0,
+      explanation: 'DevSecOps incorpora segurança cedo e continuamente no pipeline.'
+    }
+  ],
+  'module-7': [
+    {
+      prompt: 'Qual prática reduz risco de credenciais expostas em aplicações?',
+      options: [
+        'Gerenciar segredos de forma segura e evitar hardcode',
+        'Salvar senhas em texto puro no repositório',
+        'Compartilhar tokens em chats públicos',
+        'Desativar autenticação em homologação permanentemente'
+      ],
+      answer: 0,
+      explanation: 'Boa gestão de segredos é fundamental para reduzir exposição e abuso.'
+    },
+    {
+      prompt: 'Uma autenticação forte normalmente combina:',
+      options: [
+        'Boas políticas de senha, proteção de sessão e controles adicionais quando necessário',
+        'Apenas uma senha curta e simples',
+        'Ausência de timeout de sessão',
+        'Tokens permanentes sem renovação'
+      ],
+      answer: 0,
+      explanation: 'Segurança de autenticação exige múltiplas camadas de proteção.'
+    },
+    {
+      prompt: 'No contexto de segurança, validação de entrada é importante para:',
+      options: [
+        'Reduzir exploração por injeção e outros abusos',
+        'Melhorar apenas o layout da página',
+        'Aumentar o número de pop-ups',
+        'Substituir logs de auditoria'
+      ],
+      answer: 0,
+      explanation: 'Entrada sem validação é vetor comum para exploração de vulnerabilidades.'
+    },
+    {
+      prompt: 'Qual item ajuda a investigar incidentes e comportamento suspeito?',
+      options: [
+        'Logs e trilhas de auditoria consistentes',
+        'Apagar históricos do sistema',
+        'Evitar monitoramento',
+        'Desativar alertas'
+      ],
+      answer: 0,
+      explanation: 'Logs estruturados são essenciais para detecção e investigação.'
+    },
+    {
+      prompt: 'Teste de segurança não deve se limitar a:',
+      options: [
+        'Apenas um scan automático sem análise de contexto',
+        'Verificação de autenticação',
+        'Validação de headers e exposição de dados',
+        'Revisão de fluxos críticos'
+      ],
+      answer: 0,
+      explanation: 'Ferramentas automáticas ajudam, mas não substituem análise contextual.'
+    },
+    {
+      prompt: 'Uma aplicação com dados sensíveis deve ter atenção especial a:',
+      options: [
+        'Controle de acesso e proteção de dados expostos',
+        'Apenas animações da interface',
+        'Somente posicionamento do menu',
+        'Cor dos badges administrativos'
+      ],
+      answer: 0,
+      explanation: 'Controle de acesso inadequado é um risco alto em aplicações com dados sensíveis.'
+    },
+    {
+      prompt: 'Ao relatar vulnerabilidades, o QA deve priorizar:',
+      options: [
+        'Impacto, evidências e possibilidade de exploração',
+        'Apenas prints sem explicação',
+        'Comentários genéricos sem cenário',
+        'Somente opinião pessoal sobre o risco'
+      ],
+      answer: 0,
+      explanation: 'Bom relato de vulnerabilidade precisa traduzir risco e modo de exploração.'
+    }
+  ],
+  'module-8': [
+    {
+      prompt: 'Stress testing busca observar o sistema quando:',
+      options: [
+        'A carga ultrapassa o limite esperado e pressiona a estabilidade',
+        'Tudo está dentro da operação normal',
+        'Apenas a interface é redesenhada',
+        'Não há usuários simultâneos'
+      ],
+      answer: 0,
+      explanation: 'Stress testa o comportamento acima do esperado e revela limites de recuperação.'
+    },
+    {
+      prompt: 'Latency ou tempo de resposta alto impacta diretamente:',
+      options: [
+        'Experiência do usuário e percepção de fluidez',
+        'Somente a cor da interface',
+        'Apenas a documentação do produto',
+        'O contrato comercial de fornecedores'
+      ],
+      answer: 0,
+      explanation: 'Tempo de resposta é um dos principais sinais percebidos pelo usuário final.'
+    },
+    {
+      prompt: 'Um teste de spike normalmente avalia:',
+      options: [
+        'Comportamento diante de aumento brusco de acessos',
+        'Apenas carga constante e estável',
+        'Somente uso de memória local do navegador',
+        'Interface visual do produto'
+      ],
+      answer: 0,
+      explanation: 'Spike verifica reação do sistema a picos repentinos de tráfego.'
+    },
+    {
+      prompt: 'Ao analisar gargalos, uma boa prática é correlacionar:',
+      options: [
+        'Tempo de resposta, throughput e uso de recursos',
+        'Apenas o nome do teste executado',
+        'Somente o layout da aplicação',
+        'Quantidade de reuniões da sprint'
+      ],
+      answer: 0,
+      explanation: 'Performance precisa ser vista por múltiplos sinais combinados.'
+    },
+    {
+      prompt: 'Um objetivo realista de performance costuma nascer de:',
+      options: [
+        'SLA, expectativa de usuário e capacidade esperada do sistema',
+        'Apenas opinião do time sem referência',
+        'Vontade de usar números aleatórios',
+        'Quantidade de badges no dashboard'
+      ],
+      answer: 0,
+      explanation: 'Metas de performance precisam ser ligadas a operação real e expectativa de negócio.'
+    },
+    {
+      prompt: 'Ramp-up em um teste de carga representa:',
+      options: [
+        'O ritmo de entrada gradual de usuários virtuais',
+        'A correção de defeitos em produção',
+        'A troca de credenciais do admin',
+        'A duração da retrospectiva'
+      ],
+      answer: 0,
+      explanation: 'Ramp-up controla como a carga aumenta ao longo do teste.'
+    },
+    {
+      prompt: 'Uma melhoria de performance deve ser validada por:',
+      options: [
+        'Nova medição comparativa antes e depois da mudança',
+        'Apenas percepção informal do time',
+        'Somente comentário no ticket',
+        'Troca da ferramenta sem reexecutar testes'
+      ],
+      answer: 0,
+      explanation: 'Sem comparação objetiva, não há evidência concreta de ganho.'
+    }
+  ],
+  'module-9': [
+    {
+      prompt: 'Construir portfólio em QA ajuda porque:',
+      options: [
+        'Demonstra raciocínio, prática e repertório em processos reais',
+        'Substitui totalmente entrevistas',
+        'Elimina necessidade de estudar fundamentos',
+        'Serve apenas para redes sociais'
+      ],
+      answer: 0,
+      explanation: 'Portfólio mostra na prática como a pessoa pensa, executa e comunica QA.'
+    },
+    {
+      prompt: 'Em uma entrevista de QA, costuma gerar valor explicar:',
+      options: [
+        'Como você prioriza riscos, registra defeitos e toma decisões de teste',
+        'Apenas qual ferramenta você acha bonita',
+        'Somente sua opinião sobre salários',
+        'Apenas quantidade de cursos feitos'
+      ],
+      answer: 0,
+      explanation: 'Entrevistadores valorizam raciocínio prático e capacidade de decisão.'
+    },
+    {
+      prompt: 'Para crescer em QA, é útil combinar habilidades técnicas com:',
+      options: [
+        'Comunicação, visão de negócio e colaboração',
+        'Apenas decorar siglas',
+        'Somente consumo passivo de conteúdo',
+        'Evitar contato com produto e desenvolvimento'
+      ],
+      answer: 0,
+      explanation: 'Carreira forte em QA une técnica com comunicação e contexto de negócio.'
+    },
+    {
+      prompt: 'Aprender SQL é importante em QA porque:',
+      options: [
+        'Ajuda a validar dados e investigar comportamentos no backend',
+        'Serve apenas para times de marketing',
+        'Impede testes de API',
+        'Substitui documentação de requisitos'
+      ],
+      answer: 0,
+      explanation: 'SQL permite validar persistência, integrações e consistência de dados.'
+    },
+    {
+      prompt: 'Uma postura profissional em QA inclui:',
+      options: [
+        'Aprendizado contínuo e melhoria constante do processo',
+        'Dependência total de instruções prontas',
+        'Evitar feedback técnico',
+        'Ignorar métricas e retrospectivas'
+      ],
+      answer: 0,
+      explanation: 'QA evolui com estudo contínuo, prática e ajuste constante de processo.'
+    },
+    {
+      prompt: 'Ao montar currículo para QA, faz mais sentido destacar:',
+      options: [
+        'Resultados, ferramentas, contexto e responsabilidades exercidas',
+        'Somente cursos sem aplicação',
+        'Apenas frase genérica de objetivo',
+        'Somente informações pessoais sem contexto técnico'
+      ],
+      answer: 0,
+      explanation: 'Currículo eficaz mostra impacto, contexto e repertório prático.'
+    },
+    {
+      prompt: 'A evolução de carreira em QA costuma ser fortalecida por:',
+      options: [
+        'Especialização progressiva e exposição a diferentes contextos de teste',
+        'Repetir sempre o mesmo tipo de atividade sem aprofundamento',
+        'Evitar qualquer contato com automação ou dados',
+        'Ignorar feedback de entrevistas e líderes'
+      ],
+      answer: 0,
+      explanation: 'Diversidade de contexto e aprofundamento técnico ampliam o potencial de crescimento.'
+    }
+  ]
+};
+
+Object.entries(MODULE_QUIZ_EXPANSIONS).forEach(([moduleId, questions]) => {
+  if (MODULE_QUIZZES[moduleId]) {
+    MODULE_QUIZZES[moduleId].questions = [
+      ...MODULE_QUIZZES[moduleId].questions,
+      ...questions,
+    ];
+  }
+});
+
 const MODULE_DETAILED_CONTENT = {
   'module-1': {
     summary: 'Este aprofundamento transforma a introdução em uma base real de curso, conectando o papel do QA à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
