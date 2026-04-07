@@ -22,7 +22,7 @@
     <section class="hero hero-landing">
       <p class="section-eyebrow">Treinamento com prática e validação</p>
       <h1>Aprenda QA na prática e valide seu conhecimento com exercícios em cada módulo</h1>
-      <p>Você não só aprende, você pratica e testa seu conhecimento em cada etapa da jornada. Um curso completo para construir base sólida em QA com aplicação real de mercado.</p>
+      <p>Você não só aprende, você pratica e testa seu conhecimento em cada etapa da jornada. Um curso completo para construir base sólida em QA com aplicação real de mercado e certificado de conclusão.</p>
       <a href="/checkout" class="cta-button">Começar a estudar QA agora</a>
       <div class="hero-proof-strip">
         <div><strong>9 módulos</strong><span>do zero ao avançado</span></div>
@@ -203,6 +203,7 @@
             <li>✓ Curso 100% online em texto</li>
             <li>✓ Acesso imediato após o pagamento</li>
             <li>✓ Ideal para estudar no seu ritmo</li>
+            <li>✓ Certificado de conclusão</li>
           </ul>
           <a href="/checkout" class="cta-button wide">Começar a estudar QA agora</a>
           <p class="trust-note">Acesso liberado imediatamente para você começar a estudar sem espera.</p>
@@ -213,25 +214,36 @@
     <!-- COMPRA DIRETA -->
     <section id="compra" class="landing-section">
       <div class="landing-container">
-        <h2>Compra direta e acesso rápido</h2>
-        <p class="section-subtitle">Sem formulário de espera. Clique no botão, conclua o pagamento e siga para o acesso ao curso.</p>
+        <h2>Cadastre seu email e siga para o pagamento</h2>
+        <p class="section-subtitle">Registramos seu nome e email antes do checkout para enviar automaticamente o login com senha aleatória após a confirmação.</p>
         
         <div class="purchase-form-container checkout-panel">
           <div class="purchase-form checkout-card">
             <p class="pricing-kicker">Oferta ativa</p>
             <h3>Entre agora na trilha de QA</h3>
-            <p>Treinamento com prática, validação e material estruturado para quem quer aprender de verdade.</p>
-            <a href="/checkout" class="cta-button wide">Começar a estudar QA agora</a>
-            <p class="form-disclaimer">Pagamento direto via checkout. Valor promocional por tempo limitado.</p>
+            <p>Cadastre os dados abaixo e em seguida siga para o pagamento direto.</p>
+            <form id="purchaseForm" class="purchase-checkout-form">
+              <div class="form-group">
+                <label for="buyerName">Nome completo</label>
+                <input type="text" id="buyerName" name="name" placeholder="Ex.: Maria Fernanda Souza" required>
+              </div>
+              <div class="form-group">
+                <label for="buyerEmail">Email para receber o login</label>
+                <input type="email" id="buyerEmail" name="email" placeholder="seu@email.com" required>
+              </div>
+              <p id="purchaseMessage" class="form-message"></p>
+              <button type="submit" class="cta-button wide">Ir para o pagamento</button>
+            </form>
+            <p class="form-disclaimer">Após a confirmação do pagamento, o login será enviado para o email cadastrado.</p>
           </div>
 
           <div class="pix-info-card checkout-steps">
-            <h4>O que acontece depois do clique</h4>
+            <h4>O que acontece depois do cadastro</h4>
             <ol>
-              <li>Você acessa o checkout imediatamente</li>
-              <li>Conclui o pagamento sem etapa manual intermediária</li>
-              <li>Recebe a continuidade do fluxo de acesso ao curso</li>
-              <li>Começa a estudar no seu ritmo</li>
+              <li>Você registra nome e email do aluno</li>
+              <li>Segue direto para o checkout</li>
+              <li>Após confirmação, o sistema gera uma senha aleatória</li>
+              <li>O login chega no email cadastrado e também fica disponível no admin</li>
             </ol>
           </div>
         </div>

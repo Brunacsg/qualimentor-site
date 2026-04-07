@@ -103,6 +103,15 @@ db.serialize(() => {
     UNIQUE(userId, moduleId)
   )`);
 
+  db.run(`CREATE TABLE IF NOT EXISTS credential_deliveries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    name TEXT,
+    email TEXT NOT NULL,
+    plainPassword TEXT NOT NULL,
+    createdAt TEXT NOT NULL
+  )`);
+
   db.all('PRAGMA table_info(users)', (err, columns) => {
     if (err) {
       console.error('Erro ao verificar schema de users:', err);
@@ -193,6 +202,18 @@ function mapProgressRows(rows) {
     };
     return acc;
   }, {});
+}
+
+function logGeneratedCredential({ userId, name, email, plainPassword }) {
+  db.run(
+    'INSERT INTO credential_deliveries (userId, name, email, plainPassword, createdAt) VALUES (?, ?, ?, ?, ?)',
+    [userId || null, normalizeName(name), normalizeEmail(email), plainPassword, new Date().toISOString()],
+    (err) => {
+      if (err) {
+        console.error('Erro ao registrar credencial gerada:', err);
+      }
+    }
+  );
 }
 
 // =========================
@@ -361,8 +382,12 @@ app.post('/create-user', authAdmin, async (req, res) => {
 
 app.post('/purchase-request', async (req, res) => {
   const email = normalizeEmail(req.body.email);
-  const { name } = req.body;
+  const name = normalizeName(req.body.name);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!name || name.length < 3) {
+    return res.status(400).json({ success: false, message: 'Informe seu nome completo.' });
+  }
 
   if (!email || !emailRegex.test(email)) {
     return res.status(400).json({ success: false, message: 'Email inválido' });
@@ -373,19 +398,19 @@ app.post('/purchase-request', async (req, res) => {
 
   db.run(
     'INSERT INTO purchase_requests (email, name, status, pixKey, createdAt) VALUES (?, ?, ?, ?, ?)',
-    [email, name || '', 'pending', paymentLink, createdAt],
+    [email, name, 'pending', paymentLink, createdAt],
     async function (err) {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao registrar solicitação' });
       }
 
-      const message = `Solicitação registrada com sucesso. Em breve você receberá minha confirmação por email e o link PagSeguro será enviado em seguida.`;
+      const message = 'Cadastro registrado com sucesso. Você será direcionado para o pagamento.';
 
       try {
         await sendEmail({
           to: email,
-          subject: 'Solicitação recebida - Curso QA',
-          text: `Recebemos sua solicitação de compra. Em breve você receberá um email com as instruções de pagamento.`,
+          subject: 'Cadastro recebido - Curso QA',
+          text: `Recebemos seu cadastro para compra do curso QA. Após a confirmação do pagamento, enviaremos para este email o login com a senha gerada automaticamente.`,
         });
 
         await sendEmail({
@@ -470,6 +495,21 @@ app.get('/users-progress', authAdmin, (req, res) => {
       }));
 
       res.json({ success: true, summaries });
+    }
+  );
+});
+
+app.get('/credential-deliveries', authAdmin, (req, res) => {
+  db.all(
+    `SELECT id, userId, name, email, plainPassword, createdAt
+     FROM credential_deliveries
+     ORDER BY createdAt DESC`,
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao buscar credenciais geradas' });
+      }
+
+      res.json({ success: true, credentials: rows });
     }
   );
 });
@@ -583,6 +623,8 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
               return;
             }
 
+            const generatedUserId = existingUser?.id || null;
+
             if (existingUser) {
               db.run(
                 "UPDATE users SET name = COALESCE(NULLIF(?, ''), name), password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?",
@@ -600,22 +642,39 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
                 function (insertErr) {
                   if (insertErr) {
                     console.error('Erro ao criar usuário:', insertErr);
+                    return;
                   }
+
+                  logGeneratedCredential({
+                    userId: this.lastID,
+                    name: request.name,
+                    email: request.email,
+                    plainPassword: generatedPassword,
+                  });
                 }
               );
+            }
+
+            if (generatedUserId) {
+              logGeneratedCredential({
+                userId: generatedUserId,
+                name: request.name,
+                email: request.email,
+                plainPassword: generatedPassword,
+              });
             }
           });
 
           await sendEmail({
             to: request.email,
             subject: 'Seu acesso ao curso QA está pronto',
-            text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nEmail: ${request.email}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados.`,
+            text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nLogin: ${request.email}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados. Guarde esta mensagem para consultas futuras.`,
           });
 
           await sendEmail({
             to: ADMIN_EMAIL,
             subject: 'Compra QA aprovada',
-            text: `A solicitação de compra do email ${request.email} foi aprovada e os dados de acesso foram gerados.\n\nSolicitação aprovada em ${approvedAt}.`,
+            text: `A solicitação de compra do email ${request.email} foi aprovada e os dados de acesso foram gerados.\n\nNome: ${request.name || 'Não informado'}\nLogin: ${request.email}\nSenha gerada: ${generatedPassword}\nAprovado em: ${approvedAt}.`,
           });
         } catch (error) {
           console.error('Erro ao enviar emails de aprovação:', error);

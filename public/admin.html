@@ -63,6 +63,22 @@
         </div>
       </div>
     </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <span>🔐</span>
+        <div>
+          <h2>Credenciais Geradas</h2>
+          <p>Senhas aleatórias enviadas aos alunos após aprovação de compra.</p>
+        </div>
+      </div>
+
+      <div class="section-body">
+        <div id="credentialsContainer" class="purchases-table-container">
+          <p style="text-align: center; color: var(--text-muted);">Carregando credenciais...</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -129,6 +145,26 @@
       } catch (err) {
         document.getElementById('usersProgressContainer').innerHTML =
           `<p style="color: red;">Erro ao carregar progresso: ${err.message}</p>`;
+      }
+    }
+
+    async function fetchCredentials() {
+      try {
+        const res = await fetch('/credential-deliveries', {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          renderCredentials(data.credentials);
+        } else {
+          document.getElementById('credentialsContainer').innerHTML =
+            `<p style="color: red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById('credentialsContainer').innerHTML =
+          `<p style="color: red;">Erro ao carregar credenciais: ${err.message}</p>`;
       }
     }
 
@@ -276,6 +312,47 @@
       document.getElementById('usersProgressContainer').innerHTML = html;
     }
 
+    function renderCredentials(credentials) {
+      if (!credentials || credentials.length === 0) {
+        document.getElementById('credentialsContainer').innerHTML =
+          '<p style="text-align: center; color: var(--text-muted);">Nenhuma credencial gerada ainda.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="purchases-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Senha gerada</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      credentials.forEach(item => {
+        const createdAt = new Date(item.createdAt).toLocaleDateString('pt-BR');
+
+        html += `
+          <tr>
+            <td>${item.name || '-'}</td>
+            <td>${item.email}</td>
+            <td><code>${item.plainPassword}</code></td>
+            <td>${createdAt}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('credentialsContainer').innerHTML = html;
+    }
+
     async function approveRequest(requestId, secret) {
       if (!confirm('Tem certeza que deseja aprovar esta compra?')) return;
 
@@ -296,6 +373,7 @@
           fetchPurchases();
           fetchUsers();
           fetchUsersProgress();
+          fetchCredentials();
         } else {
           alert(`Erro: ${data.message}`);
         }
@@ -313,6 +391,7 @@
       fetchPurchases();
       fetchUsers();
       fetchUsersProgress();
+      fetchCredentials();
     });
   </script>
 

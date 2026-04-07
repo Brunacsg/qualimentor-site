@@ -1256,6 +1256,16 @@ function getCourseCompletionDate(progress) {
   return completionDates.length ? completionDates[completionDates.length - 1] : new Date().toISOString();
 }
 
+function buildCertificateValidationCode(issuedAtIso) {
+  const base = [
+    CERTIFICATE_ORGANIZATION.slice(0, 4).toUpperCase(),
+    String(currentUserProfile?.id || '0000').padStart(4, '0'),
+    issuedAtIso.slice(0, 10).replace(/-/g, ''),
+  ].join('-');
+
+  return base;
+}
+
 function buildCertificateMarkup() {
   const progress = loadCourseProgress();
   const completed = getCompletedCount(progress);
@@ -1272,7 +1282,9 @@ function buildCertificateMarkup() {
   }
 
   const issuedAt = new Date(getCourseCompletionDate(progress)).toLocaleDateString('pt-BR');
+  const issuedAtIso = getCourseCompletionDate(progress);
   const studentName = getStudentDisplayName();
+  const validationCode = buildCertificateValidationCode(issuedAtIso);
 
   if (!studentName) {
     return `
@@ -1310,6 +1322,11 @@ function buildCertificateMarkup() {
         <p class="certificate-student">${escapeHtml(studentName)}</p>
         <p class="certificate-text">concluiu com aproveitamento a trilha completa de Qualidade de Software, validando o aprendizado com exercícios e questionários ao longo dos 9 módulos do programa.</p>
         <div class="certificate-seal">Qualimentor</div>
+        <div class="certificate-digital-signature">
+          <p class="digital-signature-label">Assinado digitalmente por</p>
+          <p class="digital-signature-script">Qualimentor</p>
+          <p class="digital-signature-meta">Documento validado internamente em ${issuedAt}</p>
+        </div>
         <div class="certificate-footer">
           <div>
             <strong>Emitido em</strong>
@@ -1323,10 +1340,14 @@ function buildCertificateMarkup() {
             <strong>Validação</strong>
             <p>Exercícios + questionários</p>
           </div>
+          <div>
+            <strong>ID do certificado</strong>
+            <p>${validationCode}</p>
+          </div>
         </div>
         <div class="certificate-signature">
           <span></span>
-          <p>Qualimentor</p>
+          <p>Diretoria Qualimentor</p>
         </div>
       </div>
       <div class="certificate-actions">
@@ -1415,6 +1436,9 @@ function printCertificate() {
           h3 { font-size: 2.5rem; margin: 24px 0 16px; color: #0f172a; }
           .certificate-student { font-size: 2.3rem; margin: 16px 0; color: #0369a1; font-weight: 700; }
           .certificate-seal { position: absolute; right: 48px; bottom: 148px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #0369a1; display: grid; place-items: center; color: #0369a1; font-weight: 700; opacity: 0.8; }
+          .certificate-digital-signature { margin-top: 26px; padding: 16px 20px; border-radius: 16px; background: rgba(3, 105, 161, 0.08); max-width: 340px; }
+          .digital-signature-label, .digital-signature-meta { margin: 0; color: #334155; }
+          .digital-signature-script { margin: 8px 0; font-size: 2rem; font-family: "Brush Script MT", "Segoe Script", cursive; color: #075985; }
           .certificate-footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 48px; }
           .certificate-signature { margin-top: 42px; max-width: 240px; }
           .certificate-signature span { display: block; border-top: 1px solid #0f172a; margin-bottom: 10px; }
