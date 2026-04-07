@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         purchaseMessage.className = 'form-message success';
       }
 
-      window.location.href = '/checkout';
+      window.location.href = data.paymentLink || '/checkout';
     } catch (error) {
       if (purchaseMessage) {
         purchaseMessage.textContent = error.message || 'Erro ao seguir para o pagamento.';

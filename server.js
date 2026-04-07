@@ -683,24 +683,27 @@ app.post('/purchase-request', async (req, res) => {
       }
 
       const message = 'Cadastro registrado com sucesso. Você será direcionado para o pagamento.';
+      const requestId = this.lastID;
 
-      try {
-        await sendEmail({
-          to: email,
-          subject: 'Cadastro recebido - Curso QA',
-          text: `Recebemos seu cadastro para compra do curso QA. Após a confirmação do pagamento, enviaremos para este email o login com a senha gerada automaticamente.`,
-        });
+      res.json({ success: true, message, requestId, paymentLink });
 
-        await sendEmail({
-          to: ADMIN_EMAIL,
-          subject: 'Nova solicitação de compra - Portal QA',
-          text: `Nova solicitação de compra recebida:\nEmail: ${email}\nNome: ${name || 'Não informado'}\nData: ${createdAt}`,
-        });
-      } catch (error) {
-        console.error('Erro ao enviar emails de solicitação:', error);
-      }
+      setImmediate(async () => {
+        try {
+          await sendEmail({
+            to: email,
+            subject: 'Cadastro recebido - Curso QA',
+            text: 'Recebemos seu cadastro para compra do curso QA. Após a confirmação do pagamento, enviaremos para este email os dados de acesso.',
+          });
 
-      res.json({ success: true, message, requestId: this.lastID });
+          await sendEmail({
+            to: ADMIN_EMAIL,
+            subject: 'Nova solicitação de compra - Portal QA',
+            text: `Nova solicitação de compra recebida:\nEmail: ${email}\nNome: ${name || 'Não informado'}\nData: ${createdAt}`,
+          });
+        } catch (error) {
+          console.error('Erro ao enviar emails de solicitação:', error);
+        }
+      });
     }
   );
 });
