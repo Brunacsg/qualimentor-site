@@ -22,6 +22,16 @@ const SMTP_PORT = process.env.SMTP_PORT;
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
 
+process.on('uncaughtException', (error) => {
+  console.error('Erro não tratado no processo:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Promise rejeitada sem tratamento:', reason);
+  process.exit(1);
+});
+
 // =========================
 // DATABASE
 // =========================
