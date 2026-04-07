@@ -333,6 +333,28 @@ app.get('/purchase-requests', authAdmin, (req, res) => {
   });
 });
 
+app.get('/users', authAdmin, (req, res) => {
+  db.all(
+    `SELECT id, email, expiresAt, activeSessionId
+     FROM users
+     ORDER BY email COLLATE NOCASE ASC`,
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao buscar usuários' });
+      }
+
+      const users = rows.map((user) => ({
+        id: user.id,
+        email: user.email,
+        expiresAt: user.expiresAt,
+        isActive: Boolean(user.activeSessionId),
+      }));
+
+      res.json({ success: true, users });
+    }
+  );
+});
+
 app.post('/approve-purchase', authAdmin, async (req, res) => {
   const { requestId } = req.body;
   if (!requestId) {

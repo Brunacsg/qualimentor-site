@@ -31,6 +31,22 @@
         </div>
       </div>
     </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <span>👥</span>
+        <div>
+          <h2>Usuários Cadastrados</h2>
+          <p>Veja quem tem acesso ao portal e se existe sessão ativa.</p>
+        </div>
+      </div>
+
+      <div class="section-body">
+        <div id="usersContainer" class="purchases-table-container">
+          <p style="text-align: center; color: var(--text-muted);">Carregando usuários...</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -57,6 +73,26 @@
       } catch (err) {
         document.getElementById('purchasesContainer').innerHTML = 
           `<p style="color: red;">Erro ao carregar compras: ${err.message}</p>`;
+      }
+    }
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch('/users', {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          renderUsers(data.users);
+        } else {
+          document.getElementById('usersContainer').innerHTML =
+            `<p style="color: red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById('usersContainer').innerHTML =
+          `<p style="color: red;">Erro ao carregar usuários: ${err.message}</p>`;
       }
     }
 
@@ -110,6 +146,49 @@
       document.getElementById('purchasesContainer').innerHTML = html;
     }
 
+    function renderUsers(users) {
+      if (!users || users.length === 0) {
+        document.getElementById('usersContainer').innerHTML =
+          '<p style="text-align: center; color: var(--text-muted);">Nenhum usuário cadastrado ainda.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="purchases-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Email</th>
+              <th>Expira em</th>
+              <th>Sessão</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      users.forEach(user => {
+        const expiresAt = new Date(user.expiresAt).toLocaleDateString('pt-BR');
+        const sessionClass = user.isActive ? 'status-approved' : 'status-pending';
+        const sessionText = user.isActive ? 'Ativa' : 'Inativa';
+
+        html += `
+          <tr>
+            <td>${user.id}</td>
+            <td>${user.email}</td>
+            <td>${expiresAt}</td>
+            <td><span class="status-badge ${sessionClass}">${sessionText}</span></td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('usersContainer').innerHTML = html;
+    }
+
     async function approveRequest(requestId, secret) {
       if (!confirm('Tem certeza que deseja aprovar esta compra?')) return;
 
@@ -128,6 +207,7 @@
         if (data.success) {
           alert('Compra aprovada! Email enviado ao cliente.');
           fetchPurchases();
+          fetchUsers();
         } else {
           alert(`Erro: ${data.message}`);
         }
@@ -141,7 +221,10 @@
     }
 
     // Load on page load
-    window.addEventListener('DOMContentLoaded', fetchPurchases);
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchPurchases();
+      fetchUsers();
+    });
   </script>
 
   <style>
