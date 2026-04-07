@@ -650,7 +650,7 @@ app.get('/users-progress', authAdmin, (req, res) => {
       COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS "completedModules",
       COALESCE(SUM(CASE WHEN up.quizpassed = 1 THEN 1 ELSE 0 END), 0) AS "passedQuizzes",
       COALESCE(MAX(up.updatedat), '') AS "lastActivity",
-      COALESCE(ROUND(AVG(CASE WHEN up.quiztotal > 0 THEN (CAST(up.quizscore AS REAL) / up.quiztotal) * 100 END), 1), 0) AS "averageScore"
+      COALESCE(ROUND(AVG(CASE WHEN up.quiztotal > 0 THEN (CAST(up.quizscore AS NUMERIC) / up.quiztotal) * 100 END), 1), 0) AS "averageScore"
      FROM users u
      LEFT JOIN user_progress up ON up.userid = u.id
     GROUP BY u.id, u.name, u.email, u.expiresat
