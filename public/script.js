@@ -11,6 +11,49 @@ const MODULES = [
   'module-9'
 ];
 
+const LOGIN_MESSAGE_KEY = 'loginMessage';
+
+function setLoginMessage(message) {
+  if (message) {
+    localStorage.setItem(LOGIN_MESSAGE_KEY, message);
+  }
+}
+
+function showLoginMessage() {
+  const message = localStorage.getItem(LOGIN_MESSAGE_KEY);
+  const messageElement = document.getElementById('msg');
+
+  if (!message || !messageElement) {
+    return;
+  }
+
+  messageElement.innerText = message;
+  messageElement.classList.add('error');
+  localStorage.removeItem(LOGIN_MESSAGE_KEY);
+}
+
+async function hasValidSession() {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const res = await fetch(`${API_ORIGIN}/dashboard`, {
+      headers: { Authorization: token }
+    });
+
+    if (!res.ok) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 async function login() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -44,6 +87,18 @@ async function verifySession() {
   });
 
   if (!res.ok) {
+    let message = 'Sua sessão expirou. Faça login novamente.';
+
+    try {
+      const data = await res.json();
+      if (data?.error === 'Sessão encerrada por novo login em outro dispositivo') {
+        message = 'Sua conta foi acessada em outro dispositivo. Faça login novamente para continuar.';
+      }
+    } catch (error) {
+      console.error('Erro ao ler resposta de sessão:', error);
+    }
+
+    setLoginMessage(message);
     localStorage.removeItem('token');
     window.location.href = 'login.html';
   }
@@ -168,9 +223,16 @@ window.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
 
   if (page === 'login') {
-    if (localStorage.getItem('token')) {
-      window.location.href = 'dashboard.html';
-    }
+    showLoginMessage();
+
+    hasValidSession().then((isValid) => {
+      if (isValid) {
+        window.location.href = 'dashboard.html';
+      } else {
+        localStorage.removeItem('token');
+      }
+    });
+
     return;
   }
 
