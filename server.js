@@ -36,9 +36,17 @@ process.on('unhandledRejection', (reason) => {
 // =========================
 // DATABASE
 // =========================
-const defaultDataDir = process.env.RENDER_DISK_PATH
-  || (process.platform === 'win32' ? __dirname : '/tmp');
-const databasePath = process.env.DB_PATH || path.join(defaultDataDir, 'database.db');
+const bundledDatabasePath = path.join(__dirname, 'database.db');
+const renderDatabasePath = process.env.RENDER_DISK_PATH
+  ? path.join(process.env.RENDER_DISK_PATH, 'database.db')
+  : null;
+const fallbackDatabasePath = process.platform === 'win32'
+  ? bundledDatabasePath
+  : '/tmp/database.db';
+
+const databasePath = process.env.DB_PATH
+  || renderDatabasePath
+  || (fs.existsSync(bundledDatabasePath) ? bundledDatabasePath : fallbackDatabasePath);
 
 fs.mkdirSync(path.dirname(databasePath), { recursive: true });
 
