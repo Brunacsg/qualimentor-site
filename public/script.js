@@ -367,6 +367,414 @@ const MODULE_QUIZZES = {
   }
 };
 
+const MODULE_DETAILED_CONTENT = {
+  'module-1': {
+    summary: 'Este aprofundamento transforma a introdução em uma base real de curso, conectando o papel do QA à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
+    sections: [
+      {
+        heading: 'Como QA gera valor para o negócio',
+        paragraphs: [
+          'Em um curso profissionalizante de QA, é essencial entender que qualidade não é um fim isolado. O QA protege receita, reputação e experiência do cliente. Um defeito em login, checkout, cálculo de frete ou emissão de nota pode gerar perda de conversão, chamados de suporte, devoluções e desgaste da marca.',
+          'Por isso, o profissional de QA precisa saber traduzir problemas técnicos em impacto de negócio. Ao priorizar testes, não basta perguntar “o que pode quebrar?”, mas também “o que acontece com cliente, operação, suporte e faturamento se isso falhar?”. Esse raciocínio é o que diferencia um executor de testes de um profissional estratégico.'
+        ],
+        bullets: [
+          'Risco técnico: falha de validação, integração ou regra de negócio.',
+          'Risco operacional: suporte sobrecarregado, retrabalho e incidentes.',
+          'Risco financeiro: perda de vendas, chargeback, multa ou SLA descumprido.',
+          'Risco de imagem: reclamações públicas e perda de confiança do usuário.'
+        ]
+      },
+      {
+        heading: 'Mentalidade de QA moderno',
+        paragraphs: [
+          'QA moderno participa desde a descoberta do problema até a validação da solução em produção. Isso inclui revisar requisitos, levantar ambiguidades, sugerir critérios de aceitação, definir cenários críticos, validar dados e acompanhar métricas após o release.',
+          'Outro ponto central é a comunicação. Um bom QA sabe registrar defeitos com clareza, negociar prioridade, demonstrar risco com evidências e alinhar expectativa com produto e desenvolvimento. Em equipes maduras, qualidade é uma responsabilidade compartilhada, mas o QA frequentemente atua como facilitador dessa disciplina.'
+        ],
+        bullets: [
+          'Participar da definição de requisitos e critérios de aceite.',
+          'Priorizar testes com base em risco e impacto.',
+          'Documentar achados com contexto e evidência.',
+          'Acompanhar indicadores após entrega em produção.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'O objetivo é montar uma visão inicial de QA para um fluxo de checkout de e-commerce, conectando responsabilidades, riscos e ações de validação.',
+    steps: [
+      'Escolha um cenário simples de compra: produto no carrinho, preenchimento de endereço, escolha de frete e pagamento.',
+      'Liste 3 responsabilidades de QA nesse fluxo, por exemplo: revisar regras de cálculo, validar mensagens de erro e testar integração de pagamento.',
+      'Mapeie pelo menos 5 riscos: cupom inválido aceito, valor final incorreto, frete divergente, pagamento duplicado e falha de confirmação.',
+      'Transforme os riscos em ações de teste. Para cada risco, escreva o que será validado, em qual etapa e com qual resultado esperado.',
+      'Feche o exercício com um mini-plano contendo objetivo, escopo, riscos prioritários e próximos passos de execução.'
+    ],
+    deliverables: [
+      'Lista de responsabilidades do QA no fluxo.',
+      'Mapa de riscos do checkout.',
+      'Mini-plano de validação com prioridade e objetivo.'
+    ]
+  },
+  'module-2': {
+    summary: 'Neste aprofundamento, o aluno passa a enxergar o STLC como um sistema de decisões, artefatos e métricas, e não apenas como uma sequência decorada de etapas.',
+    sections: [
+      {
+        heading: 'Planejamento de testes com visão operacional',
+        paragraphs: [
+          'O planejamento de testes precisa responder perguntas objetivas: o que será testado, o que não será testado, quais ambientes estarão disponíveis, quais dados serão usados, quais riscos exigem maior profundidade e qual o critério mínimo para liberar a entrega.',
+          'Na prática, o plano de teste também organiza dependências. Uma equipe pode ter casos excelentes, mas falhar porque o ambiente está instável, os acessos não foram provisionados ou o escopo mudou sem atualização do plano. O documento e os alinhamentos precisam refletir essa realidade.'
+        ],
+        bullets: [
+          'Definir escopo e exclusões com clareza.',
+          'Mapear dependências técnicas e operacionais.',
+          'Associar casos críticos a riscos de negócio.',
+          'Estabelecer critérios de entrada e saída mensuráveis.'
+        ]
+      },
+      {
+        heading: 'Métricas que ajudam a decidir',
+        paragraphs: [
+          'Métricas não devem servir apenas para “encher relatório”. Elas precisam apoiar decisão. Cobertura de testes mostra amplitude. Tempo médio de resolução mostra fluidez do processo. Defeitos por severidade ajudam a entender risco residual. Reabertura de bugs pode sinalizar falha de entendimento ou baixa qualidade na correção.',
+          'Um QA mais maduro não apresenta números isolados; ele conta a história por trás deles. Exemplo: “Cobertura subiu, mas os defeitos críticos também cresceram na integração de pagamento. Precisamos revisar critérios de entrada e aumentar testes de contrato”.'
+        ],
+        bullets: [
+          'Cobertura sem criticidade pode gerar falsa segurança.',
+          'Tempo de correção impacta lead time e previsibilidade.',
+          'Defeitos críticos por área ajudam a redirecionar esforço.',
+          'Risco remanescente deve aparecer explicitamente no relatório.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai estruturar um mini-plano de teste para carrinho de compras com foco em objetivo, escopo, critérios e risco.',
+    steps: [
+      'Defina o objetivo do teste em uma frase clara, por exemplo: validar adição, remoção, cálculo de subtotal e aplicação de cupom no carrinho.',
+      'Separe o escopo em itens dentro e fora do teste. Exemplo: dentro do escopo está cupom; fora do escopo está gateway de pagamento.',
+      'Crie critérios de entrada, como ambiente disponível, massa de teste pronta e build homologada.',
+      'Crie critérios de saída, como zero defeitos blocker, execução de 100% dos cenários críticos e validação dos cálculos principais.',
+      'Feche com uma tabela simples de riscos priorizados, classificando impacto e probabilidade.'
+    ],
+    deliverables: [
+      'Objetivo e escopo do plano.',
+      'Critérios de entrada e saída.',
+      'Tabela de riscos priorizados.'
+    ]
+  },
+  'module-3': {
+    summary: 'Aqui o conteúdo evolui de conceitos básicos para execução prática de testes manuais com profundidade profissional, cobrindo estrutura de casos, heurísticas e registro de defeitos.',
+    sections: [
+      {
+        heading: 'Estratégia de cobertura em testes manuais',
+        paragraphs: [
+          'Testar manualmente não significa clicar aleatoriamente. Uma estratégia de cobertura profissional combina cenários positivos, negativos, alternativos, de borda, de integração e de usabilidade. O QA precisa decidir o que é essencial em função de risco, frequência de uso e criticidade de negócio.',
+          'Além disso, bons testes manuais equilibram roteiro e observação. Um caso de teste estruturado garante repetibilidade. Já o olhar exploratório permite identificar mensagens confusas, comportamento inesperado ou lacunas de requisito que um roteiro formal talvez não cubra.'
+        ],
+        bullets: [
+          'Cobrir fluxo principal e fluxos alternativos.',
+          'Validar limites e entradas inválidas.',
+          'Observar consistência visual e feedback ao usuário.',
+          'Registrar evidências sempre que o resultado fugir do esperado.'
+        ]
+      },
+      {
+        heading: 'Como escrever defeitos que realmente ajudam o time',
+        paragraphs: [
+          'Um defeito bem reportado economiza tempo de triagem, acelera a correção e evita retrabalho. O título precisa ser objetivo. Os passos de reprodução devem ser claros. O resultado atual e o resultado esperado precisam ser comparáveis. O ambiente deve estar explícito, especialmente quando o problema depende de navegador, build, usuário ou massa de dados.',
+          'O bug report também deve dar contexto. Informar que o problema ocorreu durante cadastro com email já existente, em navegador específico e com resposta 500 no console muda completamente a qualidade da investigação.'
+        ],
+        bullets: [
+          'Use título que identifique contexto e falha.',
+          'Separe resultado esperado de resultado atual.',
+          'Inclua ambiente, build e dados usados.',
+          'Anexe evidência: screenshot, vídeo, log ou payload.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai produzir três casos de teste para cadastro e dois defeitos esperados, como se estivesse preparando a documentação inicial de QA.',
+    steps: [
+      'Escolha o fluxo de cadastro com campos obrigatórios, validação de email e confirmação de senha.',
+      'Escreva o primeiro caso de teste para cadastro válido, incluindo pré-condição, passos, dados e resultado esperado.',
+      'Escreva o segundo caso para erro de email inválido e o terceiro para senha e confirmação divergentes.',
+      'Agora imagine 2 defeitos prováveis, por exemplo: mensagem incorreta para email duplicado e campo senha aceitando menos caracteres do que a regra diz.',
+      'Finalize organizando os materiais em uma tabela com ID, objetivo, passos, resultado esperado e observações.'
+    ],
+    deliverables: [
+      'Três casos de teste estruturados.',
+      'Dois defeitos esperados com descrição clara.',
+      'Tabela final pronta para execução ou revisão.'
+    ]
+  },
+  'module-4': {
+    summary: 'O módulo passa a cobrir decisões reais de automação: retorno sobre investimento, desenho da suíte, manutenção e critérios para não automatizar de forma precipitada.',
+    sections: [
+      {
+        heading: 'Como decidir o que automatizar primeiro',
+        paragraphs: [
+          'Automação madura começa por casos frequentes, estáveis e críticos. Login, jornadas principais de compra, smoke tests de API, validações de contrato e cenários de regressão recorrentes normalmente geram alto retorno. Já fluxos instáveis ou sujeitos a redesenho constante podem consumir mais manutenção do que benefício.',
+          'Outro critério relevante é a pirâmide de testes. Nem tudo deve ir para UI. Muitos cenários ficam mais rápidos, baratos e confiáveis em camadas unitária, integração ou API. Uma boa estratégia evita o erro comum de concentrar tudo em testes E2E frágeis.'
+        ],
+        bullets: [
+          'Priorize cenários críticos e repetitivos.',
+          'Automatize na camada mais barata possível.',
+          'Considere custo de manutenção ao decidir.',
+          'Use automação para acelerar feedback e regressão.'
+        ]
+      },
+      {
+        heading: 'Sustentação da suíte automatizada',
+        paragraphs: [
+          'Automação não termina quando o primeiro teste passa. É preciso organizar dados de teste, isolamento entre cenários, convenção de nomenclatura, relatórios e estratégia de execução em CI/CD. Sem isso, a suíte envelhece rápido e perde credibilidade.',
+          'Um curso de verdade também precisa reforçar o lado de engenharia: reaproveitamento com Page Object ou Screenplay, factories de dados, redução de flakiness e observabilidade para identificar a causa das falhas.'
+        ],
+        bullets: [
+          'Padronize estrutura e nome dos testes.',
+          'Controle dados e dependências externas.',
+          'Separe falha de produto de falha de automação.',
+          'Gere relatórios claros para decisão rápida.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai escolher dois casos manuais e justificar tecnicamente por que eles devem virar automação.',
+    steps: [
+      'Volte ao módulo de testes manuais e selecione dois casos recorrentes, por exemplo login válido e criação de usuário via API.',
+      'Para cada caso, responda: ele é repetitivo? crítico? estável? executado em toda regressão?',
+      'Defina a melhor camada de automação: UI, API, integração ou unitário. Justifique a escolha.',
+      'Escreva uma mini-estratégia com ferramenta, dados necessários, frequência de execução e evidência esperada.',
+      'Conclua comparando custo inicial da automação com o ganho em tempo e cobertura ao longo do projeto.'
+    ],
+    deliverables: [
+      'Dois cenários candidatos à automação.',
+      'Justificativa técnica de priorização.',
+      'Estratégia de implementação e execução.'
+    ]
+  },
+  'module-5': {
+    summary: 'Este complemento apresenta o ecossistema de ferramentas como um fluxo integrado, mostrando como gestão, execução, rastreabilidade e pipeline se conectam na prática.',
+    sections: [
+      {
+        heading: 'Ferramentas como cadeia de trabalho',
+        paragraphs: [
+          'Em um ambiente profissional, as ferramentas não vivem isoladas. O caso de teste nasce no gerenciamento, a evidência pode ser anexada no rastreador de defeitos, o build é executado no pipeline e os resultados voltam para dashboards e relatórios. Entender essas conexões é tão importante quanto conhecer o nome de cada ferramenta.',
+          'Um QA de maior senioridade sabe escolher o conjunto mais adequado para o contexto do time. Nem sempre a ferramenta “mais famosa” é a melhor. O critério inclui orçamento, curva de aprendizado, integração com stack existente e maturidade da equipe.'
+        ],
+        bullets: [
+          'Ferramentas devem apoiar o processo, não complicá-lo.',
+          'Integração reduz retrabalho e duplicidade de informação.',
+          'Escolha depende de contexto, orçamento e stack.',
+          'Métricas só têm valor se os dados forem consistentes.'
+        ]
+      },
+      {
+        heading: 'Boas práticas de uso no dia a dia',
+        paragraphs: [
+          'Coleções de API precisam ser versionadas. Casos de teste precisam de revisão. Pipelines devem separar feedback rápido de feedback profundo. Dashboards não devem esconder problemas. E o rastreador de defeitos deve refletir o fluxo real do time, com estados úteis e critérios de entrada e saída claros.',
+          'Outra prática valiosa é manter um catálogo interno de ferramentas: para que serve, quando usar, quem é responsável, como se integra e quais limitações já foram observadas em projetos anteriores.'
+        ],
+        bullets: [
+          'Versione coleções, scripts e massa de teste.',
+          'Evite excesso de estados no fluxo de bugs.',
+          'Padronize evidências e nomenclaturas.',
+          'Documente limites e acordos de uso das ferramentas.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai montar uma stack mínima de QA para um projeto com testes manuais, automação e gestão de defeitos.',
+    steps: [
+      'Defina o cenário: por exemplo, uma aplicação web com frontend, API e deploy contínuo.',
+      'Escolha uma ferramenta para gestão de testes, uma para bug tracking, uma para API, uma para automação UI e uma para CI/CD.',
+      'Para cada ferramenta, escreva por que ela foi escolhida e em que momento do processo será usada.',
+      'Desenhe o fluxo: requisito vira caso de teste, execução gera evidência, defeito vai para rastreamento, automação roda no pipeline.',
+      'Finalize apontando integrações desejadas entre as ferramentas e quais relatórios você pretende extrair.'
+    ],
+    deliverables: [
+      'Mapa da stack de QA.',
+      'Justificativa de escolha por ferramenta.',
+      'Fluxo operacional entre requisitos, testes, bugs e pipeline.'
+    ]
+  },
+  'module-6': {
+    summary: 'O módulo agora aprofunda a atuação do QA em times ágeis, cobrindo colaboração, refinamento, critérios de aceite e o papel da qualidade em ciclos curtos e contínuos.',
+    sections: [
+      {
+        heading: 'QA como agente de clareza em times ágeis',
+        paragraphs: [
+          'Em contextos ágeis, QA não entra apenas no fim da sprint. O profissional ajuda a esclarecer histórias, levantar riscos cedo e reduzir retrabalho. Uma boa pergunta no refinement pode evitar dias de desenvolvimento em cima de um requisito ambíguo.',
+          'Isso exige participação ativa em ceremonies, leitura crítica de histórias, validação de critérios de aceitação e alinhamento com desenvolvimento e produto. Quanto menor o ciclo de entrega, maior a importância de detectar ruído cedo.'
+        ],
+        bullets: [
+          'Questionar ambiguidades antes do desenvolvimento.',
+          'Transformar critérios de aceitação em cenários testáveis.',
+          'Antecipar risco técnico e operacional.',
+          'Acompanhar qualidade como parte do fluxo, não da etapa final.'
+        ]
+      },
+      {
+        heading: 'DevOps, BDD e Definition of Done na prática',
+        paragraphs: [
+          'BDD e ATDD ajudam a alinhar negócio, desenvolvimento e QA em torno do comportamento esperado. Já o DevOps amplia a responsabilidade da qualidade para o pipeline, infraestrutura, monitoramento e feedback contínuo. O QA deixa de atuar apenas em funcionalidade e passa a influenciar a forma como o software é entregue.',
+          'A Definition of Done precisa refletir essa maturidade. Não basta “código pronto”; o item precisa incluir testes, evidências, documentação mínima, validação de ambiente e ausência de riscos críticos remanescentes.'
+        ],
+        bullets: [
+          'BDD aproxima requisito e teste.',
+          'DevOps amplia a visão de qualidade para entrega contínua.',
+          'DoD bem definida reduz discussão subjetiva sobre “pronto”.',
+          'QA contribui com prevenção e observabilidade.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai montar um roteiro de daily standup em que o QA comunica progresso, risco e bloqueios com objetividade.',
+    steps: [
+      'Escolha um contexto simples, como uma sprint que está entregando login, cadastro e recuperação de senha.',
+      'Escreva o que o QA fez ontem: por exemplo, revisou critérios, executou casos críticos e abriu dois defeitos major.',
+      'Escreva o plano de hoje: criar cenários de regressão, validar correções e preparar smoke test para staging.',
+      'Liste um bloqueio realista, como ausência de ambiente, massa de dados incompleta ou endpoint instável.',
+      'Finalize com uma frase objetiva de risco, mostrando impacto caso o bloqueio permaneça até o fim da sprint.'
+    ],
+    deliverables: [
+      'Roteiro curto de daily standup.',
+      'Bloqueio com impacto descrito.',
+      'Plano de ação para o restante do dia.'
+    ]
+  },
+  'module-7': {
+    summary: 'O conteúdo de segurança foi aprofundado para aproximar o aluno da lógica de ataque e defesa, com foco em risco real, evidência técnica e documentação responsável.',
+    sections: [
+      {
+        heading: 'Pensamento orientado a risco em segurança',
+        paragraphs: [
+          'Testar segurança não é sair executando payloads sem contexto. O primeiro passo é entender superfície de ataque, ativos críticos e impacto de exploração. Em muitos casos, o problema mais grave não é a vulnerabilidade em si, mas o dado exposto, a permissão indevida ou a ausência de rastreabilidade do incidente.',
+          'QA pode contribuir muito ao testar autenticação, autorização, exposição de informações sensíveis, mensagens de erro excessivas, sessão, headers, validação de entrada e componentes desatualizados. Mesmo sem ser um especialista em pentest, o profissional de qualidade pode elevar muito o padrão do produto.'
+        ],
+        bullets: [
+          'Mapear ativos críticos e pontos de entrada.',
+          'Testar autenticação, sessão e autorização separadamente.',
+          'Avaliar exposição de dados e mensagens sensíveis.',
+          'Registrar evidências com responsabilidade e precisão.'
+        ]
+      },
+      {
+        heading: 'Como reportar achados de segurança',
+        paragraphs: [
+          'Defeitos de segurança precisam de severidade bem justificada. Não basta dizer “há falha de segurança”. É preciso informar o vetor, a condição, a evidência, o impacto e uma recomendação inicial. Isso ajuda o time a agir rápido e priorizar corretamente.',
+          'Outro ponto fundamental é o cuidado com divulgação interna. Logs, payloads e dados reais devem ser tratados com responsabilidade, especialmente quando envolvem credenciais, PII ou acesso privilegiado.'
+        ],
+        bullets: [
+          'Descreva vetor, pré-condição e impacto.',
+          'Classifique severidade com critério.',
+          'Anexe prova de conceito mínima e segura.',
+          'Evite exposição desnecessária de dados sensíveis.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai escolher dois itens do OWASP Top 10 e descrever como validaria cada um em um fluxo de cadastro.',
+    steps: [
+      'Escolha dois temas, por exemplo Injection e Broken Authentication.',
+      'Descreva onde esses riscos poderiam aparecer no cadastro: campo de nome, email, senha, recuperação de conta, etc.',
+      'Monte os testes: entradas maliciosas, tentativas inválidas repetidas, análise de mensagens de erro, checagem de logs e headers.',
+      'Escreva o resultado esperado seguro para cada cenário, deixando claro o que a aplicação deveria fazer.',
+      'Finalize com um mini-relatório de risco contendo vulnerabilidade, impacto, evidência e recomendação inicial.'
+    ],
+    deliverables: [
+      'Dois cenários de segurança detalhados.',
+      'Resultados esperados seguros.',
+      'Mini-relatório com impacto e recomendação.'
+    ]
+  },
+  'module-8': {
+    summary: 'Este aprofundamento transforma performance em disciplina prática: definição de objetivos, leitura de métricas, investigação de gargalos e comunicação técnica com o time.',
+    sections: [
+      {
+        heading: 'Como pensar um teste de performance de forma profissional',
+        paragraphs: [
+          'Performance não se resume a “quantos usuários simultâneos o sistema suporta”. Primeiro, defina objetivo: validar tempo de resposta sob carga normal? descobrir ponto de ruptura? medir estabilidade por várias horas? Cada pergunta pede um tipo de teste e métricas diferentes.',
+          'Também é necessário estabelecer baseline e threshold. Sem isso, o número isolado perde significado. Uma média de 500 ms pode ser ótima em uma operação pesada e ruim em uma busca simples. O contexto define a leitura.'
+        ],
+        bullets: [
+          'Comece pelo objetivo do teste.',
+          'Defina baseline, threshold e volume esperado.',
+          'Colete métricas de aplicação, infraestrutura e banco.',
+          'Relacione resultado técnico ao impacto no usuário final.'
+        ]
+      },
+      {
+        heading: 'Interpretação e comunicação dos resultados',
+        paragraphs: [
+          'Um bom relatório de performance separa sintoma de causa provável. Exemplo: tempo de resposta cresceu após 150 usuários, CPU subiu pouco, mas memória e conexões com banco saturaram. Isso direciona investigação. Sem essa leitura, o time recebe apenas números sem ação clara.',
+          'Em nível profissional, QA também precisa recomendar próximos passos: repetir teste com cache aquecido, isolar endpoint, revisar consulta SQL, validar pool de conexões ou medir impacto de compressão e CDN.'
+        ],
+        bullets: [
+          'Cruze métricas para formular hipótese técnica.',
+          'Aponte comportamento antes, durante e após carga.',
+          'Mostre risco para usuário e operação.',
+          'Feche com ações recomendadas e prioridade.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai desenhar um plano de load test para uma API de busca, conectando cenário, métricas e thresholds.',
+    steps: [
+      'Defina a API alvo, por exemplo uma busca de produtos por palavra-chave.',
+      'Escolha o tipo de teste principal: load test com volume esperado de usuários simultâneos.',
+      'Liste métricas obrigatórias: tempo médio, P95, throughput, taxa de erro, CPU, memória e conexões de banco.',
+      'Defina thresholds, como P95 abaixo de 1 segundo e taxa de erro menor que 1%.',
+      'Feche com plano de execução: ferramenta, duração, ramp-up, massa de dados e critério para considerar o resultado aceitável.'
+    ],
+    deliverables: [
+      'Plano de carga com objetivo e cenário.',
+      'Lista de métricas e thresholds.',
+      'Critério de aceitação do teste.'
+    ]
+  },
+  'module-9': {
+    summary: 'O módulo de carreira foi ampliado para orientar o aluno como se posicionar no mercado, montar trilha de estudo e transformar aprendizado técnico em valor percebido por recrutadores e líderes.',
+    sections: [
+      {
+        heading: 'Construção de posicionamento profissional',
+        paragraphs: [
+          'Crescer em QA exige mais do que consumir conteúdo técnico. O profissional precisa construir evidência de capacidade: projetos, testes automatizados, relatórios, estudo de caso, GitHub, participação em comunidades e capacidade de explicar decisões. Recrutadores e líderes avaliam cada vez mais a clareza com que o candidato demonstra raciocínio de qualidade.',
+          'Outro ponto importante é escolher um eixo de aprofundamento sem abandonar a base. Um QA pode caminhar para automação, performance, segurança ou liderança, mas continua precisando dominar fundamentos, comunicação e visão de produto.'
+        ],
+        bullets: [
+          'Construa evidências práticas do que sabe fazer.',
+          'Mantenha base sólida antes de hiper-especializar.',
+          'Aprenda a explicar impacto e decisão técnica.',
+          'Atualize portfólio, currículo e presença profissional.'
+        ]
+      },
+      {
+        heading: 'Estratégia de evolução contínua',
+        paragraphs: [
+          'Uma carreira forte é construída por ciclos. Aprender, praticar, consolidar, mostrar resultado e buscar próximo nível. Isso vale para certificações, entrevistas, mudança de senioridade e movimentação salarial. O curso precisa ajudar o aluno a sair com direção, não apenas com inspiração.',
+          'Por isso, a recomendação é manter um plano trimestral: fundamentos, projeto prático, automação básica, leitura de mercado, networking e revisão de currículo. Pequenos ciclos consistentes geram avanço real.'
+        ],
+        bullets: [
+          'Planeje metas trimestrais e entregáveis.',
+          'Associe estudo a projeto aplicado.',
+          'Revise currículo e portfólio regularmente.',
+          'Busque feedback técnico e de mercado.'
+        ]
+      }
+    ],
+    exerciseTitle: 'Passo a passo do exercício prático',
+    exerciseIntro: 'Você vai transformar o conteúdo do módulo em um plano concreto de carreira e em um currículo mais forte para QA.',
+    steps: [
+      'Abra o template de currículo do módulo e substitua as partes genéricas por sua experiência real, mesmo que seja acadêmica ou de projeto próprio.',
+      'Liste três competências que você já possui e três lacunas que precisa desenvolver para a vaga que deseja.',
+      'Monte um plano de 90 dias com estudo, prática e evidência: por exemplo SQL, API testing e automação básica.',
+      'Atualize LinkedIn e GitHub com descrição profissional, tecnologias estudadas e um pequeno projeto de QA.',
+      'Finalize revisando sua narrativa de entrevista: como você testaria login, como reportaria defeitos e como estruturaria uma regressão.'
+    ],
+    deliverables: [
+      'CV atualizado.',
+      'Plano de carreira de 90 dias.',
+      'Lista de competências atuais e lacunas prioritárias.'
+    ]
+  }
+};
+
 const LOGIN_MESSAGE_KEY = 'loginMessage';
 
 function getQuizRequiredCorrectAnswers(totalQuestions) {
@@ -652,6 +1060,80 @@ function buildQuizMarkup(moduleId) {
   `;
 }
 
+function enhanceLogo() {
+  document.querySelectorAll('.logo').forEach((logoElement) => {
+    if (logoElement.querySelector('.site-logo')) {
+      return;
+    }
+
+    const logoImage = document.createElement('img');
+    logoImage.src = 'imagens/favicon.png';
+    logoImage.alt = 'Logo Portal QA';
+    logoImage.className = 'site-logo';
+    logoElement.prepend(logoImage);
+  });
+}
+
+function buildDetailedSectionMarkup(moduleId) {
+  const content = MODULE_DETAILED_CONTENT[moduleId];
+  if (!content) {
+    return '';
+  }
+
+  const sectionsMarkup = content.sections.map((section) => {
+    const paragraphs = (section.paragraphs || []).map((paragraph) => `<p>${paragraph}</p>`).join('');
+    const bullets = (section.bullets || []).length
+      ? `<ul class="detail-list">${section.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>`
+      : '';
+
+    return `
+      <div class="resource-card detailed-card">
+        <h4>${section.heading}</h4>
+        ${paragraphs}
+        ${bullets}
+      </div>
+    `;
+  }).join('');
+
+  const stepsMarkup = content.steps.map((step) => `<li>${step}</li>`).join('');
+  const deliverablesMarkup = content.deliverables.map((item) => `<li>${item}</li>`).join('');
+
+  return `
+    <div class="course-deep-dive" id="module-deep-dive">
+      <div class="resource-card detailed-summary-card">
+        <h3>Conteúdo aprofundado do módulo</h3>
+        <p>${content.summary}</p>
+      </div>
+      <div class="deep-dive-grid">
+        ${sectionsMarkup}
+      </div>
+      <div class="resource-card exercise-walkthrough-card">
+        <h3>${content.exerciseTitle}</h3>
+        <p>${content.exerciseIntro}</p>
+        <ol class="step-list">${stepsMarkup}</ol>
+        <h4>Entregáveis esperados</h4>
+        <ul class="detail-list">${deliverablesMarkup}</ul>
+      </div>
+    </div>
+  `;
+}
+
+function renderModuleDetailedContent() {
+  const moduleId = document.body.dataset.module;
+  const sectionBody = document.querySelector('.section-body');
+
+  if (!moduleId || !sectionBody || document.getElementById('module-deep-dive')) {
+    return;
+  }
+
+  const markup = buildDetailedSectionMarkup(moduleId);
+  if (!markup) {
+    return;
+  }
+
+  sectionBody.insertAdjacentHTML('beforeend', markup);
+}
+
 function renderModuleQuiz() {
   const moduleId = document.body.dataset.module;
   const sectionBody = document.querySelector('.section-body');
@@ -834,6 +1316,8 @@ async function logout() {
 window.addEventListener('DOMContentLoaded', () => {
   const page = document.body.dataset.page;
 
+  enhanceLogo();
+
   if (page === 'login') {
     showLoginMessage();
 
@@ -851,6 +1335,7 @@ window.addEventListener('DOMContentLoaded', () => {
   verifySession();
   updateDashboardProgress();
   updateModulePageProgress();
+  renderModuleDetailedContent();
   renderModuleQuiz();
 
   const completeButton = document.getElementById('complete-module-button');

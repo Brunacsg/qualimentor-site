@@ -1,5 +1,17 @@
-// Verificar se é redirecionamento de sucesso do formSubmit
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.logo').forEach((logoElement) => {
+    if (logoElement.querySelector('.site-logo')) {
+      return;
+    }
+
+    const logoImage = document.createElement('img');
+    logoImage.src = 'imagens/favicon.png';
+    logoImage.alt = 'Logo Portal QA';
+    logoImage.className = 'site-logo';
+    logoElement.prepend(logoImage);
+  });
+
+  // Verificar se é redirecionamento de sucesso do formSubmit
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('success') === 'true') {
     // Mostrar mensagem de sucesso

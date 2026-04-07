@@ -544,6 +544,44 @@ main.dashboard-grid {
   color: #a3e635;
 }
 
+.course-deep-dive {
+  display: grid;
+  gap: 22px;
+}
+
+.detailed-summary-card p,
+.detailed-card p,
+.exercise-walkthrough-card p {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.deep-dive-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.detailed-card,
+.exercise-walkthrough-card,
+.detailed-summary-card {
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.detail-list,
+.step-list {
+  margin: 14px 0 0;
+  padding-left: 22px;
+  color: var(--text-muted);
+}
+
+.detail-list li,
+.step-list li {
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
 @media (max-width: 800px) {
   .site-header {
     flex-direction: column;
@@ -739,7 +777,21 @@ main.dashboard-grid {
   font-size: 3rem;
   font-weight: 700;
   color: var(--accent);
-  margin: 0 0 30px;
+  margin: 0 0 14px;
+}
+
+.price-old {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  margin-bottom: 8px;
+}
+
+.price-caption {
+  margin: 0 0 26px;
+  color: var(--text-muted);
+  line-height: 1.7;
 }
 
 .features-list {
