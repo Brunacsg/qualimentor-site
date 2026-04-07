@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -23,7 +25,20 @@ const SMTP_PASS = process.env.SMTP_PASS;
 // =========================
 // DATABASE
 // =========================
-const db = new sqlite3.Database('./database.db');
+const defaultDataDir = process.env.RENDER_DISK_PATH
+  || (process.platform === 'win32' ? __dirname : '/tmp');
+const databasePath = process.env.DB_PATH || path.join(defaultDataDir, 'database.db');
+
+fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+
+const db = new sqlite3.Database(databasePath, (error) => {
+  if (error) {
+    console.error('Erro ao abrir banco SQLite:', error);
+    process.exit(1);
+  }
+
+  console.log(`SQLite em ${databasePath}`);
+});
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (

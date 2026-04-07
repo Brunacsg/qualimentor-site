@@ -39,6 +39,13 @@ Defina as seguintes variáveis de ambiente:
 set ADMIN_SECRET=sua_senha_admin_super_secreta
 ```
 
+#### Banco SQLite (opcional)
+```bash
+set DB_PATH=caminho/para/database.db
+```
+
+No Render, sem `DB_PATH`, a aplicação usará `RENDER_DISK_PATH` quando existir. Se não houver disco persistente configurado, ela usará `/tmp/database.db` para garantir que o serviço consiga iniciar.
+
 #### Email (opcional - simulado no console se não configurado)
 ```bash
 set ADMIN_EMAIL=seu-email@dominio.com
