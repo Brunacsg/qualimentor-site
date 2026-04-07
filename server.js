@@ -138,6 +138,10 @@ async function sendEmail({ to, subject, text, html }) {
   });
 }
 
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
 // =========================
 // MIDDLEWARE AUTH
 // =========================
@@ -183,9 +187,14 @@ function auth(req, res, next) {
 // LOGIN
 // =========================
 app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+  const email = normalizeEmail(req.body.email);
+  const { password } = req.body;
 
-  db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+  if (!email || !password) {
+    return res.json({ success: false, message: 'Email e senha são obrigatórios' });
+  }
+
+  db.get('SELECT * FROM users WHERE lower(trim(email)) = ?', [email], async (err, user) => {
     if (err) {
       return res.json({ success: false, message: 'Erro no servidor' });
     }
@@ -255,7 +264,8 @@ function authAdmin(req, res, next) {
 }
 
 app.post('/create-user', authAdmin, async (req, res) => {
-  const { email, password, days } = req.body;
+  const email = normalizeEmail(req.body.email);
+  const { password, days } = req.body;
 
   if (!email || !password || !days) {
     return res.json({ success: false, message: 'Todos os campos são obrigatórios' });
@@ -291,7 +301,8 @@ app.post('/create-user', authAdmin, async (req, res) => {
 });
 
 app.post('/purchase-request', async (req, res) => {
-  const { email, name } = req.body;
+  const email = normalizeEmail(req.body.email);
+  const { name } = req.body;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!email || !emailRegex.test(email)) {
@@ -393,7 +404,7 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
         expiresAt.setDate(expiresAt.getDate() + 365);
 
         try {
-          db.get('SELECT * FROM users WHERE email = ?', [request.email], async (userErr, existingUser) => {
+          db.get('SELECT * FROM users WHERE lower(trim(email)) = ?', [normalizeEmail(request.email)], async (userErr, existingUser) => {
             if (userErr) {
               console.error('Erro ao buscar usuário existente:', userErr);
               return;
@@ -412,7 +423,7 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
             } else {
               db.run(
                 'INSERT INTO users (email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, NULL)',
-                [request.email, hashedPassword, expiresAt.toISOString()],
+                [normalizeEmail(request.email), hashedPassword, expiresAt.toISOString()],
                 function (insertErr) {
                   if (insertErr) {
                     console.error('Erro ao criar usuário:', insertErr);
