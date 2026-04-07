@@ -1,4 +1,4 @@
-const API_ORIGIN = 'https://qualimentor-site.onrender.com';
+const API_ORIGIN = window.location.origin;
 const MODULES = [
   'module-1',
   'module-2',
