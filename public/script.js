@@ -12,6 +12,9 @@ const MODULES = [
 ];
 
 const QUIZ_PASSING_PERCENT = 60;
+const COURSE_PROGRESS_STORAGE_KEY = 'qaCourseProgress';
+const CERTIFICATE_ORGANIZATION = 'Qualimentor';
+const CERTIFICATE_CNPJ = '59.758.519/0001-86';
 
 const MODULE_QUIZZES = {
   'module-1': {
@@ -968,6 +971,8 @@ const MODULE_LEARNING_EXTRAS = {
 };
 
 const LOGIN_MESSAGE_KEY = 'loginMessage';
+let currentCourseProgress = JSON.parse(localStorage.getItem(COURSE_PROGRESS_STORAGE_KEY) || '{}');
+let currentUserProfile = null;
 
 function getQuizRequiredCorrectAnswers(totalQuestions) {
   return Math.ceil(totalQuestions * (QUIZ_PASSING_PERCENT / 100));
@@ -1022,6 +1027,15 @@ function setLoginMessage(message) {
   }
 }
 
+function getAuthToken() {
+  return localStorage.getItem('token');
+}
+
+function getAuthHeaders(extraHeaders = {}) {
+  const token = getAuthToken();
+  return token ? { ...extraHeaders, Authorization: token } : extraHeaders;
+}
+
 function showLoginMessage() {
   const message = localStorage.getItem(LOGIN_MESSAGE_KEY);
   const messageElement = document.getElementById('msg');
@@ -1036,7 +1050,7 @@ function showLoginMessage() {
 }
 
 async function hasValidSession() {
-  const token = localStorage.getItem('token');
+  const token = getAuthToken();
 
   if (!token) {
     return false;
@@ -1079,10 +1093,10 @@ async function login() {
 }
 
 async function verifySession() {
-  const token = localStorage.getItem('token');
+  const token = getAuthToken();
   if (!token) {
     window.location.href = 'login.html';
-    return;
+    return false;
   }
 
   const res = await fetch(`${API_ORIGIN}/dashboard`, {
@@ -1104,16 +1118,66 @@ async function verifySession() {
     setLoginMessage(message);
     localStorage.removeItem('token');
     window.location.href = 'login.html';
+    return false;
   }
+
+  const data = await res.json();
+  currentUserProfile = data.user;
+  return true;
 }
 
 function loadCourseProgress() {
-  const data = localStorage.getItem('qaCourseProgress');
-  return data ? JSON.parse(data) : {};
+  return currentCourseProgress || {};
 }
 
 function saveCourseProgress(progress) {
-  localStorage.setItem('qaCourseProgress', JSON.stringify(progress));
+  currentCourseProgress = progress;
+  localStorage.setItem(COURSE_PROGRESS_STORAGE_KEY, JSON.stringify(progress));
+}
+
+async function persistModuleProgress(moduleId) {
+  const progress = loadCourseProgress();
+  const entry = getModuleProgressEntry(progress, moduleId);
+
+  await fetch(`${API_ORIGIN}/progress`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify({
+      moduleId,
+      completed: entry.completed,
+      quizPassed: entry.quizPassed,
+      quizScore: entry.quizScore,
+      quizTotal: entry.quizTotal,
+      quizAttempted: entry.quizAttempted,
+    })
+  });
+}
+
+async function syncCourseProgressFromServer() {
+  const res = await fetch(`${API_ORIGIN}/progress`, {
+    headers: getAuthHeaders()
+  });
+
+  if (!res.ok) {
+    return loadCourseProgress();
+  }
+
+  const data = await res.json();
+  const serverProgress = data.progress || {};
+  const localProgress = loadCourseProgress();
+
+  if (Object.keys(serverProgress).length === 0 && Object.keys(localProgress).length > 0) {
+    for (const moduleId of Object.keys(localProgress)) {
+      await persistModuleProgress(moduleId);
+    }
+    return loadCourseProgress();
+  }
+
+  saveCourseProgress(serverProgress);
+  return serverProgress;
 }
 
 function getCompletedCount(progress) {
@@ -1136,6 +1200,13 @@ function updateDashboardProgress() {
     progressFill.style.width = `${percent}%`;
   }
 
+  const certificateBadge = document.getElementById('certificate-status');
+  if (certificateBadge) {
+    certificateBadge.textContent = completed === total
+      ? 'Certificado liberado'
+      : `Conclua ${total - completed} módulo(s) para liberar o certificado`;
+  }
+
   document.querySelectorAll('.module-card').forEach((card) => {
     const moduleId = card.dataset.module;
     const statusText = card.querySelector('.status-text');
@@ -1156,6 +1227,113 @@ function updateDashboardProgress() {
       }
     }
   });
+}
+
+function getCourseCompletionDate(progress) {
+  const completionDates = MODULES
+    .map((moduleId) => getModuleProgressEntry(progress, moduleId).updatedAt)
+    .filter(Boolean)
+    .sort();
+
+  return completionDates.length ? completionDates[completionDates.length - 1] : new Date().toISOString();
+}
+
+function buildCertificateMarkup() {
+  const progress = loadCourseProgress();
+  const completed = getCompletedCount(progress);
+  const total = MODULES.length;
+
+  if (completed < total) {
+    return `
+      <div class="resource-card certificate-locked-card">
+        <h3>Certificado de conclusão</h3>
+        <p>Finalize todos os ${total} módulos e aprove os quizzes mínimos para liberar seu certificado.</p>
+        <p id="certificate-status" class="certificate-status">Conclua ${total - completed} módulo(s) para liberar o certificado</p>
+      </div>
+    `;
+  }
+
+  const issuedAt = new Date(getCourseCompletionDate(progress)).toLocaleDateString('pt-BR');
+  const studentName = currentUserProfile?.email || 'Aluno(a) do curso';
+
+  return `
+    <div class="certificate-card" id="certificate-card">
+      <div class="certificate-frame">
+        <div class="certificate-brand">
+          <img src="imagens/favicon.png" alt="Logo Qualimentor" class="certificate-logo">
+          <div>
+            <p class="certificate-org">${CERTIFICATE_ORGANIZATION}</p>
+            <p class="certificate-cnpj">CNPJ ${CERTIFICATE_CNPJ}</p>
+          </div>
+        </div>
+        <p class="certificate-label">Certificado de Conclusão</p>
+        <h3>Curso Completo de QA</h3>
+        <p class="certificate-text">Certificamos que</p>
+        <p class="certificate-student">${studentName}</p>
+        <p class="certificate-text">concluiu com aproveitamento a trilha completa do curso de Qualidade de Software, cumprindo os 9 módulos e os critérios de avaliação propostos.</p>
+        <div class="certificate-footer">
+          <div>
+            <strong>Emitido em</strong>
+            <p>${issuedAt}</p>
+          </div>
+          <div>
+            <strong>Instituição</strong>
+            <p>${CERTIFICATE_ORGANIZATION}</p>
+          </div>
+        </div>
+      </div>
+      <div class="certificate-actions">
+        <button type="button" class="primary-button" onclick="printCertificate()">Imprimir certificado</button>
+        <p id="certificate-status" class="certificate-status">Certificado liberado</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderCertificateSection() {
+  const container = document.getElementById('courseCertificateContainer');
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = buildCertificateMarkup();
+}
+
+function printCertificate() {
+  const certificateMarkup = document.getElementById('certificate-card')?.innerHTML;
+  if (!certificateMarkup) {
+    return;
+  }
+
+  const printWindow = window.open('', '_blank', 'width=1100,height=800');
+  if (!printWindow) {
+    return;
+  }
+
+  printWindow.document.write(`
+    <html lang="pt-BR">
+      <head>
+        <title>Certificado Qualimentor</title>
+        <style>
+          body { font-family: Georgia, serif; margin: 0; padding: 32px; background: #f8fafc; }
+          .certificate-frame { border: 12px solid #0f172a; padding: 48px; background: white; min-height: 80vh; }
+          .certificate-brand { display: flex; align-items: center; gap: 18px; margin-bottom: 32px; }
+          .certificate-logo { width: 72px; height: 72px; object-fit: contain; }
+          .certificate-org { margin: 0; font-size: 1.4rem; font-weight: 700; }
+          .certificate-cnpj, .certificate-label, .certificate-text { margin: 0; color: #334155; }
+          h3 { font-size: 2.5rem; margin: 24px 0 16px; color: #0f172a; }
+          .certificate-student { font-size: 2rem; margin: 16px 0; color: #0369a1; font-weight: 700; }
+          .certificate-footer { display: flex; justify-content: space-between; gap: 24px; margin-top: 48px; }
+          .certificate-actions, .certificate-status { display: none; }
+        </style>
+      </head>
+      <body>${certificateMarkup}</body>
+    </html>
+  `);
+
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
 }
 
 function updateModulePageProgress() {
@@ -1421,7 +1599,7 @@ function restoreQuizState(moduleId) {
   setQuizResultMessage(message, entry.quizPassed ? 'success' : 'warning');
 }
 
-function handleQuizSubmit(event) {
+async function handleQuizSubmit(event) {
   event.preventDefault();
 
   const form = event.currentTarget;
@@ -1474,6 +1652,7 @@ function handleQuizSubmit(event) {
     completed: quizPassed ? getModuleProgressEntry(progress, moduleId).completed : false,
   });
   saveCourseProgress(progress);
+  await persistModuleProgress(moduleId);
 
   const message = unansweredCount > 0
     ? `Você acertou ${correctAnswers} de ${totalQuestions}. Ainda faltaram ${unansweredCount} pergunta(s) sem resposta.`
@@ -1484,6 +1663,7 @@ function handleQuizSubmit(event) {
   setQuizResultMessage(message, quizPassed ? 'success' : 'warning');
   updateModulePageProgress();
   updateDashboardProgress();
+  renderCertificateSection();
 }
 
 function resetQuiz() {
@@ -1510,7 +1690,7 @@ function resetQuiz() {
   }
 }
 
-function toggleModuleCompletion() {
+async function toggleModuleCompletion() {
   const moduleId = document.body.dataset.module;
   if (!moduleId) return;
 
@@ -1531,8 +1711,31 @@ function toggleModuleCompletion() {
     completed: !entry.completed,
   });
   saveCourseProgress(progress);
+  await persistModuleProgress(moduleId);
   updateModulePageProgress();
   updateDashboardProgress();
+  renderCertificateSection();
+}
+
+async function initializeAuthenticatedPages() {
+  const sessionIsValid = await verifySession();
+  if (!sessionIsValid) {
+    return;
+  }
+
+  await syncCourseProgressFromServer();
+  updateDashboardProgress();
+  updateModulePageProgress();
+  renderModuleDetailedContent();
+  renderModuleLearningExtras();
+  renderModuleQuiz();
+  renderCertificateSection();
+
+  const completeButton = document.getElementById('complete-module-button');
+  if (completeButton && !completeButton.dataset.boundClick) {
+    completeButton.addEventListener('click', toggleModuleCompletion);
+    completeButton.dataset.boundClick = 'true';
+  }
 }
 
 async function logout() {
@@ -1553,7 +1756,7 @@ async function logout() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const page = document.body.dataset.page;
 
   enhanceLogo();
@@ -1572,15 +1775,5 @@ window.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  verifySession();
-  updateDashboardProgress();
-  updateModulePageProgress();
-  renderModuleDetailedContent();
-  renderModuleLearningExtras();
-  renderModuleQuiz();
-
-  const completeButton = document.getElementById('complete-module-button');
-  if (completeButton) {
-    completeButton.addEventListener('click', toggleModuleCompletion);
-  }
+  await initializeAuthenticatedPages();
 });

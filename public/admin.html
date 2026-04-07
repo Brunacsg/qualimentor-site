@@ -47,6 +47,22 @@
         </div>
       </div>
     </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <span>📈</span>
+        <div>
+          <h2>Progresso dos Alunos</h2>
+          <p>Acompanhe conclusão dos módulos, média dos quizzes e liberação de certificado.</p>
+        </div>
+      </div>
+
+      <div class="section-body">
+        <div id="usersProgressContainer" class="purchases-table-container">
+          <p style="text-align: center; color: var(--text-muted);">Carregando progresso...</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -93,6 +109,26 @@
       } catch (err) {
         document.getElementById('usersContainer').innerHTML =
           `<p style="color: red;">Erro ao carregar usuários: ${err.message}</p>`;
+      }
+    }
+
+    async function fetchUsersProgress() {
+      try {
+        const res = await fetch('/users-progress', {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          renderUsersProgress(data.users);
+        } else {
+          document.getElementById('usersProgressContainer').innerHTML =
+            `<p style="color: red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById('usersProgressContainer').innerHTML =
+          `<p style="color: red;">Erro ao carregar progresso: ${err.message}</p>`;
       }
     }
 
@@ -189,6 +225,53 @@
       document.getElementById('usersContainer').innerHTML = html;
     }
 
+    function renderUsersProgress(users) {
+      if (!users || users.length === 0) {
+        document.getElementById('usersProgressContainer').innerHTML =
+          '<p style="text-align: center; color: var(--text-muted);">Nenhum progresso registrado ainda.</p>';
+        return;
+      }
+
+      let html = `
+        <table class="purchases-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Módulos concluídos</th>
+              <th>Média quizzes</th>
+              <th>Última atualização</th>
+              <th>Certificado</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      users.forEach(user => {
+        const lastUpdated = user.lastUpdatedAt
+          ? new Date(user.lastUpdatedAt).toLocaleDateString('pt-BR')
+          : '-';
+        const certificateClass = user.certificateEligible ? 'status-approved' : 'status-pending';
+        const certificateText = user.certificateEligible ? 'Liberado' : 'Pendente';
+
+        html += `
+          <tr>
+            <td>${user.email}</td>
+            <td>${user.completedModules} / ${user.totalModules}</td>
+            <td>${user.quizAverage}%</td>
+            <td>${lastUpdated}</td>
+            <td><span class="status-badge ${certificateClass}">${certificateText}</span></td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById('usersProgressContainer').innerHTML = html;
+    }
+
     async function approveRequest(requestId, secret) {
       if (!confirm('Tem certeza que deseja aprovar esta compra?')) return;
 
@@ -208,6 +291,7 @@
           alert('Compra aprovada! Email enviado ao cliente.');
           fetchPurchases();
           fetchUsers();
+          fetchUsersProgress();
         } else {
           alert(`Erro: ${data.message}`);
         }
@@ -224,6 +308,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       fetchPurchases();
       fetchUsers();
+      fetchUsersProgress();
     });
   </script>
 

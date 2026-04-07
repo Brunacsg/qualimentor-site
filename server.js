@@ -22,6 +22,17 @@ const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = process.env.SMTP_PORT;
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASS = process.env.SMTP_PASS;
+const COURSE_MODULE_IDS = [
+  'module-1',
+  'module-2',
+  'module-3',
+  'module-4',
+  'module-5',
+  'module-6',
+  'module-7',
+  'module-8',
+  'module-9'
+];
 
 process.on('uncaughtException', (error) => {
   console.error('Erro não tratado no processo:', error);
@@ -76,6 +87,19 @@ db.serialize(() => {
     pixKey TEXT,
     createdAt TEXT,
     approvedAt TEXT
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS user_progress (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    moduleId TEXT NOT NULL,
+    completed INTEGER DEFAULT 0,
+    quizPassed INTEGER DEFAULT 0,
+    quizScore INTEGER DEFAULT 0,
+    quizTotal INTEGER DEFAULT 0,
+    quizAttempted INTEGER DEFAULT 0,
+    updatedAt TEXT NOT NULL,
+    UNIQUE(userId, moduleId)
   )`);
 
   db.all('PRAGMA table_info(users)', (err, columns) => {
@@ -140,6 +164,20 @@ async function sendEmail({ to, subject, text, html }) {
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
+}
+
+function mapProgressRows(rows) {
+  return rows.reduce((acc, row) => {
+    acc[row.moduleId] = {
+      completed: Boolean(row.completed),
+      quizPassed: Boolean(row.quizPassed),
+      quizScore: Number(row.quizScore || 0),
+      quizTotal: Number(row.quizTotal || 0),
+      quizAttempted: Boolean(row.quizAttempted),
+      updatedAt: row.updatedAt,
+    };
+    return acc;
+  }, {});
 }
 
 // =========================
@@ -370,6 +408,116 @@ app.get('/users', authAdmin, (req, res) => {
       }));
 
       res.json({ success: true, users });
+    }
+  );
+});
+
+app.get('/users-progress', authAdmin, (req, res) => {
+  db.all(
+    `SELECT
+      u.id,
+      u.email,
+      u.expiresAt,
+      COUNT(up.moduleId) AS touchedModules,
+      COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS completedModules,
+      COALESCE(SUM(CASE WHEN up.quizPassed = 1 THEN 1 ELSE 0 END), 0) AS passedQuizzes,
+      COALESCE(MAX(up.updatedAt), '') AS lastActivity,
+      COALESCE(ROUND(AVG(CASE WHEN up.quizTotal > 0 THEN (CAST(up.quizScore AS REAL) / up.quizTotal) * 100 END), 1), 0) AS averageScore
+     FROM users u
+     LEFT JOIN user_progress up ON up.userId = u.id
+     GROUP BY u.id, u.email, u.expiresAt
+     ORDER BY u.email COLLATE NOCASE ASC`,
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao buscar progresso dos usuários' });
+      }
+
+      const summaries = rows.map((row) => ({
+        id: row.id,
+        email: row.email,
+        expiresAt: row.expiresAt,
+        touchedModules: Number(row.touchedModules || 0),
+        completedModules: Number(row.completedModules || 0),
+        passedQuizzes: Number(row.passedQuizzes || 0),
+        averageScore: Number(row.averageScore || 0),
+        certificateEligible: Number(row.completedModules || 0) >= COURSE_MODULE_IDS.length,
+        lastActivity: row.lastActivity || null,
+      }));
+
+      res.json({ success: true, summaries });
+    }
+  );
+});
+
+app.get('/progress', auth, (req, res) => {
+  db.all(
+    `SELECT moduleId, completed, quizPassed, quizScore, quizTotal, quizAttempted, updatedAt
+     FROM user_progress
+     WHERE userId = ?`,
+    [req.user.id],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao buscar progresso' });
+      }
+
+      res.json({ success: true, progress: mapProgressRows(rows) });
+    }
+  );
+});
+
+app.post('/progress', auth, (req, res) => {
+  const moduleId = String(req.body.moduleId || '').trim();
+
+  if (!COURSE_MODULE_IDS.includes(moduleId)) {
+    return res.status(400).json({ success: false, message: 'Módulo inválido' });
+  }
+
+  const progressEntry = {
+    completed: req.body.completed ? 1 : 0,
+    quizPassed: req.body.quizPassed ? 1 : 0,
+    quizScore: Number(req.body.quizScore || 0),
+    quizTotal: Number(req.body.quizTotal || 0),
+    quizAttempted: req.body.quizAttempted ? 1 : 0,
+    updatedAt: new Date().toISOString(),
+  };
+
+  db.run(
+    `INSERT INTO user_progress (userId, moduleId, completed, quizPassed, quizScore, quizTotal, quizAttempted, updatedAt)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(userId, moduleId)
+     DO UPDATE SET
+       completed = excluded.completed,
+       quizPassed = excluded.quizPassed,
+       quizScore = excluded.quizScore,
+       quizTotal = excluded.quizTotal,
+       quizAttempted = excluded.quizAttempted,
+       updatedAt = excluded.updatedAt`,
+    [
+      req.user.id,
+      moduleId,
+      progressEntry.completed,
+      progressEntry.quizPassed,
+      progressEntry.quizScore,
+      progressEntry.quizTotal,
+      progressEntry.quizAttempted,
+      progressEntry.updatedAt,
+    ],
+    (err) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao salvar progresso' });
+      }
+
+      res.json({
+        success: true,
+        progress: {
+          completed: Boolean(progressEntry.completed),
+          quizPassed: Boolean(progressEntry.quizPassed),
+          quizScore: progressEntry.quizScore,
+          quizTotal: progressEntry.quizTotal,
+          quizAttempted: Boolean(progressEntry.quizAttempted),
+          updatedAt: progressEntry.updatedAt,
+        },
+      });
     }
   );
 });
