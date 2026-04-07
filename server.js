@@ -13,10 +13,10 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 const SECRET = 'segredo_super_forte';
-const ADMIN_SECRET = process.env.ADMIN_SECRET;
+const ADMIN_SECRET = String(process.env.ADMIN_SECRET || '').trim();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'qualimentor.mentoria@gmail.com';
 const PAGSEGURO_LINK = process.env.PAGSEGURO_LINK || 'https://pag.ae/81E_Aa4jo';
-const PAYMENT_WEBHOOK_SECRET = process.env.PAYMENT_WEBHOOK_SECRET;
+const PAYMENT_WEBHOOK_SECRET = String(process.env.PAYMENT_WEBHOOK_SECRET || '').trim();
 const DATABASE_URL = String(process.env.DATABASE_URL || '').trim();
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = process.env.SMTP_PORT;
@@ -493,7 +493,7 @@ function authAdmin(req, res, next) {
     return res.status(503).json({ success: false, message: 'Admin secret não configurado' });
   }
 
-  const secret = req.headers['x-admin-secret'];
+  const secret = String(req.headers['x-admin-secret'] || '').trim();
   if (!secret || secret !== ADMIN_SECRET) {
     return res.status(403).json({ success: false, message: 'Acesso negado' });
   }

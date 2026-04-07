@@ -103,7 +103,7 @@
   </main>
 
   <script>
-    const ADMIN_SECRET = prompt('Digite a senha de administrador:');
+    const ADMIN_SECRET = String(prompt('Digite a senha de administrador:') || '').trim();
     if (!ADMIN_SECRET) {
       alert('Acesso negado');
       window.location.href = 'login.html';
