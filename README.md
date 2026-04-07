@@ -55,6 +55,13 @@ set SMTP_USER=seu-usuario@dominio.com
 set SMTP_PASS=sua-senha-email
 ```
 
+#### Webhook de pagamento (opcional, recomendado para automação)
+```bash
+set PAYMENT_WEBHOOK_SECRET=uma_chave_longa_e_unica
+```
+
+Com essa chave configurada, o endpoint `POST /payment-webhook` pode confirmar pagamentos automaticamente e liberar acesso sem intervenção manual.
+
 **Exemplos de provedores SMTP:**
 - Gmail: `smtp.gmail.com` (use senha de app específica)
 - Outlook: `smtp-mail.outlook.com`
@@ -85,8 +92,27 @@ Servidor rodará em: `http://localhost:3000`
 1. Acesse `http://localhost:3000/admin.html`
 2. Digite a `ADMIN_SECRET` (senha admin)
 3. Veja lista de solicitações de compra
-4. Clique em "Aprovar" para cada venda autorizada
-5. Sistema enviará emails de confirmação aos clientes
+4. Se você usa apenas o app do PagBank/PagSeguro, confirme no app que o pagamento caiu
+5. Clique em `Simular webhook` para liberar o acesso automaticamente
+6. O sistema enviará os emails e registrará a senha gerada no admin
+
+### Fluxo Recomendado com App do PagBank
+
+Se você usa apenas o app bancário do PagBank para acompanhar os recebimentos, o fluxo recomendado é semi-automático:
+
+1. O aluno preenche nome e email na landing
+2. O aluno é redirecionado para o link de pagamento
+3. Você confirma no app do PagBank que o valor caiu
+4. Você abre `admin.html` e clica em `Simular webhook`
+5. O sistema gera senha, libera acesso, envia email e grava a credencial para consulta futura
+
+### Para Automação de Pagamento
+
+1. Configure `PAYMENT_WEBHOOK_SECRET`
+2. No provedor de pagamento ou ferramenta intermediária, envie `POST /payment-webhook`
+3. Inclua o header `x-payment-secret` com o mesmo valor configurado
+4. Envie `status=paid` ou `approved`
+5. O sistema aprova a compra, gera senha, envia email e registra a credencial no admin
 
 ### Para Usuários (Acesso ao Curso)
 
@@ -103,9 +129,25 @@ Servidor rodará em: `http://localhost:3000`
 ```
 POST /purchase-request
   - email: string (obrigatório)
-  - name: string (opcional)
+  - name: string (obrigatório)
   
   Resposta: { success: bool, message: string, requestId: number }
+
+POST /payment-webhook
+  Headers: x-payment-secret: sua_chave_webhook
+  - requestId: number (opcional se email for informado)
+  - email: string (opcional se requestId for informado)
+  - status: string (paid|approved|completed|confirmed)
+  - paymentProvider: string (opcional)
+  - paymentReference: string (opcional)
+
+  Resposta: { success: bool, message: string }
+
+POST /simulate-payment-webhook
+  Headers: x-admin-secret: sua_senha_admin
+  Body: { requestId: number, paymentProvider?: string, paymentReference?: string }
+
+  Resposta: { success: bool, message: string }
 ```
 
 ### Autenticados (Cliente)
@@ -191,6 +233,10 @@ CREATE TABLE purchase_requests (
   name TEXT,
   status TEXT (pending|approved),
   pixKey TEXT,
+  paymentProvider TEXT,
+  paymentReference TEXT,
+  approvalSource TEXT,
+  lastWebhookAt TEXT,
   createdAt TEXT (ISO date),
   approvedAt TEXT (ISO date)
 );
@@ -218,6 +264,52 @@ Para: ADMIN_EMAIL
 Assunto: Nova compra aprovada
 Corpo: Dados do cliente para enviar acesso
 ```
+
+## Webhook de Pagamento
+
+Exemplo de chamada:
+
+```bash
+curl -X POST http://localhost:3000/payment-webhook \
+  -H "Content-Type: application/json" \
+  -H "x-payment-secret: SUA_CHAVE_WEBHOOK" \
+  -d '{
+    "requestId": 12,
+    "status": "paid",
+    "paymentProvider": "pagseguro",
+    "paymentReference": "TXN-2026-0001"
+  }'
+```
+
+O endpoint também aceita payloads alternativos comuns em gateways, por exemplo `reference_id`, `transactionId`, `customer.email`, `sender.email`, `charges[0].status` e `charges[0].reference_id`.
+
+Se quiser validar sem depender do provedor, o painel admin agora tem o botão `Simular webhook`, e a API também aceita este teste manual:
+
+```bash
+curl -X POST http://localhost:3000/simulate-payment-webhook \
+  -H "Content-Type: application/json" \
+  -H "x-admin-secret: SUA_SENHA_ADMIN" \
+  -d '{
+    "requestId": 12,
+    "paymentProvider": "pagseguro-simulado"
+  }'
+```
+
+Se o provedor não devolver `requestId`, você pode confirmar pela combinação do email e status:
+
+```bash
+curl -X POST http://localhost:3000/payment-webhook \
+  -H "Content-Type: application/json" \
+  -H "x-payment-secret: SUA_CHAVE_WEBHOOK" \
+  -d '{
+    "email": "aluno@email.com",
+    "status": "approved",
+    "paymentProvider": "pagseguro",
+    "paymentReference": "TXN-2026-0002"
+  }'
+```
+
+Se você não tiver webhook no seu fluxo atual do PagBank, use o botão `Simular webhook` no painel admin. Esse é o caminho recomendado até migrar para uma integração via painel developer/API.
 
 ## Segurança
 

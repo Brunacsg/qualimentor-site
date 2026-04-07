@@ -21,13 +21,34 @@
         <span>📋</span>
         <div>
           <h2>Gerenciar Compras</h2>
-          <p>Veja e aprove solicitações de compra do curso.</p>
+          <p>Confirme o pagamento no app do PagBank e depois clique em Simular webhook para liberar o acesso.</p>
         </div>
       </div>
 
       <div class="section-body">
+        <p id="adminStatusMessage" class="admin-status-message" aria-live="polite"></p>
+        <div class="admin-flow-card">
+          <strong>Fluxo recomendado com app PagBank</strong>
+          <p>1. O aluno paga pelo link. 2. Você confirma no app do banco que o valor caiu. 3. No admin, clique em Simular webhook. 4. O sistema gera senha, libera acesso, envia email e registra a credencial.</p>
+        </div>
         <div id="purchasesContainer" class="purchases-table-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando solicitações...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-header">
+        <span>🛠️</span>
+        <div>
+          <h2>Status do Ambiente</h2>
+          <p>Veja o que já está configurado para Render, SMTP, webhook e persistência.</p>
+        </div>
+      </div>
+
+      <div class="section-body">
+        <div id="systemStatusContainer" class="system-status-grid">
+          <p style="text-align: center; color: var(--text-muted);">Carregando diagnóstico...</p>
         </div>
       </div>
     </section>
@@ -128,6 +149,26 @@
       }
     }
 
+    async function fetchSystemStatus() {
+      try {
+        const res = await fetch('/system-status', {
+          headers: { 'x-admin-secret': ADMIN_SECRET }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          renderSystemStatus(data.status);
+        } else {
+          document.getElementById('systemStatusContainer').innerHTML =
+            `<p style="color: red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById('systemStatusContainer').innerHTML =
+          `<p style="color: red;">Erro ao carregar diagnóstico: ${err.message}</p>`;
+      }
+    }
+
     async function fetchUsersProgress() {
       try {
         const res = await fetch('/users-progress', {
@@ -183,6 +224,7 @@
               <th>Nome</th>
               <th>Link de Pagamento</th>
               <th>Status</th>
+              <th>Origem</th>
               <th>Data</th>
               <th>Ação</th>
             </tr>
@@ -194,9 +236,17 @@
         const date = new Date(req.createdAt).toLocaleDateString('pt-BR');
         const statusClass = req.status === 'approved' ? 'status-approved' : 'status-pending';
         const statusText = req.status === 'approved' ? 'Aprovada' : 'Pendente';
+        const approvalSource = req.approvalSource
+          ? `${req.approvalSource}${req.paymentProvider ? ` / ${req.paymentProvider}` : ''}`
+          : '-';
         const actionBtn = req.status === 'approved' 
           ? '<span style="color: var(--text-muted);">Já aprovada</span>'
-          : `<button onclick="approveRequest(${req.id}, '${ADMIN_SECRET}')" class="approve-button">Aprovar</button>`;
+          : `
+            <div class="admin-actions">
+              <button onclick="approveRequest(${req.id}, '${ADMIN_SECRET}')" class="approve-button">Aprovar</button>
+              <button onclick="simulateWebhook(${req.id}, '${ADMIN_SECRET}')" class="simulate-button">Simular webhook</button>
+            </div>
+          `;
 
         html += `
           <tr>
@@ -204,6 +254,7 @@
             <td>${req.name || '-'}</td>
             <td><code>${req.pixKey}</code></td>
             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>${approvalSource}</td>
             <td>${date}</td>
             <td>${actionBtn}</td>
           </tr>
@@ -261,6 +312,42 @@
       `;
 
       document.getElementById('usersContainer').innerHTML = html;
+    }
+
+    function renderSystemStatus(status) {
+      if (!status || !status.checks || status.checks.length === 0) {
+        document.getElementById('systemStatusContainer').innerHTML =
+          '<p style="text-align: center; color: var(--text-muted);">Nenhum diagnóstico disponível.</p>';
+        return;
+      }
+
+      let html = `
+        <div class="system-meta-card">
+          <strong>Ambiente</strong>
+          <span>${status.environment}</span>
+        </div>
+        <div class="system-meta-card">
+          <strong>Banco atual</strong>
+          <span>${status.databasePath}</span>
+        </div>
+      `;
+
+      status.checks.forEach(item => {
+        const badgeClass = item.ok ? 'status-approved' : 'status-pending';
+        const badgeText = item.ok ? 'OK' : 'Pendente';
+
+        html += `
+          <article class="system-check-card">
+            <div class="system-check-header">
+              <strong>${item.label}</strong>
+              <span class="status-badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <p>${item.detail}</p>
+          </article>
+        `;
+      });
+
+      document.getElementById('systemStatusContainer').innerHTML = html;
     }
 
     function renderUsersProgress(users) {
@@ -369,17 +456,54 @@
         const data = await res.json();
 
         if (data.success) {
-          alert('Compra aprovada! Email enviado ao cliente.');
+          showAdminStatus('Compra aprovada manualmente e email enviado ao cliente.', 'success');
           fetchPurchases();
+          fetchSystemStatus();
           fetchUsers();
           fetchUsersProgress();
           fetchCredentials();
         } else {
-          alert(`Erro: ${data.message}`);
+          showAdminStatus(`Erro: ${data.message}`, 'error');
         }
       } catch (err) {
-        alert(`Erro ao aprovar: ${err.message}`);
+        showAdminStatus(`Erro ao aprovar: ${err.message}`, 'error');
       }
+    }
+
+    async function simulateWebhook(requestId, secret) {
+      if (!confirm('Simular a confirmação automática de pagamento para esta compra?')) return;
+
+      try {
+        const res = await fetch('/simulate-payment-webhook', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-secret': secret
+          },
+          body: JSON.stringify({ requestId, paymentProvider: 'pagseguro-simulado' })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          showAdminStatus('Webhook simulado com sucesso. Acesso liberado automaticamente.', 'success');
+          fetchPurchases();
+          fetchSystemStatus();
+          fetchUsers();
+          fetchUsersProgress();
+          fetchCredentials();
+        } else {
+          showAdminStatus(`Erro: ${data.message}`, 'error');
+        }
+      } catch (err) {
+        showAdminStatus(`Erro ao simular webhook: ${err.message}`, 'error');
+      }
+    }
+
+    function showAdminStatus(message, type = '') {
+      const element = document.getElementById('adminStatusMessage');
+      element.textContent = message;
+      element.className = `admin-status-message ${type}`;
     }
 
     function logoutAdmin() {
@@ -389,6 +513,7 @@
     // Load on page load
     window.addEventListener('DOMContentLoaded', () => {
       fetchPurchases();
+      fetchSystemStatus();
       fetchUsers();
       fetchUsersProgress();
       fetchCredentials();
@@ -408,6 +533,94 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.95rem;
+    }
+
+    .admin-status-message {
+      min-height: 24px;
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .admin-status-message.success {
+      color: #a3e635;
+    }
+
+    .admin-status-message.error {
+      color: #fb7185;
+    }
+
+    .admin-flow-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .admin-flow-card strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .admin-flow-card p {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .system-status-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .system-meta-card,
+    .system-check-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .system-meta-card strong,
+    .system-check-header strong {
+      display: block;
+      color: var(--accent);
+    }
+
+    .system-meta-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--text-muted);
+      word-break: break-word;
+    }
+
+    .system-check-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .system-check-card p {
+      margin: 12px 0 0;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .simulate-button {
+      background: rgba(56, 189, 248, 0.18);
+      color: var(--text);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 8px 12px;
+      border-radius: 999px;
     }
 
     .purchases-table thead {

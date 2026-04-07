@@ -18,6 +18,7 @@ const SECRET = 'segredo_super_forte';
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'qualimentor.mentoria@gmail.com';
 const PAGSEGURO_LINK = process.env.PAGSEGURO_LINK || 'https://pag.ae/81E_Aa4jo';
+const PAYMENT_WEBHOOK_SECRET = process.env.PAYMENT_WEBHOOK_SECRET;
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = process.env.SMTP_PORT;
 const SMTP_USER = process.env.SMTP_USER;
@@ -86,6 +87,10 @@ db.serialize(() => {
     name TEXT,
     status TEXT,
     pixKey TEXT,
+    paymentProvider TEXT,
+    paymentReference TEXT,
+    approvalSource TEXT,
+    lastWebhookAt TEXT,
     createdAt TEXT,
     approvedAt TEXT
   )`);
@@ -138,8 +143,35 @@ db.serialize(() => {
     }
   });
 
+  db.all('PRAGMA table_info(purchase_requests)', (err, columns) => {
+    if (err) {
+      console.error('Erro ao verificar schema de purchase_requests:', err);
+      return;
+    }
+
+    const requiredColumns = [
+      { name: 'paymentProvider', sql: 'ALTER TABLE purchase_requests ADD COLUMN paymentProvider TEXT' },
+      { name: 'paymentReference', sql: 'ALTER TABLE purchase_requests ADD COLUMN paymentReference TEXT' },
+      { name: 'approvalSource', sql: 'ALTER TABLE purchase_requests ADD COLUMN approvalSource TEXT' },
+      { name: 'lastWebhookAt', sql: 'ALTER TABLE purchase_requests ADD COLUMN lastWebhookAt TEXT' },
+    ];
+
+    requiredColumns.forEach((column) => {
+      if (!columns.some((item) => item.name === column.name)) {
+        db.run(column.sql, (alterErr) => {
+          if (alterErr) {
+            console.error(`Erro ao adicionar ${column.name} em purchase_requests:`, alterErr);
+          }
+        });
+      }
+    });
+  });
+
   if (!ADMIN_SECRET) {
     console.warn('Aviso: ADMIN_SECRET não está definido. /create-user e /approve-purchase estarão desabilitados. Defina ADMIN_SECRET para liberar administração.')
+  }
+  if (!PAYMENT_WEBHOOK_SECRET) {
+    console.warn('Aviso: PAYMENT_WEBHOOK_SECRET não está definido. /payment-webhook ficará desabilitado. Defina PAYMENT_WEBHOOK_SECRET para liberar automação de confirmação de pagamento.');
   }
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
     console.warn('Aviso: SMTP não está configurado. Emails serão apenas simulados no console. Defina SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS para envio real.');
@@ -214,6 +246,250 @@ function logGeneratedCredential({ userId, name, email, plainPassword }) {
       }
     }
   );
+}
+
+function dbGet(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.get(sql, params, (err, row) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(row);
+    });
+  });
+}
+
+function dbRun(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function onRun(err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve({ lastID: this.lastID, changes: this.changes });
+    });
+  });
+}
+
+function generateTemporaryPassword() {
+  return `${crypto.randomBytes(4).toString('hex')}${Math.floor(Math.random() * 90 + 10)}`;
+}
+
+function isPaidStatus(status) {
+  return ['paid', 'approved', 'completed', 'confirmed'].includes(String(status || '').trim().toLowerCase());
+}
+
+function pickFirstString(...values) {
+  for (const value of values) {
+    if (value === undefined || value === null) {
+      continue;
+    }
+
+    const normalized = String(value).trim();
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return '';
+}
+
+function extractWebhookPayload(body = {}) {
+  const charge = Array.isArray(body.charges) ? body.charges[0] || {} : {};
+  const transaction = body.transaction && typeof body.transaction === 'object' ? body.transaction : {};
+  const customer = body.customer && typeof body.customer === 'object' ? body.customer : {};
+  const sender = body.sender && typeof body.sender === 'object' ? body.sender : {};
+  const payment = body.payment && typeof body.payment === 'object' ? body.payment : {};
+
+  const requestId = Number(
+    body.requestId
+    || body.referenceId
+    || body.reference_id
+    || charge.requestId
+    || charge.referenceId
+    || 0
+  );
+
+  const status = pickFirstString(
+    body.status,
+    body.paymentStatus,
+    body.payment_status,
+    body.current_status,
+    payment.status,
+    transaction.status,
+    charge.status,
+    charge.current_status
+  ).toLowerCase();
+
+  const email = normalizeEmail(pickFirstString(
+    body.email,
+    customer.email,
+    sender.email,
+    payment.email,
+    transaction.email,
+    charge.email
+  ));
+
+  const paymentReference = pickFirstString(
+    body.paymentReference,
+    body.reference,
+    body.reference_id,
+    body.referenceId,
+    body.transactionId,
+    body.transaction_id,
+    body.notificationCode,
+    transaction.reference,
+    transaction.id,
+    charge.reference,
+    charge.reference_id,
+    charge.id
+  );
+
+  const paymentProvider = pickFirstString(
+    body.paymentProvider,
+    body.provider,
+    body.gateway,
+    payment.provider,
+    transaction.provider,
+    'webhook'
+  );
+
+  return {
+    requestId,
+    status,
+    email,
+    paymentReference,
+    paymentProvider,
+  };
+}
+
+function buildSystemStatus() {
+  const usingRenderDisk = Boolean(process.env.RENDER_DISK_PATH);
+  const smtpConfigured = Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
+  const webhookConfigured = Boolean(PAYMENT_WEBHOOK_SECRET);
+  const adminConfigured = Boolean(ADMIN_SECRET);
+
+  return {
+    environment: process.env.RENDER ? 'render' : process.env.NODE_ENV || 'development',
+    databasePath,
+    usingRenderDisk,
+    checks: [
+      {
+        key: 'adminSecret',
+        label: 'ADMIN_SECRET configurado',
+        ok: adminConfigured,
+        detail: adminConfigured ? 'Admin liberado.' : 'Defina ADMIN_SECRET no ambiente.',
+      },
+      {
+        key: 'smtp',
+        label: 'SMTP configurado',
+        ok: smtpConfigured,
+        detail: smtpConfigured ? `Envio real via ${SMTP_HOST}:${SMTP_PORT || 587}.` : 'Defina SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS.',
+      },
+      {
+        key: 'paymentWebhook',
+        label: 'Webhook de pagamento configurado',
+        ok: webhookConfigured,
+        detail: webhookConfigured ? 'Endpoint /payment-webhook protegido por segredo.' : 'Defina PAYMENT_WEBHOOK_SECRET no ambiente.',
+      },
+      {
+        key: 'paymentLink',
+        label: 'Link de pagamento configurado',
+        ok: Boolean(PAGSEGURO_LINK),
+        detail: PAGSEGURO_LINK || 'Defina PAGSEGURO_LINK no ambiente.',
+      },
+      {
+        key: 'databasePersistence',
+        label: 'Persistência do banco',
+        ok: process.platform === 'win32' || usingRenderDisk || Boolean(process.env.DB_PATH),
+        detail: process.platform === 'win32'
+          ? `Banco local em ${databasePath}.`
+          : usingRenderDisk
+            ? `Disco persistente Render em ${databasePath}.`
+            : process.env.DB_PATH
+              ? `DB_PATH definido em ${databasePath}.`
+              : 'No Render, configure disco persistente ou DB_PATH para não perder dados.',
+      },
+    ],
+  };
+}
+
+async function approvePurchaseRequest(request, options = {}) {
+  const normalizedEmail = normalizeEmail(request.email);
+  const normalizedName = normalizeName(request.name);
+  const approvedAt = options.approvedAt || new Date().toISOString();
+  const approvalSource = options.approvalSource || 'manual';
+  const paymentProvider = String(options.paymentProvider || '').trim();
+  const paymentReference = String(options.paymentReference || '').trim();
+  const webhookTimestamp = options.lastWebhookAt || null;
+
+  await dbRun(
+    `UPDATE purchase_requests
+     SET status = ?, approvedAt = ?, approvalSource = ?, paymentProvider = ?, paymentReference = ?, lastWebhookAt = ?
+     WHERE id = ?`,
+    [
+      'approved',
+      approvedAt,
+      approvalSource,
+      paymentProvider,
+      paymentReference,
+      webhookTimestamp,
+      request.id,
+    ]
+  );
+
+  const generatedPassword = generateTemporaryPassword();
+  const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 365);
+
+  const existingUser = await dbGet('SELECT * FROM users WHERE lower(trim(email)) = ?', [normalizedEmail]);
+  let userId = existingUser?.id || null;
+
+  if (existingUser) {
+    await dbRun(
+      "UPDATE users SET name = COALESCE(NULLIF(?, ''), name), password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?",
+      [normalizedName, hashedPassword, expiresAt.toISOString(), existingUser.id]
+    );
+  } else {
+    const insertResult = await dbRun(
+      'INSERT INTO users (name, email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, ?, NULL)',
+      [normalizedName, normalizedEmail, hashedPassword, expiresAt.toISOString()]
+    );
+    userId = insertResult.lastID;
+  }
+
+  logGeneratedCredential({
+    userId,
+    name: normalizedName,
+    email: normalizedEmail,
+    plainPassword: generatedPassword,
+  });
+
+  await sendEmail({
+    to: normalizedEmail,
+    subject: 'Seu acesso ao curso QA está pronto',
+    text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nLogin: ${normalizedEmail}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados. Guarde esta mensagem para consultas futuras.`,
+  });
+
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    subject: approvalSource === 'webhook' ? 'Compra QA aprovada automaticamente' : 'Compra QA aprovada',
+    text: `A solicitação de compra do email ${normalizedEmail} foi aprovada e os dados de acesso foram gerados.\n\nNome: ${normalizedName || 'Não informado'}\nLogin: ${normalizedEmail}\nSenha gerada: ${generatedPassword}\nOrigem da aprovação: ${approvalSource}\nProvedor: ${paymentProvider || 'Não informado'}\nReferência: ${paymentReference || 'Não informada'}\nAprovado em: ${approvedAt}.`,
+  });
+
+  return {
+    approvedAt,
+    approvalSource,
+    paymentProvider,
+    paymentReference,
+    generatedPassword,
+    normalizedEmail,
+    normalizedName,
+  };
 }
 
 // =========================
@@ -397,8 +673,10 @@ app.post('/purchase-request', async (req, res) => {
   const createdAt = new Date().toISOString();
 
   db.run(
-    'INSERT INTO purchase_requests (email, name, status, pixKey, createdAt) VALUES (?, ?, ?, ?, ?)',
-    [email, name, 'pending', paymentLink, createdAt],
+    `INSERT INTO purchase_requests (
+      email, name, status, pixKey, paymentProvider, paymentReference, approvalSource, lastWebhookAt, createdAt
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [email, name, 'pending', paymentLink, '', '', '', null, createdAt],
     async function (err) {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao registrar solicitação' });
@@ -514,6 +792,10 @@ app.get('/credential-deliveries', authAdmin, (req, res) => {
   );
 });
 
+app.get('/system-status', authAdmin, (req, res) => {
+  res.json({ success: true, status: buildSystemStatus() });
+});
+
 app.get('/progress', auth, (req, res) => {
   db.all(
     `SELECT moduleId, completed, quizPassed, quizScore, quizTotal, quizAttempted, updatedAt
@@ -593,8 +875,10 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
     return res.status(400).json({ success: false, message: 'requestId é obrigatório' });
   }
 
-  db.get('SELECT * FROM purchase_requests WHERE id = ?', [requestId], async (err, request) => {
-    if (err || !request) {
+  try {
+    const request = await dbGet('SELECT * FROM purchase_requests WHERE id = ?', [requestId]);
+
+    if (!request) {
       return res.status(404).json({ success: false, message: 'Solicitação não encontrada' });
     }
 
@@ -602,88 +886,116 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
       return res.json({ success: false, message: 'Solicitação já aprovada' });
     }
 
-    const approvedAt = new Date().toISOString();
-    db.run(
-      'UPDATE purchase_requests SET status = ?, approvedAt = ? WHERE id = ?',
-      ['approved', approvedAt, requestId],
-      async function (updateErr) {
-        if (updateErr) {
-          return res.status(500).json({ success: false, message: 'Erro ao aprovar solicitação' });
-        }
+    await approvePurchaseRequest(request, { approvalSource: 'manual' });
 
-        const generatedPassword = Math.random().toString(36).slice(2, 10) + Math.floor(Math.random() * 90 + 10);
-        const hashedPassword = await bcrypt.hash(generatedPassword, 10);
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 365);
+    res.json({ success: true, message: 'Solicitação aprovada e emails enviados' });
+  } catch (error) {
+    console.error('Erro ao aprovar compra manualmente:', error);
+    res.status(500).json({ success: false, message: 'Erro ao aprovar solicitação' });
+  }
+});
 
-        try {
-          db.get('SELECT * FROM users WHERE lower(trim(email)) = ?', [normalizeEmail(request.email)], async (userErr, existingUser) => {
-            if (userErr) {
-              console.error('Erro ao buscar usuário existente:', userErr);
-              return;
-            }
+app.post('/simulate-payment-webhook', authAdmin, async (req, res) => {
+  const requestId = Number(req.body.requestId || 0);
+  const paymentProvider = pickFirstString(req.body.paymentProvider, 'admin-simulation');
+  const paymentReference = pickFirstString(req.body.paymentReference, `SIM-${Date.now()}`);
+  const approvedAt = new Date().toISOString();
 
-            const generatedUserId = existingUser?.id || null;
+  if (!requestId) {
+    return res.status(400).json({ success: false, message: 'requestId é obrigatório' });
+  }
 
-            if (existingUser) {
-              db.run(
-                "UPDATE users SET name = COALESCE(NULLIF(?, ''), name), password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?",
-                [normalizeName(request.name), hashedPassword, expiresAt.toISOString(), existingUser.id],
-                function (updateUserErr) {
-                  if (updateUserErr) {
-                    console.error('Erro ao atualizar usuário:', updateUserErr);
-                  }
-                }
-              );
-            } else {
-              db.run(
-                'INSERT INTO users (name, email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, ?, NULL)',
-                [normalizeName(request.name), normalizeEmail(request.email), hashedPassword, expiresAt.toISOString()],
-                function (insertErr) {
-                  if (insertErr) {
-                    console.error('Erro ao criar usuário:', insertErr);
-                    return;
-                  }
+  try {
+    const request = await dbGet('SELECT * FROM purchase_requests WHERE id = ?', [requestId]);
 
-                  logGeneratedCredential({
-                    userId: this.lastID,
-                    name: request.name,
-                    email: request.email,
-                    plainPassword: generatedPassword,
-                  });
-                }
-              );
-            }
+    if (!request) {
+      return res.status(404).json({ success: false, message: 'Solicitação não encontrada' });
+    }
 
-            if (generatedUserId) {
-              logGeneratedCredential({
-                userId: generatedUserId,
-                name: request.name,
-                email: request.email,
-                plainPassword: generatedPassword,
-              });
-            }
-          });
+    if (request.status === 'approved') {
+      return res.json({ success: false, message: 'Solicitação já aprovada' });
+    }
 
-          await sendEmail({
-            to: request.email,
-            subject: 'Seu acesso ao curso QA está pronto',
-            text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nLogin: ${request.email}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados. Guarde esta mensagem para consultas futuras.`,
-          });
+    await approvePurchaseRequest(request, {
+      approvalSource: 'admin-simulation',
+      paymentProvider,
+      paymentReference,
+      lastWebhookAt: approvedAt,
+      approvedAt,
+    });
 
-          await sendEmail({
-            to: ADMIN_EMAIL,
-            subject: 'Compra QA aprovada',
-            text: `A solicitação de compra do email ${request.email} foi aprovada e os dados de acesso foram gerados.\n\nNome: ${request.name || 'Não informado'}\nLogin: ${request.email}\nSenha gerada: ${generatedPassword}\nAprovado em: ${approvedAt}.`,
-          });
-        } catch (error) {
-          console.error('Erro ao enviar emails de aprovação:', error);
-        }
+    res.json({ success: true, message: 'Simulação executada e acesso liberado automaticamente.' });
+  } catch (error) {
+    console.error('Erro ao simular webhook de pagamento:', error);
+    res.status(500).json({ success: false, message: 'Erro ao simular confirmação de pagamento' });
+  }
+});
 
-        res.json({ success: true, message: 'Solicitação aprovada e emails enviados' });
-      }
-    );
-  });
+app.post('/payment-webhook', async (req, res) => {
+  if (!PAYMENT_WEBHOOK_SECRET) {
+    return res.status(503).json({ success: false, message: 'Webhook secret não configurado' });
+  }
+
+  const receivedSecret = String(req.headers['x-payment-secret'] || '').trim();
+  if (!receivedSecret || receivedSecret !== PAYMENT_WEBHOOK_SECRET) {
+    return res.status(403).json({ success: false, message: 'Acesso negado' });
+  }
+
+  const payload = extractWebhookPayload(req.body);
+  const { requestId, status, email, paymentReference, paymentProvider } = payload;
+
+  if (!isPaidStatus(status)) {
+    return res.json({ success: true, ignored: true, message: 'Status recebido não libera acesso' });
+  }
+
+  const webhookTimestamp = new Date().toISOString();
+
+  if (!requestId && !email) {
+    return res.status(400).json({ success: false, message: 'Informe requestId ou email para localizar a compra.' });
+  }
+
+  try {
+    const request = requestId
+      ? await dbGet('SELECT * FROM purchase_requests WHERE id = ?', [requestId])
+      : await dbGet(
+        `SELECT * FROM purchase_requests
+         WHERE lower(trim(email)) = ?
+         ORDER BY createdAt DESC
+         LIMIT 1`,
+        [email]
+      );
+
+    if (!request) {
+      return res.status(404).json({ success: false, message: 'Solicitação de compra não encontrada' });
+    }
+
+    if (request.status === 'approved') {
+      await dbRun(
+        `UPDATE purchase_requests
+         SET paymentProvider = ?, paymentReference = ?, lastWebhookAt = ?, approvalSource = COALESCE(NULLIF(approvalSource, ''), ?)
+         WHERE id = ?`,
+        [paymentProvider, paymentReference, webhookTimestamp, 'webhook', request.id]
+      );
+
+      return res.json({
+        success: true,
+        alreadyProcessed: true,
+        message: 'Pagamento já havia sido confirmado anteriormente.',
+      });
+    }
+
+    await approvePurchaseRequest(request, {
+      approvalSource: 'webhook',
+      paymentProvider,
+      paymentReference,
+      lastWebhookAt: webhookTimestamp,
+    });
+
+    res.json({ success: true, message: 'Pagamento confirmado e acesso liberado automaticamente.' });
+  } catch (error) {
+    console.error('Erro ao processar webhook de pagamento:', error);
+    res.status(500).json({ success: false, message: 'Erro ao processar confirmação de pagamento' });
+  }
 });
 
 app.post('/profile', auth, (req, res) => {

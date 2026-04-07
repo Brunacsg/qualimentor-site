@@ -18,6 +18,9 @@ set SMTP_HOST=smtp.gmail.com
 set SMTP_PORT=587
 set SMTP_USER=seu-email@gmail.com
 set SMTP_PASS=sua-senha-app
+
+# (Opcional, recomendado) Automação de pagamento:
+set PAYMENT_WEBHOOK_SECRET=sua-chave-webhook
 ```
 
 ### 3. Iniciar servidor
@@ -51,8 +54,17 @@ Servidor rodando em: **http://localhost:3000**
 
 ### 3️⃣ Você pela admin
 - Acessa `/admin.html` com sua senha
-- Aprova o pagamento
-- Cliente recebe confirmação por email
+- Confirma no app do PagBank que o pagamento caiu
+- Clica em `Simular webhook`
+- Cliente recebe login e senha por email
+
+### 3️⃣ Alternativa automática via webhook
+- Seu provedor chama `/payment-webhook`
+- Envia `x-payment-secret` e `status=paid`
+- O acesso é liberado automaticamente
+
+### Fluxo recomendado agora
+- Se você está usando só o app do PagBank, o caminho principal é confirmar o pagamento no app e depois clicar em `Simular webhook` no admin.
 
 ### 4️⃣ Você envia acesso
 - Cria usuário: `email@cliente.com` + `senha`
@@ -94,6 +106,7 @@ Abrir: `http://localhost:3000`
 1. Acesse: `http://localhost:3000/admin.html`
 2. Digite sua ADMIN_SECRET
 3. Veja compras pendentes
+4. Confira a seção "Status do Ambiente" para validar Render, SMTP e webhook
 
 ### Testar login
 1. Crie um usuário (veja acima)
@@ -119,6 +132,19 @@ Seu pagamento foi aprovado...
 ```bash
 curl -X GET http://localhost:3000/purchase-requests \
   -H "x-admin-secret: SUA_SENHA_AQUI"
+```
+
+### Simular confirmação automática de pagamento
+```bash
+curl -X POST http://localhost:3000/payment-webhook \
+  -H "Content-Type: application/json" \
+  -H "x-payment-secret: SUA_CHAVE_WEBHOOK" \
+  -d '{
+    "requestId": 1,
+    "status": "paid",
+    "paymentProvider": "pagseguro",
+    "paymentReference": "TX-0001"
+  }'
 ```
 
 ---
