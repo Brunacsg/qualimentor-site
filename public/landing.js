@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const logoImage = document.createElement('img');
     logoImage.src = 'imagens/favicon.png';
-    logoImage.alt = 'Logo Portal QA';
+    logoImage.alt = 'Logo QUALIMENTOR';
     logoImage.className = 'site-logo';
     logoElement.prepend(logoImage);
   });
