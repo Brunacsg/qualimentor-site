@@ -146,9 +146,22 @@ function toggleModuleCompletion() {
   updateModulePageProgress();
 }
 
-function logout() {
-  localStorage.removeItem('token');
-  window.location.href = 'login.html';
+async function logout() {
+  const token = localStorage.getItem('token');
+
+  try {
+    if (token) {
+      await fetch(`${API_ORIGIN}/logout`, {
+        method: 'POST',
+        headers: { Authorization: token }
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao encerrar sessão:', error);
+  } finally {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {

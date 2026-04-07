@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -55,7 +56,8 @@ db.serialize(() => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
     password TEXT,
-    expiresAt TEXT
+    expiresAt TEXT,
+    activeSessionId TEXT
   )`);
 
   db.run(`CREATE TABLE IF NOT EXISTS purchase_requests (
@@ -67,6 +69,22 @@ db.serialize(() => {
     createdAt TEXT,
     approvedAt TEXT
   )`);
+
+  db.all('PRAGMA table_info(users)', (err, columns) => {
+    if (err) {
+      console.error('Erro ao verificar schema de users:', err);
+      return;
+    }
+
+    const hasActiveSessionId = columns.some((column) => column.name === 'activeSessionId');
+    if (!hasActiveSessionId) {
+      db.run('ALTER TABLE users ADD COLUMN activeSessionId TEXT', (alterErr) => {
+        if (alterErr) {
+          console.error('Erro ao adicionar activeSessionId em users:', alterErr);
+        }
+      });
+    }
+  });
 
   if (!ADMIN_SECRET) {
     console.warn('Aviso: ADMIN_SECRET não está definido. /create-user e /approve-purchase estarão desabilitados. Defina ADMIN_SECRET para liberar administração.')
@@ -123,8 +141,31 @@ function auth(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, SECRET);
-    req.user = decoded;
-    next();
+
+    db.get(
+      'SELECT id, email, expiresAt, activeSessionId FROM users WHERE id = ?',
+      [decoded.id],
+      (err, user) => {
+        if (err) {
+          return res.status(500).json({ error: 'Erro ao validar sessão' });
+        }
+
+        if (!user) {
+          return res.status(401).json({ error: 'Usuário não encontrado' });
+        }
+
+        if (!decoded.sessionId || !user.activeSessionId || user.activeSessionId !== decoded.sessionId) {
+          return res.status(401).json({ error: 'Sessão encerrada por novo login em outro dispositivo' });
+        }
+
+        if (new Date() > new Date(user.expiresAt)) {
+          return res.status(401).json({ error: 'Acesso expirado' });
+        }
+
+        req.user = { id: user.id, email: user.email, sessionId: user.activeSessionId };
+        next();
+      }
+    );
   } catch (error) {
     res.status(401).json({ error: 'Token inválido' });
   }
@@ -153,14 +194,40 @@ app.post('/login', (req, res) => {
       return res.json({ success: false, message: 'Acesso expirado' });
     }
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      SECRET,
-      { expiresIn: '1d' }
-    );
+    const sessionId = crypto.randomBytes(32).toString('hex');
 
-    res.json({ success: true, token });
+    db.run(
+      'UPDATE users SET activeSessionId = ? WHERE id = ?',
+      [sessionId, user.id],
+      (updateErr) => {
+        if (updateErr) {
+          return res.json({ success: false, message: 'Erro ao iniciar sessão' });
+        }
+
+        const token = jwt.sign(
+          { id: user.id, email: user.email, sessionId },
+          SECRET,
+          { expiresIn: '1d' }
+        );
+
+        res.json({ success: true, token });
+      }
+    );
   });
+});
+
+app.post('/logout', auth, (req, res) => {
+  db.run(
+    'UPDATE users SET activeSessionId = NULL WHERE id = ? AND activeSessionId = ?',
+    [req.user.id, req.user.sessionId],
+    (err) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: 'Erro ao encerrar sessão' });
+      }
+
+      res.json({ success: true });
+    }
+  );
 });
 
 // =========================
@@ -204,7 +271,7 @@ app.post('/create-user', authAdmin, async (req, res) => {
   expiresAt.setDate(expiresAt.getDate() + days);
 
   db.run(
-    'INSERT INTO users (email, password, expiresAt) VALUES (?, ?, ?)',
+    'INSERT INTO users (email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, NULL)',
     [email, hash, expiresAt.toISOString()],
     function (err) {
       if (err) {
@@ -304,7 +371,7 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
 
             if (existingUser) {
               db.run(
-                'UPDATE users SET password = ?, expiresAt = ? WHERE id = ?',
+                'UPDATE users SET password = ?, expiresAt = ?, activeSessionId = NULL WHERE id = ?',
                 [hashedPassword, expiresAt.toISOString(), existingUser.id],
                 function (updateUserErr) {
                   if (updateUserErr) {
@@ -314,7 +381,7 @@ app.post('/approve-purchase', authAdmin, async (req, res) => {
               );
             } else {
               db.run(
-                'INSERT INTO users (email, password, expiresAt) VALUES (?, ?, ?)',
+                'INSERT INTO users (email, password, expiresAt, activeSessionId) VALUES (?, ?, ?, NULL)',
                 [request.email, hashedPassword, expiresAt.toISOString()],
                 function (insertErr) {
                   if (insertErr) {
