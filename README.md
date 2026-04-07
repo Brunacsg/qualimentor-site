@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Portal SaaS com curso completo de QA contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com PIX, autenticação segura e painel administrativo.
+Portal SaaS com curso completo de QA contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com link de pagamento, autenticação segura e painel administrativo.
 
 ## Recursos
 
@@ -23,7 +23,7 @@ npm install
 
 Dependências instaladas:
 - `express` - Framework web
-- `sqlite3` - Banco de dados
+- `pg` - PostgreSQL
 - `bcryptjs` - Hash de senhas
 - `jsonwebtoken` - Autenticação JWT
 - `nodemailer` - Envio de emails
@@ -39,12 +39,12 @@ Defina as seguintes variáveis de ambiente:
 set ADMIN_SECRET=sua_senha_admin_super_secreta
 ```
 
-#### Banco SQLite (opcional)
+#### Banco PostgreSQL (obrigatório)
 ```bash
-set DB_PATH=caminho/para/database.db
+set DATABASE_URL=postgresql://usuario:senha@host:5432/database
 ```
 
-No Render, sem `DB_PATH`, a aplicação usará `RENDER_DISK_PATH` quando existir. Se não houver disco persistente configurado, ela usará `/tmp/database.db` para garantir que o serviço consiga iniciar.
+Use aqui a string de conexão do Supabase, Render PostgreSQL ou outro provedor compatível.
 
 #### Email (opcional - simulado no console se não configurado)
 ```bash
@@ -82,29 +82,29 @@ Servidor rodará em: `http://localhost:3000`
 
 1. Acesse `http://localhost:3000` (página pública)
 2. Veja os módulos disponíveis
-3. Clique em "Compre o Curso Agora"
-4. Preencha email e nome (opcional)
-5. Receberá em breve a chave PIX
-6. Após pagamento aprovado, recebe acesso ao curso
+3. Clique em "Começar a estudar QA agora"
+4. Preencha nome e email
+5. Siga para o link de pagamento
+6. Após pagamento aprovado, recebe os dados de acesso ao curso
 
 ### Para Admin (Gerenciamento)
 
 1. Acesse `http://localhost:3000/admin.html`
 2. Digite a `ADMIN_SECRET` (senha admin)
 3. Veja lista de solicitações de compra
-4. Se você usa apenas o app do PagBank/PagSeguro, confirme no app que o pagamento caiu
+4. Confirme no Mercado Pago que o pagamento foi aprovado
 5. Clique em `Simular webhook` para liberar o acesso automaticamente
-6. O sistema enviará os emails e registrará a senha gerada no admin
+6. O sistema enviará os emails e registrará os dados de acesso no admin
 
-### Fluxo Recomendado com App do PagBank
+### Fluxo Recomendado com Mercado Pago
 
-Se você usa apenas o app bancário do PagBank para acompanhar os recebimentos, o fluxo recomendado é semi-automático:
+Se você usa o Mercado Pago para acompanhar os recebimentos, o fluxo recomendado é semi-automático:
 
 1. O aluno preenche nome e email na landing
 2. O aluno é redirecionado para o link de pagamento
-3. Você confirma no app do PagBank que o valor caiu
+3. Você confirma no Mercado Pago que o pagamento foi aprovado
 4. Você abre `admin.html` e clica em `Simular webhook`
-5. O sistema gera senha, libera acesso, envia email e grava a credencial para consulta futura
+5. O sistema libera acesso, envia email e grava os dados de acesso para consulta futura
 
 ### Para Automação de Pagamento
 
@@ -112,7 +112,7 @@ Se você usa apenas o app bancário do PagBank para acompanhar os recebimentos, 
 2. No provedor de pagamento ou ferramenta intermediária, envie `POST /payment-webhook`
 3. Inclua o header `x-payment-secret` com o mesmo valor configurado
 4. Envie `status=paid` ou `approved`
-5. O sistema aprova a compra, gera senha, envia email e registra a credencial no admin
+5. O sistema aprova a compra, libera o acesso, envia email e registra a credencial no admin
 
 ### Para Usuários (Acesso ao Curso)
 
@@ -192,7 +192,7 @@ POST /create-user
 mini_saas_qa/
 ├── server.js           # Backend Express
 ├── package.json        # Dependências
-├── database.db         # SQLite (criado automaticamente)
+├── database.js         # Camada de acesso PostgreSQL
 └── public/
     ├── index.html           # Landing page
     ├── landing.js           # JS da landing

@@ -1,13 +1,11 @@
-const fs = require('fs');
-const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const { db, initDatabase, databaseLabel } = require('./database');
 
 const app = express();
 app.use(cors());
@@ -19,6 +17,7 @@ const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'qualimentor.mentoria@gmail.com';
 const PAGSEGURO_LINK = process.env.PAGSEGURO_LINK || 'https://pag.ae/81E_Aa4jo';
 const PAYMENT_WEBHOOK_SECRET = process.env.PAYMENT_WEBHOOK_SECRET;
+const DATABASE_URL = String(process.env.DATABASE_URL || '').trim();
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = process.env.SMTP_PORT;
 const SMTP_USER = process.env.SMTP_USER;
@@ -45,130 +44,12 @@ process.on('unhandledRejection', (reason) => {
   process.exit(1);
 });
 
-// =========================
-// DATABASE
-// =========================
-const bundledDatabasePath = path.join(__dirname, 'database.db');
-const renderDatabasePath = process.env.RENDER_DISK_PATH
-  ? path.join(process.env.RENDER_DISK_PATH, 'database.db')
-  : null;
-const fallbackDatabasePath = process.platform === 'win32'
-  ? bundledDatabasePath
-  : '/tmp/database.db';
-
-const databasePath = process.env.DB_PATH
-  || renderDatabasePath
-  || (fs.existsSync(bundledDatabasePath) ? bundledDatabasePath : fallbackDatabasePath);
-
-fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-
-const db = new sqlite3.Database(databasePath, (error) => {
-  if (error) {
-    console.error('Erro ao abrir banco SQLite:', error);
-    process.exit(1);
-  }
-
-  console.log(`SQLite em ${databasePath}`);
-});
-
 db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    email TEXT UNIQUE,
-    password TEXT,
-    expiresAt TEXT,
-    activeSessionId TEXT
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS purchase_requests (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT,
-    name TEXT,
-    status TEXT,
-    pixKey TEXT,
-    paymentProvider TEXT,
-    paymentReference TEXT,
-    approvalSource TEXT,
-    lastWebhookAt TEXT,
-    createdAt TEXT,
-    approvedAt TEXT
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS user_progress (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userId INTEGER NOT NULL,
-    moduleId TEXT NOT NULL,
-    completed INTEGER DEFAULT 0,
-    quizPassed INTEGER DEFAULT 0,
-    quizScore INTEGER DEFAULT 0,
-    quizTotal INTEGER DEFAULT 0,
-    quizAttempted INTEGER DEFAULT 0,
-    updatedAt TEXT NOT NULL,
-    UNIQUE(userId, moduleId)
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS credential_deliveries (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userId INTEGER,
-    name TEXT,
-    email TEXT NOT NULL,
-    plainPassword TEXT NOT NULL,
-    createdAt TEXT NOT NULL
-  )`);
-
-  db.all('PRAGMA table_info(users)', (err, columns) => {
-    if (err) {
-      console.error('Erro ao verificar schema de users:', err);
-      return;
-    }
-
-    const hasActiveSessionId = columns.some((column) => column.name === 'activeSessionId');
-    const hasName = columns.some((column) => column.name === 'name');
-
-    if (!hasName) {
-      db.run('ALTER TABLE users ADD COLUMN name TEXT', (alterErr) => {
-        if (alterErr) {
-          console.error('Erro ao adicionar name em users:', alterErr);
-        }
-      });
-    }
-
-    if (!hasActiveSessionId) {
-      db.run('ALTER TABLE users ADD COLUMN activeSessionId TEXT', (alterErr) => {
-        if (alterErr) {
-          console.error('Erro ao adicionar activeSessionId em users:', alterErr);
-        }
-      });
-    }
-  });
-
-  db.all('PRAGMA table_info(purchase_requests)', (err, columns) => {
-    if (err) {
-      console.error('Erro ao verificar schema de purchase_requests:', err);
-      return;
-    }
-
-    const requiredColumns = [
-      { name: 'paymentProvider', sql: 'ALTER TABLE purchase_requests ADD COLUMN paymentProvider TEXT' },
-      { name: 'paymentReference', sql: 'ALTER TABLE purchase_requests ADD COLUMN paymentReference TEXT' },
-      { name: 'approvalSource', sql: 'ALTER TABLE purchase_requests ADD COLUMN approvalSource TEXT' },
-      { name: 'lastWebhookAt', sql: 'ALTER TABLE purchase_requests ADD COLUMN lastWebhookAt TEXT' },
-    ];
-
-    requiredColumns.forEach((column) => {
-      if (!columns.some((item) => item.name === column.name)) {
-        db.run(column.sql, (alterErr) => {
-          if (alterErr) {
-            console.error(`Erro ao adicionar ${column.name} em purchase_requests:`, alterErr);
-          }
-        });
-      }
-    });
-  });
-
   if (!ADMIN_SECRET) {
     console.warn('Aviso: ADMIN_SECRET não está definido. /create-user e /approve-purchase estarão desabilitados. Defina ADMIN_SECRET para liberar administração.')
+  }
+  if (!DATABASE_URL) {
+    console.warn('Aviso: DATABASE_URL não está definido. Configure a string de conexão do PostgreSQL para liberar o banco.');
   }
   if (!PAYMENT_WEBHOOK_SECRET) {
     console.warn('Aviso: PAYMENT_WEBHOOK_SECRET não está definido. /payment-webhook ficará desabilitado. Defina PAYMENT_WEBHOOK_SECRET para liberar automação de confirmação de pagamento.');
@@ -367,15 +248,15 @@ function extractWebhookPayload(body = {}) {
 }
 
 function buildSystemStatus() {
-  const usingRenderDisk = Boolean(process.env.RENDER_DISK_PATH);
   const smtpConfigured = Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
   const webhookConfigured = Boolean(PAYMENT_WEBHOOK_SECRET);
   const adminConfigured = Boolean(ADMIN_SECRET);
+  const databaseConfigured = Boolean(DATABASE_URL);
 
   return {
     environment: process.env.RENDER ? 'render' : process.env.NODE_ENV || 'development',
-    databasePath,
-    usingRenderDisk,
+    databasePath: databaseLabel,
+    usingRenderDisk: false,
     checks: [
       {
         key: 'adminSecret',
@@ -388,6 +269,12 @@ function buildSystemStatus() {
         label: 'SMTP configurado',
         ok: smtpConfigured,
         detail: smtpConfigured ? `Envio real via ${SMTP_HOST}:${SMTP_PORT || 587}.` : 'Defina SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS.',
+      },
+      {
+        key: 'database',
+        label: 'PostgreSQL configurado',
+        ok: databaseConfigured,
+        detail: databaseConfigured ? `Conectado via DATABASE_URL em ${databaseLabel}.` : 'Defina DATABASE_URL com a conexão do PostgreSQL.',
       },
       {
         key: 'paymentWebhook',
@@ -404,14 +291,10 @@ function buildSystemStatus() {
       {
         key: 'databasePersistence',
         label: 'Persistência do banco',
-        ok: process.platform === 'win32' || usingRenderDisk || Boolean(process.env.DB_PATH),
-        detail: process.platform === 'win32'
-          ? `Banco local em ${databasePath}.`
-          : usingRenderDisk
-            ? `Disco persistente Render em ${databasePath}.`
-            : process.env.DB_PATH
-              ? `DB_PATH definido em ${databasePath}.`
-              : 'No Render, configure disco persistente ou DB_PATH para não perder dados.',
+        ok: databaseConfigured,
+        detail: databaseConfigured
+          ? 'Persistência garantida pelo PostgreSQL configurado externamente.'
+          : 'Configure DATABASE_URL para usar um banco persistente.',
       },
     ],
   };
@@ -1036,6 +919,14 @@ app.get('/dashboard', auth, (req, res) => {
 // START SERVER
 // =========================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Rodando em http://localhost:${PORT}`);
-});
+initDatabase()
+  .then(() => {
+    console.log(`PostgreSQL em ${databaseLabel}`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Rodando em http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Erro ao inicializar PostgreSQL:', error);
+    process.exit(1);
+  });

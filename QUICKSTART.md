@@ -11,6 +11,7 @@ npm install
 ```bash
 # Windows PowerShell
 set ADMIN_SECRET=sua_senha_muito_secreta
+set DATABASE_URL=postgresql://usuario:senha@host:5432/database
 
 # (Opcional) Se usar email real:
 set ADMIN_EMAIL=voce@email.com
@@ -46,17 +47,17 @@ Servidor rodando em: **http://localhost:3000**
 
 ### 1️⃣ Cliente acessa landing
 - Vê descrição do curso
-- Clica em "Compre o Curso"
+- Clica em "Começar a estudar QA agora"
 
-### 2️⃣ Cliente preenche email
-- Recebe chave PIX por email
-- Faz pagamento via PIX
+### 2️⃣ Cliente preenche cadastro
+- Informa nome e email
+- É redirecionado ao pagamento
 
 ### 3️⃣ Você pela admin
 - Acessa `/admin.html` com sua senha
-- Confirma no app do PagBank que o pagamento caiu
+- Confirma no Mercado Pago que o pagamento foi aprovado
 - Clica em `Simular webhook`
-- Cliente recebe login e senha por email
+- Cliente recebe os dados de acesso por email
 
 ### 3️⃣ Alternativa automática via webhook
 - Seu provedor chama `/payment-webhook`
@@ -64,13 +65,9 @@ Servidor rodando em: **http://localhost:3000**
 - O acesso é liberado automaticamente
 
 ### Fluxo recomendado agora
-- Se você está usando só o app do PagBank, o caminho principal é confirmar o pagamento no app e depois clicar em `Simular webhook` no admin.
+- Se você está usando o Mercado Pago, o caminho principal é confirmar o pagamento por lá e depois clicar em `Simular webhook` no admin.
 
-### 4️⃣ Você envia acesso
-- Cria usuário: `email@cliente.com` + `senha`
-- Envia para cliente
-
-### 5️⃣ Cliente faz login
+### 4️⃣ Cliente faz login
 - Acessa `/login.html`
 - Estuda os 9 módulos
 - Acompanha progresso
@@ -99,8 +96,8 @@ curl -X POST http://localhost:3000/create-user \
 Abrir: `http://localhost:3000`
 
 ### Testar formulário de compra
-1. Preencher email qualquer
-2. Ver resposta com PIX key
+1. Preencher nome e email
+2. Ver redirecionamento para o link de pagamento
 
 ### Testar admin
 1. Acesse: `http://localhost:3000/admin.html`
