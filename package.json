@@ -1,17 +1,16 @@
 {
   "name": "mini-saas-qa",
   "version": "1.0.0",
+  "description": "A mini SaaS application for testing",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "body-parser": "^2.2.2",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "nodemailer": "^6.9.7",
-    "sqlite3": "^6.0.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
   }
 }
