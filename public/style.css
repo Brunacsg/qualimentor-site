@@ -1398,6 +1398,15 @@ main.dashboard-grid {
   border: 1px solid rgba(244, 232, 193, 0.18);
 }
 
+.hero-mini-label {
+  margin: -6px auto 18px;
+  color: rgba(244, 232, 193, 0.82);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
 .section-subtitle {
   text-align: center;
   color: var(--text-soft);
@@ -2032,6 +2041,11 @@ main.dashboard-grid {
   .section-eyebrow {
     font-size: 0.75rem;
     letter-spacing: 0.12em;
+  }
+
+  .hero-mini-label {
+    margin-bottom: 14px;
+    font-size: 0.72rem;
   }
 
   .hero-proof-strip {
