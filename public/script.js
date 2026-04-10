@@ -2071,11 +2071,14 @@ function buildChallengeHistoryMarkup(submissions) {
 
 function buildChallengeMarkup(moduleId) {
   const challenge = getCurrentModuleChallenge(moduleId);
+  const content = MODULE_DETAILED_CONTENT[moduleId];
   if (!challenge) {
     return '';
   }
 
   const history = currentChallengeHistory[moduleId] || [];
+  const stepsMarkup = (content?.steps || []).map((step) => `<li>${step}</li>`).join('');
+  const deliverablesMarkup = (content?.deliverables || []).map((item) => `<li>${item}</li>`).join('');
 
   const bodyMarkup = `
     <section class="challenge-card" data-cy="module-challenge-card-content">
@@ -2086,6 +2089,15 @@ function buildChallengeMarkup(moduleId) {
         </div>
         <span class="challenge-pass-target">Meta mínima: ${challenge.passingScore}/100</span>
       </div>
+      ${content ? `
+        <div class="resource-card challenge-walkthrough-card">
+          <h4>${escapeHtml(content.exerciseTitle)}</h4>
+          <p>${escapeHtml(content.exerciseIntro)}</p>
+          <ol class="step-list">${stepsMarkup}</ol>
+          <h4>Entregáveis esperados</h4>
+          <ul class="detail-list">${deliverablesMarkup}</ul>
+        </div>
+      ` : ''}
       <div class="challenge-layout">
         <div class="challenge-brief resource-card">
           <h4>Rubrica automática</h4>
@@ -2123,7 +2135,7 @@ function buildChallengeMarkup(moduleId) {
   return buildInteractivePanelMarkup({
     panelId: 'module-challenge',
     title: 'Desafio prático do módulo',
-    description: 'Abra este bloco para enviar sua resposta escrita e receber avaliação automática.',
+    description: 'Abra este bloco para ver o passo a passo do exercício, enviar sua resposta escrita e receber avaliação automática.',
     bodyMarkup,
     dataCy: 'module-challenge',
   });
@@ -2641,27 +2653,24 @@ function buildDetailedSectionMarkup(moduleId) {
     `;
   }).join('');
 
-  const stepsMarkup = content.steps.map((step) => `<li>${step}</li>`).join('');
-  const deliverablesMarkup = content.deliverables.map((item) => `<li>${item}</li>`).join('');
-
-  return `
-    <div class="course-deep-dive" id="module-deep-dive">
+  const bodyMarkup = `
+    <div class="course-deep-dive" data-cy="module-deep-dive-content">
       <div class="resource-card detailed-summary-card">
-        <h3>Conteúdo aprofundado do módulo</h3>
         <p>${content.summary}</p>
       </div>
       <div class="deep-dive-grid">
         ${sectionsMarkup}
       </div>
-      <div class="resource-card exercise-walkthrough-card">
-        <h3>${content.exerciseTitle}</h3>
-        <p>${content.exerciseIntro}</p>
-        <ol class="step-list">${stepsMarkup}</ol>
-        <h4>Entregáveis esperados</h4>
-        <ul class="detail-list">${deliverablesMarkup}</ul>
-      </div>
     </div>
   `;
+
+  return buildInteractivePanelMarkup({
+    panelId: 'module-deep-dive',
+    title: 'Conteúdo aprofundado do módulo',
+    description: 'Abra este bloco para ver o aprofundamento teórico e os materiais complementares do módulo.',
+    bodyMarkup,
+    dataCy: 'module-deep-dive',
+  });
 }
 
 function buildLearningExtrasMarkup(moduleId) {

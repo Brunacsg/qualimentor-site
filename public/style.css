@@ -690,11 +690,17 @@ main.dashboard-grid {
 }
 
 .challenge-brief,
+.challenge-walkthrough-card,
 .challenge-form,
 .challenge-history-panel,
 .challenge-feedback-panel {
   background: rgba(15, 23, 42, 0.92);
   border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.challenge-walkthrough-card p {
+  color: var(--text-muted);
+  line-height: 1.8;
 }
 
 .challenge-criteria-list,
