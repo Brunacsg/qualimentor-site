@@ -2722,23 +2722,50 @@ function buildLearningExtrasMarkup(moduleId) {
   const checklistMarkup = extras.checklist.map((item) => `<li>${item}</li>`).join('');
   const recapMarkup = extras.recap.map((item) => `<li>${item}</li>`).join('');
 
-  return `
-    <div class="course-learning-extras" id="module-learning-extras">
+  const caseStudyPanel = buildInteractivePanelMarkup({
+    panelId: 'module-case-study',
+    title: 'Estudo de caso guiado',
+    description: 'Abra este bloco para analisar o cenário, seguir as tarefas propostas e praticar a tomada de decisão.',
+    bodyMarkup: `
       <div class="resource-card case-study-card">
-        <h3>Estudo de caso guiado</h3>
         <h4>${extras.caseTitle}</h4>
         <p>${extras.caseScenario}</p>
         <ol class="step-list">${caseTasksMarkup}</ol>
       </div>
+    `,
+    dataCy: 'module-case-study',
+  });
+
+  const checklistPanel = buildInteractivePanelMarkup({
+    panelId: 'module-review-checklist',
+    title: 'Checklist de revisão',
+    description: 'Abra este bloco para revisar os pontos essenciais antes de avançar.',
+    bodyMarkup: `
+      <div class="resource-card checklist-card">
+        <ul class="detail-list">${checklistMarkup}</ul>
+      </div>
+    `,
+    dataCy: 'module-review-checklist',
+  });
+
+  const recapPanel = buildInteractivePanelMarkup({
+    panelId: 'module-final-recap',
+    title: 'Resumo final do módulo',
+    description: 'Abra este bloco para recapitular os conceitos-chave e fixar a mensagem central do módulo.',
+    bodyMarkup: `
+      <div class="resource-card recap-card">
+        <ul class="detail-list">${recapMarkup}</ul>
+      </div>
+    `,
+    dataCy: 'module-final-recap',
+  });
+
+  return `
+    <div class="course-learning-extras" id="module-learning-extras">
+      ${caseStudyPanel}
       <div class="learning-extras-grid">
-        <div class="resource-card checklist-card">
-          <h3>Checklist de revisão</h3>
-          <ul class="detail-list">${checklistMarkup}</ul>
-        </div>
-        <div class="resource-card recap-card">
-          <h3>Resumo final do módulo</h3>
-          <ul class="detail-list">${recapMarkup}</ul>
-        </div>
+        ${checklistPanel}
+        ${recapPanel}
       </div>
     </div>
   `;
@@ -2758,6 +2785,7 @@ function renderModuleLearningExtras() {
   }
 
   sectionBody.insertAdjacentHTML('beforeend', markup);
+  initializeModuleInteractivePanels();
 }
 
 function renderModuleDetailedContent() {
