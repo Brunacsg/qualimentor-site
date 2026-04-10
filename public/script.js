@@ -2110,6 +2110,7 @@ function buildChallengeHistoryMarkup(submissions) {
 function buildChallengeMarkup(moduleId) {
   const challenge = getCurrentModuleChallenge(moduleId);
   const content = MODULE_DETAILED_CONTENT[moduleId];
+  const extras = MODULE_LEARNING_EXTRAS[moduleId];
   if (!challenge) {
     return '';
   }
@@ -2117,6 +2118,9 @@ function buildChallengeMarkup(moduleId) {
   const history = currentChallengeHistory[moduleId] || [];
   const stepsMarkup = (content?.steps || []).map((step) => `<li>${step}</li>`).join('');
   const deliverablesMarkup = (content?.deliverables || []).map((item) => `<li>${item}</li>`).join('');
+  const caseTasksMarkup = (extras?.caseTasks || []).map((item) => `<li>${item}</li>`).join('');
+  const checklistMarkup = (extras?.checklist || []).map((item) => `<li>${item}</li>`).join('');
+  const recapMarkup = (extras?.recap || []).map((item) => `<li>${item}</li>`).join('');
 
   const bodyMarkup = `
     <section class="challenge-card" data-cy="module-challenge-card-content">
@@ -2129,20 +2133,33 @@ function buildChallengeMarkup(moduleId) {
       </div>
       ${content ? `
         <div class="resource-card challenge-walkthrough-card">
-          <h4>${escapeHtml(content.exerciseTitle)}</h4>
+          <h4>Desafio integrador do módulo</h4>
+          ${extras ? `
+            <h5>${escapeHtml(extras.caseTitle)}</h5>
+            <p>${escapeHtml(extras.caseScenario)}</p>
+            <h5>Como conduzir a análise</h5>
+            <ol class="step-list">${caseTasksMarkup}</ol>
+          ` : ''}
+          <h5>${escapeHtml(content.exerciseTitle)}</h5>
           <p>${escapeHtml(content.exerciseIntro)}</p>
           <ol class="step-list">${stepsMarkup}</ol>
           <h4>Entregáveis esperados</h4>
           <ul class="detail-list">${deliverablesMarkup}</ul>
+          ${extras ? `
+            <h4>Conhecimentos do módulo que devem aparecer na resposta</h4>
+            <ul class="detail-list">${checklistMarkup}</ul>
+            <h4>Síntese final para orientar sua entrega</h4>
+            <ul class="detail-list">${recapMarkup}</ul>
+          ` : ''}
         </div>
       ` : ''}
       <div class="challenge-layout">
         <div class="challenge-brief resource-card">
-          <h4>Rubrica automática</h4>
+          <h4>Como sua entrega será avaliada</h4>
           <ul class="challenge-criteria-list">
             ${buildChallengeCriteriaMarkup(challenge.criteria)}
           </ul>
-          <p class="challenge-guidance">Escreva com clareza, justificativa e termos técnicos do módulo. A avaliação mede cobertura dos critérios e nível de detalhamento.</p>
+          <p class="challenge-guidance">Este é o desafio único do módulo. Use o estudo de caso, os conceitos centrais e o passo a passo para montar uma resposta completa, técnica e bem justificada.</p>
         </div>
         <form class="challenge-form resource-card" id="module-challenge-form" data-module-id="${escapeHtml(moduleId)}" data-cy="module-challenge-form">
           <label class="challenge-form-label" for="challenge-content">${escapeHtml(challenge.submissionLabel)}</label>
@@ -2174,7 +2191,7 @@ function buildChallengeMarkup(moduleId) {
   return buildInteractivePanelMarkup({
     panelId: 'module-challenge',
     title: 'Desafio prático do módulo',
-    description: 'Abra este bloco para ver o passo a passo do exercício, enviar sua resposta escrita e receber avaliação automática.',
+    description: 'Abra este bloco para resolver o desafio integrador do módulo, enviar sua resposta e receber avaliação automática.',
     bodyMarkup,
     dataCy: 'module-challenge',
   });
@@ -3126,7 +3143,6 @@ async function initializeAuthenticatedPages() {
   updateModulePageProgress();
   initializeModuleTopicAccordions();
   renderModuleDetailedContent();
-  renderModuleLearningExtras();
   renderModuleQuiz();
   await renderModuleChallenge();
   renderCertificateSection();
