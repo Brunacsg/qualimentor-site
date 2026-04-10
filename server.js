@@ -246,7 +246,7 @@ async function notifyPaymentClick({ requestId, email, name, createdAt, paymentLi
   await sendEmail({
     to: PAYMENT_CLICK_NOTIFY_EMAIL,
     subject: 'Aluno clicou em Ir para o pagamento',
-    text: `Um aluno acabou de seguir para o checkout do curso de Qualidade de Software.\n\nSolicitação: ${requestId}\nNome: ${name || 'Não informado'}\nEmail: ${email}\nData: ${createdAt}\nLink de pagamento: ${paymentLink}`,
+    text: `Um aluno acabou de seguir para o checkout da trilha de Quality Assurance.\n\nSolicitação: ${requestId}\nNome: ${name || 'Não informado'}\nEmail: ${email}\nData: ${createdAt}\nLink de pagamento: ${paymentLink}`,
   });
 }
 
@@ -746,13 +746,13 @@ async function approvePurchaseRequest(request, options = {}) {
 
   await sendEmail({
     to: normalizedEmail,
-    subject: 'Seu acesso ao curso de Qualidade de Software está pronto',
+    subject: 'Seu acesso à trilha de Quality Assurance está pronto',
     text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nLogin: ${normalizedEmail}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados. Guarde esta mensagem para consultas futuras.`,
   });
 
   await sendEmail({
     to: ADMIN_EMAIL,
-    subject: approvalSource === 'webhook' ? 'Compra de curso de Qualidade de Software aprovada automaticamente' : 'Compra de curso de Qualidade de Software aprovada',
+    subject: approvalSource === 'webhook' ? 'Compra da trilha de Quality Assurance aprovada automaticamente' : 'Compra da trilha de Quality Assurance aprovada',
     text: `A solicitação de compra do email ${normalizedEmail} foi aprovada e os dados de acesso foram gerados.\n\nNome: ${normalizedName || 'Não informado'}\nLogin: ${normalizedEmail}\nSenha gerada: ${generatedPassword}\nOrigem da aprovação: ${approvalSource}\nProvedor: ${paymentProvider || 'Não informado'}\nReferência: ${paymentReference || 'Não informada'}\nAprovado em: ${approvedAt}.`,
   });
 
@@ -969,8 +969,8 @@ app.post('/purchase-request', async (req, res) => {
         try {
           await sendEmail({
             to: email,
-            subject: 'Cadastro recebido - Curso de Qualidade de Software',
-            text: 'Recebemos seu cadastro para compra do curso de Qualidade de Software. Após a confirmação do pagamento, enviaremos para este email os dados de acesso.',
+            subject: 'Cadastro recebido - Trilha de Quality Assurance',
+            text: 'Recebemos seu cadastro para compra da trilha de Quality Assurance. Após a confirmação do pagamento, enviaremos para este email os dados de acesso.',
           });
 
           await notifyPaymentClick({

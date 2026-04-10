@@ -1095,12 +1095,12 @@ Object.entries(MODULE_QUIZ_EXPANSIONS).forEach(([moduleId, questions]) => {
 
 const MODULE_DETAILED_CONTENT = {
   'module-1': {
-    summary: 'Este aprofundamento transforma a introdução em uma base real de curso, conectando o papel de Quality Assurance à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
+    summary: 'Este aprofundamento transforma a introdução em uma base real de trilha, conectando o papel de Quality Assurance à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
     sections: [
       {
         heading: 'Como Quality Assurance gera valor para o negócio',
         paragraphs: [
-          'Em um curso profissionalizante de Quality Assurance, é essencial entender que qualidade não é um fim isolado. Quality Assurance protege receita, reputação e experiência do cliente. Um defeito em login, checkout, cálculo de frete ou emissão de nota pode gerar perda de conversão, chamados de suporte, devoluções e desgaste da marca.',
+          'Em uma trilha profissionalizante de Quality Assurance, é essencial entender que qualidade não é um fim isolado. Quality Assurance protege receita, reputação e experiência do cliente. Um defeito em login, checkout, cálculo de frete ou emissão de nota pode gerar perda de conversão, chamados de suporte, devoluções e desgaste da marca.',
           'Por isso, o profissional de Quality Assurance precisa saber traduzir problemas técnicos em impacto de negócio. Ao priorizar testes, não basta perguntar “o que pode quebrar?”, mas também “o que acontece com cliente, operação, suporte e faturamento se isso falhar?”. Esse raciocínio é o que diferencia um executor de testes de um profissional estratégico.'
         ],
         bullets: [
@@ -1249,7 +1249,7 @@ const MODULE_DETAILED_CONTENT = {
         heading: 'Sustentação da suíte automatizada',
         paragraphs: [
           'Automação não termina quando o primeiro teste passa. É preciso organizar dados de teste, isolamento entre cenários, convenção de nomenclatura, relatórios e estratégia de execução em CI/CD. Sem isso, a suíte envelhece rápido e perde credibilidade.',
-          'Um curso de verdade também precisa reforçar o lado de engenharia: reaproveitamento com Page Object ou Screenplay, factories de dados, redução de flakiness e observabilidade para identificar a causa das falhas.'
+          'Uma trilha de verdade também precisa reforçar o lado de engenharia: reaproveitamento com Page Object ou Screenplay, factories de dados, redução de flakiness e observabilidade para identificar a causa das falhas.'
         ],
         bullets: [
           'Padronize estrutura e nome dos testes.',
@@ -1473,7 +1473,7 @@ const MODULE_DETAILED_CONTENT = {
       {
         heading: 'Estratégia de evolução contínua',
         paragraphs: [
-          'Uma carreira forte é construída por ciclos. Aprender, praticar, consolidar, mostrar resultado e buscar próximo nível. Isso vale para certificações, entrevistas, mudança de senioridade e movimentação salarial. O curso precisa ajudar o aluno a sair com direção, não apenas com inspiração.',
+          'Uma carreira forte é construída por ciclos. Aprender, praticar, consolidar, mostrar resultado e buscar próximo nível. Isso vale para certificações, entrevistas, mudança de senioridade e movimentação salarial. A trilha precisa ajudar o aluno a sair com direção, não apenas com inspiração.',
           'Por isso, a recomendação é manter um plano trimestral: fundamentos, projeto prático, automação básica, leitura de mercado, networking e revisão de currículo. Pequenos ciclos consistentes geram avanço real.'
         ],
         bullets: [
@@ -2434,7 +2434,7 @@ function buildCertificateMarkup() {
           </div>
         </div>
         <p class="certificate-label">Certificado de Conclusão</p>
-        <h3>Curso Completo de Qualidade de Software</h3>
+        <h3>Trilha Completa do Quality Assurance</h3>
         <p class="certificate-text">Certificamos que</p>
         <p class="certificate-student">${escapeHtml(studentName)}</p>
         <p class="certificate-text">concluiu com aproveitamento a trilha completa de Qualidade de Software, validando o aprendizado com exercícios e questionários ao longo dos 9 módulos do programa.</p>

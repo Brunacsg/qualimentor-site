@@ -47,7 +47,7 @@ Servidor rodando em: **http://localhost:3000**
 ## Fluxo de Vendas
 
 ### 1️⃣ Cliente acessa landing
-- Vê descrição do curso
+- Vê descrição da trilha
 - Clica em "Começar a estudar Qualidade de Software agora"
 
 ### 2️⃣ Cliente preenche cadastro
@@ -121,7 +121,7 @@ Se SMTP não estiver configurado, emails aparecem assim:
 ```
 --- EMAIL SIMULADO ---
 Para: aluno@email.com
-Assunto: Compra de curso de Qualidade de Software aprovada
+Assunto: Compra da trilha de Quality Assurance aprovada
 Seu pagamento foi aprovado...
 ----------------------
 ```
@@ -149,11 +149,11 @@ curl -X POST http://localhost:3000/payment-webhook \
 
 ## Customizações
 
-### Mudar preço do curso
+### Mudar preço da trilha
 Editar: `public/index.html`
 Procurar por: "R$ 197,00"
 
-### Mudar nome do curso
+### Mudar nome da trilha
 Editar: `public/index.html`
 Procurar por: "Portal Qualidade de Software"
 
@@ -176,7 +176,7 @@ mini_saas_qa/
     ├── index.html         ← Landing (pública)
     ├── login.html         ← Login (autenticado)
     ├── admin.html         ← Admin
-    └── [modulos].html     ← Conteúdo do curso
+    └── [modulos].html     ← Conteúdo da trilha
 ```
 
 ---

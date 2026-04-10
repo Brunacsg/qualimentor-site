@@ -1,15 +1,15 @@
-# Portal Qualidade de Software - Curso Completo de Qualidade de Software
+# Portal Qualidade de Software - Trilha Completa do Quality Assurance
 
 ## Descrição
 
-Portal SaaS com curso completo de Qualidade de Software contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com link de pagamento, autenticação segura e painel administrativo.
+Portal SaaS com trilha completa de Quality Assurance contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com link de pagamento, autenticação segura e painel administrativo.
 
 ## Recursos
 
-- **Landing Page Pública**: Apresentação do curso, módulos e formulário de compra
+- **Landing Page Pública**: Apresentação da trilha, módulos e formulário de compra
 - **Sistema de Compras**: Cadastro via email, geração de chave PIX, emails de confirmação
 - **Autenticação Segura**: Login com email e senha apenas para usuários cadastrados
-- **9 Módulos de Curso**: Integralmente de Qualidade de Software com conteúdo prático
+- **9 Módulos da Trilha**: Integralmente de Qualidade de Software com conteúdo prático
 - **Rastreamento de Progresso**: Acompanhe é completamento de cada módulo
 - **Painel Admin**: Gerenciamento de compras e aprovação de pagamentos
 
@@ -88,7 +88,7 @@ Servidor rodará em: `http://localhost:3000`
 3. Clique em "Começar a estudar Qualidade de Software agora"
 4. Preencha nome e email
 5. Siga para o link de pagamento
-6. Após pagamento aprovado, recebe os dados de acesso ao curso
+6. Após pagamento aprovado, recebe os dados de acesso à trilha
 
 ### Para Admin (Gerenciamento)
 
@@ -117,11 +117,11 @@ Se você usa o Mercado Pago para acompanhar os recebimentos, o fluxo recomendado
 4. Envie `status=paid` ou `approved`
 5. O sistema aprova a compra, libera o acesso, envia email e registra a credencial no admin
 
-### Para Usuários (Acesso ao Curso)
+### Para Usuários (Acesso à Trilha)
 
 1. Acesse `http://localhost:3000/login.html`
 2. Faça login com email e senha fornecidos pelo admin
-3. Acesse o dashboard do curso
+3. Acesse o dashboard da trilha
 4. Navegue pelos 9 módulos
 5. Marque módulos como concluído para acompanhar progresso
 
@@ -204,7 +204,7 @@ mini_saas_qa/
     ├── index.html           # Landing page
     ├── landing.js           # JS da landing
     ├── login.html           # Página de login
-    ├── dashboard.html       # Dashboard do curso
+    ├── dashboard.html       # Dashboard da trilha
     ├── intro.html           # Módulo 01-09 (páginas de conteúdo)
     ├── process.html
     ├── manual.html
@@ -215,7 +215,7 @@ mini_saas_qa/
     ├── performance.html
     ├── career.html
     ├── admin.html           # Painel administrativo
-    ├── script.js            # JS do curso e autenticação
+    ├── script.js            # JS da trilha e autenticação
     └── style.css            # Estilos globais
 
 ```
@@ -261,7 +261,7 @@ Corpo: Instrução com chave PIX e passo a passo
 ### Email de Compra Aprovada (para cliente)
 ```
 Para: email@cliente.com
-Assunto: Compra aprovada - Acesso ao curso
+Assunto: Compra aprovada - Acesso à trilha
 Corpo: Confirmação e passo próximo
 ```
 
@@ -337,7 +337,7 @@ Se você não tiver webhook no seu fluxo atual do PagBank, use o botão `Simular
 
 ## Desenvolvimento
 
-### Adicionar novo módulo de curso
+### Adicionar novo módulo da trilha
 
 1. Criar nova página `public/novo-modulo.html`
 2. Adicionar `data-module="module-X"` ao body
@@ -419,4 +419,4 @@ Para dúvidas sobre configuração ou uso, verifique os logs do terminal onde o 
 
 ---
 
-**Desenvolvido como SaaS completo com curso interativo de Qualidade de Software**
+**Desenvolvido como SaaS completo com trilha interativa de Qualidade de Software**
