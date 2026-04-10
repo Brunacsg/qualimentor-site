@@ -3137,6 +3137,8 @@ async function initializeAuthenticatedPages() {
     return;
   }
 
+  document.body.classList.add('authenticated-ready');
+
   await syncCourseProgressFromServer();
   await syncChallengesFromServer();
   updateDashboardProgress();

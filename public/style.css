@@ -32,6 +32,16 @@ body {
   color: var(--text);
 }
 
+body[data-page="dashboard"],
+body[data-page="content"] {
+  visibility: hidden;
+}
+
+body[data-page="dashboard"].authenticated-ready,
+body[data-page="content"].authenticated-ready {
+  visibility: visible;
+}
+
 a {
   color: inherit;
   text-decoration: none;
