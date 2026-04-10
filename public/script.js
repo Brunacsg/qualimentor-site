@@ -3048,12 +3048,12 @@ async function initializeAuthenticatedPages() {
   await syncChallengesFromServer();
   updateDashboardProgress();
   updateModulePageProgress();
+  initializeModuleTopicAccordions();
   renderModuleDetailedContent();
   renderModuleLearningExtras();
   renderModuleQuiz();
   await renderModuleChallenge();
   renderCertificateSection();
-  initializeModuleTopicAccordions();
 
   const completeButton = document.getElementById('complete-module-button');
   if (completeButton && !completeButton.dataset.boundClick) {
