@@ -1562,6 +1562,92 @@ main.dashboard-grid {
   box-shadow: var(--shadow-soft);
 }
 
+.testimonials-section {
+  position: relative;
+}
+
+.testimonials-section::before {
+  content: '';
+  position: absolute;
+  inset: 40px auto auto 50%;
+  width: min(1120px, calc(100% - 48px));
+  height: calc(100% - 80px);
+  transform: translateX(-50%);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(8, 20, 34, 0.82), rgba(13, 24, 38, 0.92));
+  border: 1px solid rgba(153, 246, 228, 0.1);
+  pointer-events: none;
+}
+
+.testimonials-section .landing-container {
+  position: relative;
+  z-index: 1;
+}
+
+.testimonials-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.testimonial-card {
+  position: relative;
+  min-height: 100%;
+  padding: 28px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.98), rgba(10, 15, 28, 0.94));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.testimonial-card::before {
+  content: '“';
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(244, 232, 193, 0.12);
+}
+
+.testimonial-card-featured {
+  background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(9, 22, 36, 0.98), rgba(10, 15, 28, 0.94));
+  border-color: rgba(153, 246, 228, 0.22);
+}
+
+.testimonial-card-accent {
+  background:
+    radial-gradient(circle at top right, rgba(244, 232, 193, 0.14), transparent 32%),
+    linear-gradient(180deg, rgba(17, 24, 39, 0.98), rgba(10, 15, 28, 0.94));
+  border-color: rgba(244, 232, 193, 0.18);
+}
+
+.testimonial-rating {
+  margin-bottom: 18px;
+  letter-spacing: 0.14em;
+  font-size: 1.1rem;
+}
+
+.testimonial-quote {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.testimonial-author {
+  margin: 24px 0 0;
+  color: var(--warm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
 .pricing-card {
   max-width: 500px;
   margin: 0 auto;
