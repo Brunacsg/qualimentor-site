@@ -188,12 +188,35 @@ async function initDatabase() {
     createdAt TEXT NOT NULL
   )`);
 
+  await pool.query(`CREATE TABLE IF NOT EXISTS challenge_submissions (
+    id SERIAL PRIMARY KEY,
+    userId INTEGER NOT NULL,
+    moduleId TEXT NOT NULL,
+    challengeId TEXT NOT NULL,
+    submissionType TEXT NOT NULL,
+    content TEXT NOT NULL,
+    score INTEGER NOT NULL,
+    maxScore INTEGER NOT NULL,
+    passed INTEGER DEFAULT 0,
+    feedbackJson TEXT NOT NULL,
+    criteriaJson TEXT NOT NULL,
+    createdAt TEXT NOT NULL
+  )`);
+
   await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS name TEXT');
   await pool.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS activeSessionId TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS paymentProvider TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS paymentReference TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS approvalSource TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS lastWebhookAt TEXT');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS submissionType TEXT');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS content TEXT');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS score INTEGER DEFAULT 0');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS maxScore INTEGER DEFAULT 100');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS passed INTEGER DEFAULT 0');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS feedbackJson TEXT DEFAULT "[]"');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS criteriaJson TEXT DEFAULT "[]"');
+  await pool.query('ALTER TABLE challenge_submissions ADD COLUMN IF NOT EXISTS createdAt TEXT');
 
   await pool.query('CREATE INDEX IF NOT EXISTS idx_users_email_lower ON users (lower(email))');
   await pool.query('CREATE INDEX IF NOT EXISTS idx_users_expiresat ON users (expiresAt)');
@@ -201,6 +224,7 @@ async function initDatabase() {
   await pool.query('CREATE INDEX IF NOT EXISTS idx_purchase_requests_status_createdat ON purchase_requests (status, createdAt DESC)');
   await pool.query('CREATE INDEX IF NOT EXISTS idx_credential_deliveries_createdat ON credential_deliveries (createdAt DESC)');
   await pool.query('CREATE INDEX IF NOT EXISTS idx_user_progress_userid_updatedat ON user_progress (userId, updatedAt DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_challenge_submissions_userid_moduleid_createdat ON challenge_submissions (userId, moduleId, createdAt DESC)');
 }
 
 module.exports = {

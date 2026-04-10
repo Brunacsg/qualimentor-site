@@ -175,7 +175,7 @@ const MODULE_QUIZZES = {
   },
   'module-5': {
     title: 'Questionário do módulo',
-    description: 'Revise as ferramentas de Qualidade de Software para gestão, bugs, APIs e CI/CD.',
+    description: 'Revise a Biblioteca do QA com foco em ferramentas, bugs, APIs e CI/CD.',
     questions: [
       {
         prompt: 'Qual ferramenta do módulo é amplamente usada para bug tracking com workflows customizáveis?',
@@ -1696,6 +1696,8 @@ const MODULE_LEARNING_EXTRAS = {
 const LOGIN_MESSAGE_KEY = 'loginMessage';
 let currentCourseProgress = JSON.parse(localStorage.getItem(COURSE_PROGRESS_STORAGE_KEY) || '{}');
 let currentUserProfile = null;
+let currentChallenges = {};
+let currentChallengeHistory = {};
 
 function getQuizRequiredCorrectAnswers(totalQuestions) {
   return Math.ceil(totalQuestions * (QUIZ_PASSING_PERCENT / 100));
@@ -1876,6 +1878,14 @@ function saveCourseProgress(progress) {
   localStorage.setItem(COURSE_PROGRESS_STORAGE_KEY, JSON.stringify(progress));
 }
 
+function saveCurrentChallenges(challenges) {
+  currentChallenges = challenges;
+}
+
+function getCurrentModuleChallenge(moduleId) {
+  return currentChallenges[moduleId] || null;
+}
+
 async function persistModuleProgress(moduleId) {
   const progress = loadCourseProgress();
   const entry = getModuleProgressEntry(progress, moduleId);
@@ -1919,6 +1929,287 @@ async function syncCourseProgressFromServer() {
 
   saveCourseProgress(serverProgress);
   return serverProgress;
+}
+
+async function syncChallengesFromServer() {
+  const res = await fetch(`${API_ORIGIN}/challenges`, {
+    headers: getAuthHeaders()
+  });
+
+  if (!res.ok) {
+    return currentChallenges;
+  }
+
+  const data = await res.json();
+  const nextChallenges = (data.challenges || []).reduce((acc, challenge) => {
+    acc[challenge.moduleId] = challenge;
+    return acc;
+  }, {});
+
+  saveCurrentChallenges(nextChallenges);
+  return nextChallenges;
+}
+
+async function fetchChallengeHistory(moduleId) {
+  const res = await fetch(`${API_ORIGIN}/challenge-submissions?moduleId=${encodeURIComponent(moduleId)}`, {
+    headers: getAuthHeaders()
+  });
+
+  if (!res.ok) {
+    return [];
+  }
+
+  const data = await res.json();
+  const submissions = data.submissions || [];
+  currentChallengeHistory[moduleId] = submissions;
+  return submissions;
+}
+
+function formatChallengeDate(value) {
+  if (!value) {
+    return '';
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  }).format(date);
+}
+
+function buildChallengeCriteriaMarkup(criteria) {
+  return (criteria || []).map((criterion) => `
+    <li>
+      <strong>${escapeHtml(criterion.label)}</strong>
+      <span>${criterion.maxScore} pts</span>
+    </li>
+  `).join('');
+}
+
+function buildChallengeLatestSubmissionMarkup(latestSubmission) {
+  if (!latestSubmission) {
+    return `
+      <div class="challenge-feedback-panel empty" data-cy="challenge-empty-state">
+        <p>Nenhuma submissão enviada ainda. Envie sua resposta para receber nota automática e feedback objetivo.</p>
+      </div>
+    `;
+  }
+
+  const feedbackMarkup = (latestSubmission.feedback || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+  const criteriaMarkup = (latestSubmission.criteria || []).map((criterion) => `
+    <li>
+      <strong>${escapeHtml(criterion.label)}</strong>
+      <span>${criterion.score}/${criterion.maxScore}</span>
+    </li>
+  `).join('');
+
+  return `
+    <div class="challenge-feedback-panel ${latestSubmission.passed ? 'passed' : 'needs-work'}" data-cy="challenge-latest-result">
+      <div class="challenge-feedback-header">
+        <h4>Último resultado</h4>
+        <span class="challenge-score-badge ${latestSubmission.passed ? 'passed' : 'needs-work'}">
+          ${latestSubmission.score}/${latestSubmission.maxScore}
+        </span>
+      </div>
+      <p class="challenge-feedback-meta">
+        ${latestSubmission.passed ? 'Aprovado no desafio.' : 'Ainda precisa reforçar alguns critérios.'}
+        ${latestSubmission.createdAt ? `Última tentativa em ${escapeHtml(formatChallengeDate(latestSubmission.createdAt))}.` : ''}
+      </p>
+      <ul class="detail-list challenge-feedback-list">${feedbackMarkup}</ul>
+      <ul class="challenge-criteria-result-list">${criteriaMarkup}</ul>
+    </div>
+  `;
+}
+
+function buildChallengeHistoryMarkup(submissions) {
+  if (!submissions.length) {
+    return '<p class="challenge-history-empty">O histórico das tentativas aparecerá aqui.</p>';
+  }
+
+  return `
+    <ul class="challenge-history-list">
+      ${submissions.map((submission) => `
+        <li>
+          <span>${escapeHtml(formatChallengeDate(submission.createdAt) || 'Tentativa recente')}</span>
+          <strong>${submission.score}/${submission.maxScore}</strong>
+          <span>${submission.passed ? 'Aprovado' : 'Revisar'}</span>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+}
+
+function buildChallengeMarkup(moduleId) {
+  const challenge = getCurrentModuleChallenge(moduleId);
+  if (!challenge) {
+    return '';
+  }
+
+  const history = currentChallengeHistory[moduleId] || [];
+
+  return `
+    <section class="challenge-card" id="module-challenge" data-cy="module-challenge">
+      <div class="challenge-header">
+        <div>
+          <h3>${escapeHtml(challenge.title)}</h3>
+          <p>${escapeHtml(challenge.description)}</p>
+        </div>
+        <span class="challenge-pass-target">Meta mínima: ${challenge.passingScore}/100</span>
+      </div>
+      <div class="challenge-layout">
+        <div class="challenge-brief resource-card">
+          <h4>Rubrica automática</h4>
+          <ul class="challenge-criteria-list">
+            ${buildChallengeCriteriaMarkup(challenge.criteria)}
+          </ul>
+          <p class="challenge-guidance">Escreva com clareza, justificativa e termos técnicos do módulo. A avaliação mede cobertura dos critérios e nível de detalhamento.</p>
+        </div>
+        <form class="challenge-form resource-card" id="module-challenge-form" data-module-id="${escapeHtml(moduleId)}" data-cy="module-challenge-form">
+          <label class="challenge-form-label" for="challenge-content">${escapeHtml(challenge.submissionLabel)}</label>
+          <textarea id="challenge-content" name="content" rows="10" minlength="80" placeholder="${escapeHtml(challenge.placeholder)}" data-cy="challenge-content"></textarea>
+          <div class="challenge-form-actions">
+            <span class="challenge-min-length">Recomendado: pelo menos ${challenge.minLength} caracteres.</span>
+            <button type="submit" class="primary-button" data-cy="challenge-submit">Enviar para avaliação</button>
+          </div>
+          <p class="challenge-submit-message" id="challenge-submit-message" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="challenge-results-grid">
+        <div id="challenge-latest-result-container">
+          ${buildChallengeLatestSubmissionMarkup(challenge.latestSubmission)}
+        </div>
+        <div class="challenge-history-panel resource-card" data-cy="challenge-history-panel">
+          <div class="challenge-feedback-header">
+            <h4>Histórico recente</h4>
+          </div>
+          <div id="challenge-history-container">
+            ${buildChallengeHistoryMarkup(history)}
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function setChallengeSubmitMessage(message, tone = 'neutral') {
+  const messageElement = document.getElementById('challenge-submit-message');
+  if (!messageElement) {
+    return;
+  }
+
+  messageElement.textContent = message;
+  messageElement.className = 'challenge-submit-message';
+  if (tone !== 'neutral') {
+    messageElement.classList.add(tone);
+  }
+}
+
+function refreshChallengePanels(moduleId) {
+  const challenge = getCurrentModuleChallenge(moduleId);
+  if (!challenge) {
+    return;
+  }
+
+  const latestContainer = document.getElementById('challenge-latest-result-container');
+  const historyContainer = document.getElementById('challenge-history-container');
+
+  if (latestContainer) {
+    latestContainer.innerHTML = buildChallengeLatestSubmissionMarkup(challenge.latestSubmission);
+  }
+
+  if (historyContainer) {
+    historyContainer.innerHTML = buildChallengeHistoryMarkup(currentChallengeHistory[moduleId] || []);
+  }
+}
+
+async function handleChallengeSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const moduleId = form.dataset.moduleId;
+  const contentField = form.querySelector('textarea[name="content"]');
+  const submitButton = form.querySelector('button[type="submit"]');
+  const content = String(contentField?.value || '').trim();
+
+  if (!moduleId || !contentField) {
+    return;
+  }
+
+  if (content.length < 80) {
+    setChallengeSubmitMessage('Escreva uma resposta mais completa antes de enviar.', 'error');
+    return;
+  }
+
+  setChallengeSubmitMessage('Avaliando sua resposta...');
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
+  try {
+    const res = await fetch(`${API_ORIGIN}/challenge-submissions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
+      body: JSON.stringify({ moduleId, content })
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || 'Não foi possível avaliar o desafio.');
+    }
+
+    const challenge = getCurrentModuleChallenge(moduleId);
+    if (challenge) {
+      challenge.latestSubmission = data.submission;
+    }
+
+    currentChallengeHistory[moduleId] = [
+      data.submission,
+      ...(currentChallengeHistory[moduleId] || [])
+    ].slice(0, 10);
+
+    refreshChallengePanels(moduleId);
+    setChallengeSubmitMessage('Avaliação concluída. O resultado já foi salvo no seu histórico.', 'success');
+  } catch (error) {
+    console.error('Erro ao enviar desafio:', error);
+    setChallengeSubmitMessage(error.message || 'Erro ao enviar desafio.', 'error');
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+    }
+  }
+}
+
+async function renderModuleChallenge() {
+  const moduleId = document.body.dataset.module;
+  const sectionBody = document.querySelector('.section-body');
+
+  if (!moduleId || !sectionBody || document.getElementById('module-challenge')) {
+    return;
+  }
+
+  const challenge = getCurrentModuleChallenge(moduleId);
+  if (!challenge) {
+    return;
+  }
+
+  if (!currentChallengeHistory[moduleId]) {
+    await fetchChallengeHistory(moduleId);
+  }
+
+  const markup = buildChallengeMarkup(moduleId);
+  if (!markup) {
+    return;
+  }
+
+  sectionBody.insertAdjacentHTML('beforeend', markup);
+  document.getElementById('module-challenge-form')?.addEventListener('submit', handleChallengeSubmit);
 }
 
 function getCompletedCount(progress) {
@@ -2680,11 +2971,13 @@ async function initializeAuthenticatedPages() {
   }
 
   await syncCourseProgressFromServer();
+  await syncChallengesFromServer();
   updateDashboardProgress();
   updateModulePageProgress();
   renderModuleDetailedContent();
   renderModuleLearningExtras();
   renderModuleQuiz();
+  await renderModuleChallenge();
   renderCertificateSection();
   initializeModuleTopicAccordions();
 

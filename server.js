@@ -34,6 +34,134 @@ const COURSE_MODULE_IDS = [
   'module-8',
   'module-9'
 ];
+const MODULE_CHALLENGES = {
+  'module-1': {
+    challengeId: 'foundations-risk-brief',
+    title: 'Desafio prático do módulo',
+    description: 'Escreva uma análise curta explicando como Quality Assurance atuaria em um checkout com alta taxa de abandono, priorizando risco e impacto no negócio.',
+    submissionLabel: 'Sua análise',
+    placeholder: 'Explique o cenário, os riscos mais críticos, as validações prioritárias e como você comunicaria isso ao time.',
+    minLength: 320,
+    passingScore: 70,
+    criteria: [
+      { id: 'risk', label: 'Risco e impacto', weight: 35, keywords: ['risco', 'impacto', 'cliente', 'negocio'], minCoverage: 0.5 },
+      { id: 'priority', label: 'Priorização das validações', weight: 35, keywords: ['prioridade', 'checkout', 'pagamento', 'validacao'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 320 }
+    ]
+  },
+  'module-2': {
+    challengeId: 'test-plan-mini-strategy',
+    title: 'Desafio prático do módulo',
+    description: 'Monte um mini plano de testes para um release curto com ambiente instável, definindo escopo, critérios e métricas mínimas.',
+    submissionLabel: 'Seu mini plano',
+    placeholder: 'Descreva o escopo, critérios de entrada e saída, riscos e métricas que orientariam a decisão do release.',
+    minLength: 320,
+    passingScore: 70,
+    criteria: [
+      { id: 'scope', label: 'Escopo e estratégia', weight: 35, keywords: ['escopo', 'estrategia', 'risco', 'release'], minCoverage: 0.5 },
+      { id: 'criteria', label: 'Critérios e métricas', weight: 35, keywords: ['criterio', 'entrada', 'saida', 'metrica'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 320 }
+    ]
+  },
+  'module-3': {
+    challengeId: 'manual-test-and-bug-report',
+    title: 'Desafio prático do módulo',
+    description: 'Escreva três casos de teste manuais resumidos para cadastro e descreva um bug report com resultado esperado e atual.',
+    submissionLabel: 'Seus casos e bug report',
+    placeholder: 'Inclua cenário positivo, negativo, valor limite e um defeito com passos, resultado esperado e resultado atual.',
+    minLength: 360,
+    passingScore: 70,
+    criteria: [
+      { id: 'coverage', label: 'Cobertura de cenários', weight: 35, keywords: ['positivo', 'negativo', 'limite', 'cadastro'], minCoverage: 0.5 },
+      { id: 'bug-report', label: 'Registro do defeito', weight: 35, keywords: ['passos', 'resultado esperado', 'resultado atual', 'evidencia'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 360 }
+    ]
+  },
+  'module-4': {
+    challengeId: 'automation-roi-outline',
+    title: 'Desafio prático do módulo',
+    description: 'Proponha uma automação inicial com Cypress ou JavaScript, justificando ROI, camada de teste e sustentabilidade da suíte.',
+    submissionLabel: 'Sua proposta de automação',
+    placeholder: 'Explique o cenário escolhido, a camada ideal, a justificativa de ROI e os cuidados de manutenção. Pode incluir pseudocódigo ou exemplo em JavaScript.',
+    minLength: 340,
+    passingScore: 70,
+    criteria: [
+      { id: 'roi', label: 'Justificativa de priorização', weight: 35, keywords: ['roi', 'critico', 'regressao', 'repetitivo'], minCoverage: 0.5 },
+      { id: 'technical', label: 'Decisão técnica', weight: 35, keywords: ['cypress', 'javascript', 'api', 'ui'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 340 }
+    ]
+  },
+  'module-5': {
+    challengeId: 'qa-stack-map',
+    title: 'Desafio prático do módulo',
+    description: 'Desenhe uma stack mínima da Biblioteca do QA conectando gestão, bugs, automação, API e CI/CD.',
+    submissionLabel: 'Seu mapa de stack',
+    placeholder: 'Liste as ferramentas escolhidas, a função de cada uma, integrações e o fluxo operacional entre requisito, teste, bug e pipeline.',
+    minLength: 340,
+    passingScore: 70,
+    criteria: [
+      { id: 'tooling', label: 'Escolha de ferramentas', weight: 35, keywords: ['gestao', 'bug', 'api', 'pipeline'], minCoverage: 0.5 },
+      { id: 'integration', label: 'Integração do fluxo', weight: 35, keywords: ['integracao', 'evidencia', 'relatorio', 'rastreamento'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 340 }
+    ]
+  },
+  'module-6': {
+    challengeId: 'agile-qa-alignment',
+    title: 'Desafio prático do módulo',
+    description: 'Transforme uma user story ambígua em perguntas de refinement, cenários testáveis e uma mini Definition of Done.',
+    submissionLabel: 'Seu alinhamento ágil',
+    placeholder: 'Inclua perguntas de refinamento, critérios de aceitação ou cenários e uma DoD enxuta.',
+    minLength: 320,
+    passingScore: 70,
+    criteria: [
+      { id: 'refinement', label: 'Clareza de refinamento', weight: 35, keywords: ['refinement', 'pergunta', 'criterio', 'aceitacao'], minCoverage: 0.5 },
+      { id: 'delivery', label: 'Fluxo de entrega', weight: 35, keywords: ['definition of done', 'cenario', 'risco', 'sprint'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 320 }
+    ]
+  },
+  'module-7': {
+    challengeId: 'security-risk-note',
+    title: 'Desafio prático do módulo',
+    description: 'Descreva como você validaria dois riscos de segurança em autenticação e registre impacto, evidência e recomendação inicial.',
+    submissionLabel: 'Seu relatório de segurança',
+    placeholder: 'Escolha dois riscos, explique a validação, o impacto potencial, a evidência e a recomendação.',
+    minLength: 340,
+    passingScore: 70,
+    criteria: [
+      { id: 'risk', label: 'Risco e vetor', weight: 35, keywords: ['owasp', 'autenticacao', 'sessao', 'impacto'], minCoverage: 0.5 },
+      { id: 'report', label: 'Registro do achado', weight: 35, keywords: ['evidencia', 'recomendacao', 'severidade', 'vulnerabilidade'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 340 }
+    ]
+  },
+  'module-8': {
+    challengeId: 'performance-test-plan',
+    title: 'Desafio prático do módulo',
+    description: 'Monte um plano de teste de performance para uma API crítica, com objetivo, métricas, thresholds e hipótese inicial.',
+    submissionLabel: 'Seu plano de performance',
+    placeholder: 'Defina o tipo de teste, métricas como P95/throughput/taxa de erro, thresholds e a leitura esperada dos resultados.',
+    minLength: 340,
+    passingScore: 70,
+    criteria: [
+      { id: 'goal', label: 'Objetivo e cenário', weight: 35, keywords: ['objetivo', 'carga', 'api', 'cenario'], minCoverage: 0.5 },
+      { id: 'metrics', label: 'Métricas e thresholds', weight: 35, keywords: ['p95', 'throughput', 'threshold', 'taxa de erro'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 340 }
+    ]
+  },
+  'module-9': {
+    challengeId: 'career-90-day-plan',
+    title: 'Desafio prático do módulo',
+    description: 'Estruture um plano de 90 dias para evoluir em Quality Assurance, conectando estudo, prática, portfólio e narrativa de entrevista.',
+    submissionLabel: 'Seu plano de carreira',
+    placeholder: 'Liste competências atuais, lacunas, um plano de 90 dias e as evidências que você produzirá.',
+    minLength: 320,
+    passingScore: 70,
+    criteria: [
+      { id: 'plan', label: 'Plano e metas', weight: 35, keywords: ['90 dias', 'plano', 'meta', 'evolucao'], minCoverage: 0.5 },
+      { id: 'evidence', label: 'Evidências e posicionamento', weight: 35, keywords: ['portfolio', 'curriculo', 'github', 'entrevista'], minCoverage: 0.5 },
+      { id: 'depth', label: 'Detalhamento suficiente', weight: 30, minLength: 320 }
+    ]
+  }
+};
 
 process.on('uncaughtException', (error) => {
   console.error('Erro não tratado no processo:', error);
@@ -130,6 +258,15 @@ function normalizeName(name) {
   return String(name || '').trim().replace(/\s+/g, ' ');
 }
 
+function normalizeForEvaluation(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function mapProgressRows(rows) {
   return rows.reduce((acc, row) => {
     acc[row.moduleId] = {
@@ -142,6 +279,131 @@ function mapProgressRows(rows) {
     };
     return acc;
   }, {});
+}
+
+function getChallengeDefinition(moduleId) {
+  return MODULE_CHALLENGES[moduleId] || null;
+}
+
+function evaluateLengthCriterion(content, criterion) {
+  const minLength = Number(criterion.minLength || 0);
+  const currentLength = content.trim().length;
+  const ratio = minLength > 0 ? Math.min(currentLength / minLength, 1) : 1;
+  const passed = currentLength >= minLength;
+
+  return {
+    id: criterion.id,
+    label: criterion.label,
+    score: Math.round(criterion.weight * ratio),
+    maxScore: criterion.weight,
+    passed,
+    feedback: passed
+      ? 'O nível de detalhamento ficou adequado para avaliação automática.'
+      : `A resposta ainda está curta. Expanda pelo menos mais ${Math.max(minLength - currentLength, 0)} caracteres com mais contexto e justificativa.`
+  };
+}
+
+function evaluateKeywordCriterion(normalizedContent, criterion) {
+  const expectedKeywords = Array.isArray(criterion.keywords) ? criterion.keywords : [];
+  const matchedKeywords = expectedKeywords.filter((keyword) => normalizedContent.includes(normalizeForEvaluation(keyword)));
+  const coverage = expectedKeywords.length ? matchedKeywords.length / expectedKeywords.length : 1;
+  const minimumCoverage = Number(criterion.minCoverage || 0.5);
+  const ratio = minimumCoverage > 0 ? Math.min(coverage / minimumCoverage, 1) : 1;
+  const passed = coverage >= minimumCoverage;
+  const missingKeywords = expectedKeywords.filter((keyword) => !matchedKeywords.includes(keyword));
+
+  return {
+    id: criterion.id,
+    label: criterion.label,
+    score: Math.round(criterion.weight * ratio),
+    maxScore: criterion.weight,
+    passed,
+    feedback: passed
+      ? `Boa cobertura dos pontos esperados: ${matchedKeywords.join(', ')}.`
+      : `Faltou reforçar pontos como ${missingKeywords.slice(0, 3).join(', ')}.`
+  };
+}
+
+function evaluateChallengeSubmission(moduleId, rawContent) {
+  const definition = getChallengeDefinition(moduleId);
+  if (!definition) {
+    return null;
+  }
+
+  const content = String(rawContent || '').trim();
+  const normalizedContent = normalizeForEvaluation(content);
+  const criteriaResults = definition.criteria.map((criterion) => (
+    criterion.minLength
+      ? evaluateLengthCriterion(content, criterion)
+      : evaluateKeywordCriterion(normalizedContent, criterion)
+  ));
+  const score = criteriaResults.reduce((total, criterion) => total + criterion.score, 0);
+  const maxScore = criteriaResults.reduce((total, criterion) => total + criterion.maxScore, 0);
+  const passed = score >= definition.passingScore;
+
+  const feedback = [
+    passed
+      ? 'Sua submissão atingiu o nível mínimo esperado para este desafio.'
+      : 'Sua submissão ainda precisa de mais consistência para atingir o nível mínimo esperado.',
+    ...criteriaResults.map((criterion) => `${criterion.label}: ${criterion.feedback}`)
+  ];
+
+  return {
+    challengeId: definition.challengeId,
+    submissionType: 'text',
+    score,
+    maxScore,
+    passed,
+    feedback,
+    criteria: criteriaResults,
+  };
+}
+
+function parseJsonArray(value) {
+  try {
+    const parsed = JSON.parse(String(value || '[]'));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function mapChallengeSubmissionRow(row) {
+  return {
+    id: row.id,
+    moduleId: row.moduleId,
+    challengeId: row.challengeId,
+    submissionType: row.submissionType,
+    score: Number(row.score || 0),
+    maxScore: Number(row.maxScore || 0),
+    passed: Boolean(row.passed),
+    feedback: parseJsonArray(row.feedbackJson),
+    criteria: parseJsonArray(row.criteriaJson),
+    createdAt: row.createdAt,
+  };
+}
+
+function buildPublicChallengeDefinition(moduleId) {
+  const definition = getChallengeDefinition(moduleId);
+  if (!definition) {
+    return null;
+  }
+
+  return {
+    moduleId,
+    challengeId: definition.challengeId,
+    title: definition.title,
+    description: definition.description,
+    submissionLabel: definition.submissionLabel,
+    placeholder: definition.placeholder,
+    minLength: definition.minLength,
+    passingScore: definition.passingScore,
+    criteria: definition.criteria.map((criterion) => ({
+      id: criterion.id,
+      label: criterion.label,
+      maxScore: criterion.weight,
+    })),
+  };
 }
 
 function logGeneratedCredential({ userId, name, email, plainPassword }) {
@@ -982,6 +1244,152 @@ app.post('/progress', auth, (req, res) => {
       });
     }
   );
+});
+
+app.get('/challenges', auth, async (req, res) => {
+  try {
+    const rows = await dbAll(
+      `SELECT DISTINCT ON (moduleId)
+         id,
+         moduleId,
+         challengeId,
+         submissionType,
+         score,
+         maxScore,
+         passed,
+         feedbackJson,
+         criteriaJson,
+         createdAt
+       FROM challenge_submissions
+       WHERE userId = ?
+       ORDER BY moduleId, createdAt DESC`,
+      [req.user.id]
+    );
+
+    const latestByModule = rows.reduce((acc, row) => {
+      acc[row.moduleId] = mapChallengeSubmissionRow(row);
+      return acc;
+    }, {});
+
+    const challenges = COURSE_MODULE_IDS
+      .map((moduleId) => {
+        const challenge = buildPublicChallengeDefinition(moduleId);
+        if (!challenge) {
+          return null;
+        }
+
+        return {
+          ...challenge,
+          latestSubmission: latestByModule[moduleId] || null,
+        };
+      })
+      .filter(Boolean);
+
+    res.json({ success: true, challenges });
+  } catch (error) {
+    console.error('Erro ao carregar desafios:', error);
+    res.status(500).json({ success: false, message: 'Erro ao carregar desafios do aluno.' });
+  }
+});
+
+app.get('/challenge-submissions', auth, async (req, res) => {
+  const moduleId = String(req.query.moduleId || '').trim();
+  const params = [req.user.id];
+  let whereClause = 'WHERE userId = ?';
+
+  if (moduleId) {
+    if (!COURSE_MODULE_IDS.includes(moduleId)) {
+      return res.status(400).json({ success: false, message: 'Módulo inválido' });
+    }
+
+    whereClause += ' AND moduleId = ?';
+    params.push(moduleId);
+  }
+
+  try {
+    const rows = await dbAll(
+      `SELECT id, moduleId, challengeId, submissionType, score, maxScore, passed, feedbackJson, criteriaJson, createdAt
+       FROM challenge_submissions
+       ${whereClause}
+       ORDER BY createdAt DESC
+       LIMIT 10`,
+      params
+    );
+
+    res.json({ success: true, submissions: rows.map(mapChallengeSubmissionRow) });
+  } catch (error) {
+    console.error('Erro ao carregar histórico de desafios:', error);
+    res.status(500).json({ success: false, message: 'Erro ao carregar histórico de desafios.' });
+  }
+});
+
+app.post('/challenge-submissions', auth, async (req, res) => {
+  const moduleId = String(req.body.moduleId || '').trim();
+  const content = String(req.body.content || '').trim();
+  const challenge = getChallengeDefinition(moduleId);
+
+  if (!challenge) {
+    return res.status(400).json({ success: false, message: 'Módulo inválido' });
+  }
+
+  if (content.length < 80) {
+    return res.status(400).json({ success: false, message: 'Envie uma resposta mais completa para avaliar o desafio.' });
+  }
+
+  const evaluation = evaluateChallengeSubmission(moduleId, content);
+  const createdAt = new Date().toISOString();
+
+  try {
+    const result = await dbRun(
+      `INSERT INTO challenge_submissions (
+         userId,
+         moduleId,
+         challengeId,
+         submissionType,
+         content,
+         score,
+         maxScore,
+         passed,
+         feedbackJson,
+         criteriaJson,
+         createdAt
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        req.user.id,
+        moduleId,
+        evaluation.challengeId,
+        evaluation.submissionType,
+        content,
+        evaluation.score,
+        evaluation.maxScore,
+        evaluation.passed ? 1 : 0,
+        JSON.stringify(evaluation.feedback),
+        JSON.stringify(evaluation.criteria),
+        createdAt,
+      ]
+    );
+
+    invalidateAdminCache();
+
+    res.json({
+      success: true,
+      submission: {
+        id: result.lastID,
+        moduleId,
+        challengeId: evaluation.challengeId,
+        submissionType: evaluation.submissionType,
+        score: evaluation.score,
+        maxScore: evaluation.maxScore,
+        passed: evaluation.passed,
+        feedback: evaluation.feedback,
+        criteria: evaluation.criteria,
+        createdAt,
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao salvar submissão do desafio:', error);
+    res.status(500).json({ success: false, message: 'Erro ao avaliar e salvar o desafio.' });
+  }
 });
 
 app.post('/approve-purchase', authAdmin, async (req, res) => {
