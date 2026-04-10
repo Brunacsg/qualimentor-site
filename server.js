@@ -374,6 +374,7 @@ function mapChallengeSubmissionRow(row) {
     moduleId: row.moduleId,
     challengeId: row.challengeId,
     submissionType: row.submissionType,
+    content: String(row.content || ''),
     score: Number(row.score || 0),
     maxScore: Number(row.maxScore || 0),
     passed: Boolean(row.passed),
@@ -1254,6 +1255,7 @@ app.get('/challenges', auth, async (req, res) => {
          moduleId,
          challengeId,
          submissionType,
+         content,
          score,
          maxScore,
          passed,
@@ -1308,7 +1310,7 @@ app.get('/challenge-submissions', auth, async (req, res) => {
 
   try {
     const rows = await dbAll(
-      `SELECT id, moduleId, challengeId, submissionType, score, maxScore, passed, feedbackJson, criteriaJson, createdAt
+      `SELECT id, moduleId, challengeId, submissionType, content, score, maxScore, passed, feedbackJson, criteriaJson, createdAt
        FROM challenge_submissions
        ${whereClause}
        ORDER BY createdAt DESC
@@ -1378,6 +1380,7 @@ app.post('/challenge-submissions', auth, async (req, res) => {
         moduleId,
         challengeId: evaluation.challengeId,
         submissionType: evaluation.submissionType,
+        content,
         score: evaluation.score,
         maxScore: evaluation.maxScore,
         passed: evaluation.passed,

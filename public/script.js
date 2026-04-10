@@ -1990,6 +1990,54 @@ function buildChallengeCriteriaMarkup(criteria) {
   `).join('');
 }
 
+function buildChallengeCriteriaResultMarkup(criteria) {
+  return (criteria || []).map((criterion) => `
+    <li>
+      <strong>${escapeHtml(criterion.label)}</strong>
+      <span>${criterion.score}/${criterion.maxScore}</span>
+    </li>
+  `).join('');
+}
+
+function buildChallengeConversationMarkup(submission, { compact = false } = {}) {
+  if (!submission) {
+    return '';
+  }
+
+  const feedbackMarkup = (submission.feedback || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+  const criteriaMarkup = buildChallengeCriteriaResultMarkup(submission.criteria || []);
+  const createdAt = submission.createdAt ? escapeHtml(formatChallengeDate(submission.createdAt)) : 'Agora mesmo';
+
+  return `
+    <div class="challenge-conversation ${compact ? 'compact' : ''}" data-cy="challenge-conversation-thread">
+      <article class="challenge-message challenge-message-student" data-cy="challenge-student-message">
+        <div class="challenge-message-meta">
+          <span>Você</span>
+          <time datetime="${escapeHtml(submission.createdAt || '')}">${createdAt}</time>
+        </div>
+        <div class="challenge-message-bubble">
+          <p>${escapeHtml(submission.content || 'Resposta enviada.')}</p>
+        </div>
+      </article>
+      <article class="challenge-message challenge-message-reviewer" data-cy="challenge-reviewer-message">
+        <div class="challenge-message-meta">
+          <span>Avaliador automático</span>
+          <span class="challenge-score-badge ${submission.passed ? 'passed' : 'needs-work'}">
+            ${submission.score}/${submission.maxScore}
+          </span>
+        </div>
+        <div class="challenge-message-bubble">
+          <p class="challenge-feedback-summary">
+            ${submission.passed ? 'Aprovado no desafio.' : 'Ainda precisa reforçar alguns critérios.'}
+          </p>
+          <ul class="detail-list challenge-feedback-list">${feedbackMarkup}</ul>
+          <ul class="challenge-criteria-result-list">${criteriaMarkup}</ul>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
 function buildInteractivePanelMarkup({ panelId, title, description, bodyMarkup, dataCy }) {
   return `
     <section class="module-interactive-panel" id="${panelId}" data-cy="${dataCy}">
@@ -2020,33 +2068,20 @@ function buildChallengeLatestSubmissionMarkup(latestSubmission) {
   if (!latestSubmission) {
     return `
       <div class="challenge-feedback-panel empty" data-cy="challenge-empty-state">
-        <p>Nenhuma submissão enviada ainda. Envie sua resposta para receber nota automática e feedback objetivo.</p>
+        <p>Nenhuma submissão enviada ainda. Envie sua resposta para abrir a conversa com a correção automática.</p>
       </div>
     `;
   }
 
-  const feedbackMarkup = (latestSubmission.feedback || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('');
-  const criteriaMarkup = (latestSubmission.criteria || []).map((criterion) => `
-    <li>
-      <strong>${escapeHtml(criterion.label)}</strong>
-      <span>${criterion.score}/${criterion.maxScore}</span>
-    </li>
-  `).join('');
-
   return `
     <div class="challenge-feedback-panel ${latestSubmission.passed ? 'passed' : 'needs-work'}" data-cy="challenge-latest-result">
       <div class="challenge-feedback-header">
-        <h4>Último resultado</h4>
-        <span class="challenge-score-badge ${latestSubmission.passed ? 'passed' : 'needs-work'}">
-          ${latestSubmission.score}/${latestSubmission.maxScore}
-        </span>
+        <h4>Última conversa de avaliação</h4>
       </div>
       <p class="challenge-feedback-meta">
-        ${latestSubmission.passed ? 'Aprovado no desafio.' : 'Ainda precisa reforçar alguns critérios.'}
-        ${latestSubmission.createdAt ? `Última tentativa em ${escapeHtml(formatChallengeDate(latestSubmission.createdAt))}.` : ''}
+        ${latestSubmission.createdAt ? `Tentativa registrada em ${escapeHtml(formatChallengeDate(latestSubmission.createdAt))}.` : 'Tentativa registrada agora mesmo.'}
       </p>
-      <ul class="detail-list challenge-feedback-list">${feedbackMarkup}</ul>
-      <ul class="challenge-criteria-result-list">${criteriaMarkup}</ul>
+      ${buildChallengeConversationMarkup(latestSubmission)}
     </div>
   `;
 }
@@ -2057,15 +2092,18 @@ function buildChallengeHistoryMarkup(submissions) {
   }
 
   return `
-    <ul class="challenge-history-list">
+    <div class="challenge-history-list">
       ${submissions.map((submission) => `
-        <li>
-          <span>${escapeHtml(formatChallengeDate(submission.createdAt) || 'Tentativa recente')}</span>
-          <strong>${submission.score}/${submission.maxScore}</strong>
-          <span>${submission.passed ? 'Aprovado' : 'Revisar'}</span>
-        </li>
+        <section class="challenge-history-entry">
+          <div class="challenge-history-entry-header">
+            <span>${escapeHtml(formatChallengeDate(submission.createdAt) || 'Tentativa recente')}</span>
+            <strong>${submission.score}/${submission.maxScore}</strong>
+            <span>${submission.passed ? 'Aprovado' : 'Revisar'}</span>
+          </div>
+          ${buildChallengeConversationMarkup(submission, { compact: true })}
+        </section>
       `).join('')}
-    </ul>
+    </div>
   `;
 }
 
@@ -2113,6 +2151,7 @@ function buildChallengeMarkup(moduleId) {
             <span class="challenge-min-length">Recomendado: pelo menos ${challenge.minLength} caracteres.</span>
             <button type="submit" class="primary-button" data-cy="challenge-submit">Enviar para avaliação</button>
           </div>
+          <p class="challenge-form-hint">Sua resposta entra na conversa abaixo e recebe devolutiva imediata com nota, critérios e pontos a reforçar.</p>
           <p class="challenge-submit-message" id="challenge-submit-message" aria-live="polite"></p>
         </form>
       </div>
@@ -2122,7 +2161,7 @@ function buildChallengeMarkup(moduleId) {
         </div>
         <div class="challenge-history-panel resource-card" data-cy="challenge-history-panel">
           <div class="challenge-feedback-header">
-            <h4>Histórico recente</h4>
+            <h4>Conversas anteriores</h4>
           </div>
           <div id="challenge-history-container">
             ${buildChallengeHistoryMarkup(history)}
