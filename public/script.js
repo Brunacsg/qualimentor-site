@@ -1990,6 +1990,32 @@ function buildChallengeCriteriaMarkup(criteria) {
   `).join('');
 }
 
+function buildInteractivePanelMarkup({ panelId, title, description, bodyMarkup, dataCy }) {
+  return `
+    <section class="module-interactive-panel" id="${panelId}" data-cy="${dataCy}">
+      <div class="module-interactive-panel-header">
+        <button
+          type="button"
+          class="module-interactive-toggle"
+          aria-expanded="false"
+          aria-controls="${panelId}-content"
+          data-target-panel="${panelId}"
+          data-cy="${dataCy}-toggle"
+        >
+          <span class="module-interactive-toggle-copy">
+            <span class="module-interactive-toggle-title">${escapeHtml(title)}</span>
+            ${description ? `<span class="module-interactive-toggle-description">${escapeHtml(description)}</span>` : ''}
+          </span>
+          <span class="module-interactive-toggle-indicator" aria-hidden="true">Expandir</span>
+        </button>
+      </div>
+      <div class="module-interactive-panel-body" id="${panelId}-content" hidden>
+        ${bodyMarkup}
+      </div>
+    </section>
+  `;
+}
+
 function buildChallengeLatestSubmissionMarkup(latestSubmission) {
   if (!latestSubmission) {
     return `
@@ -2051,8 +2077,8 @@ function buildChallengeMarkup(moduleId) {
 
   const history = currentChallengeHistory[moduleId] || [];
 
-  return `
-    <section class="challenge-card" id="module-challenge" data-cy="module-challenge">
+  const bodyMarkup = `
+    <section class="challenge-card" data-cy="module-challenge-card-content">
       <div class="challenge-header">
         <div>
           <h3>${escapeHtml(challenge.title)}</h3>
@@ -2093,6 +2119,14 @@ function buildChallengeMarkup(moduleId) {
       </div>
     </section>
   `;
+
+  return buildInteractivePanelMarkup({
+    panelId: 'module-challenge',
+    title: 'Desafio prático do módulo',
+    description: 'Abra este bloco para enviar sua resposta escrita e receber avaliação automática.',
+    bodyMarkup,
+    dataCy: 'module-challenge',
+  });
 }
 
 function setChallengeSubmitMessage(message, tone = 'neutral') {
@@ -2209,6 +2243,7 @@ async function renderModuleChallenge() {
   }
 
   sectionBody.insertAdjacentHTML('beforeend', markup);
+  initializeModuleInteractivePanels();
   document.getElementById('module-challenge-form')?.addEventListener('submit', handleChallengeSubmit);
 }
 
@@ -2544,8 +2579,8 @@ function buildQuizMarkup(moduleId) {
     `;
   }).join('');
 
-  return `
-    <div class="quiz-card" id="module-quiz" data-cy="module-quiz-card">
+  const bodyMarkup = `
+    <div class="quiz-card" data-cy="module-quiz-card-content">
       <div class="quiz-header" data-cy="module-quiz-header">
         <h3>${quiz.title}</h3>
         <p>${quiz.description}</p>
@@ -2561,6 +2596,14 @@ function buildQuizMarkup(moduleId) {
       </form>
     </div>
   `;
+
+  return buildInteractivePanelMarkup({
+    panelId: 'module-quiz',
+    title: 'Questionário do módulo',
+    description: 'Abra este bloco para responder as questões objetivas do módulo.',
+    bodyMarkup,
+    dataCy: 'module-quiz-card',
+  });
 }
 
 function enhanceLogo() {
@@ -2699,6 +2742,7 @@ function renderModuleQuiz() {
   }
 
   sectionBody.insertAdjacentHTML('beforeend', quizMarkup);
+  initializeModuleInteractivePanels();
 
   document.getElementById('module-quiz-form')?.addEventListener('submit', handleQuizSubmit);
   document.getElementById('reset-quiz-button')?.addEventListener('click', resetQuiz);
@@ -2935,6 +2979,36 @@ function initializeModuleTopicAccordions() {
     accordionIndex += 1;
     index = scanIndex - 1;
   }
+}
+
+function initializeModuleInteractivePanels() {
+  document.querySelectorAll('.module-interactive-toggle').forEach((button) => {
+    if (button.dataset.boundClick === 'true') {
+      return;
+    }
+
+    button.addEventListener('click', () => {
+      const panelId = button.dataset.targetPanel;
+      const panel = panelId ? document.getElementById(panelId) : null;
+      const panelBody = panel?.querySelector('.module-interactive-panel-body');
+      const indicator = button.querySelector('.module-interactive-toggle-indicator');
+      const shouldOpen = panelBody?.hidden !== false;
+
+      if (!panel || !panelBody) {
+        return;
+      }
+
+      panel.classList.toggle('is-open', shouldOpen);
+      panelBody.hidden = !shouldOpen;
+      button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+
+      if (indicator) {
+        indicator.textContent = shouldOpen ? 'Recolher' : 'Expandir';
+      }
+    });
+
+    button.dataset.boundClick = 'true';
+  });
 }
 
 async function toggleModuleCompletion() {
