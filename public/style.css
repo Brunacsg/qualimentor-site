@@ -1389,17 +1389,26 @@ main.dashboard-grid {
   flex-direction: column;
   align-items: center;
   margin: 0 auto 18px;
-  padding: 18px 28px;
+  gap: 4px;
+  padding: 18px 30px 16px;
   border-radius: 999px;
-  background: rgba(45, 212, 191, 0.12);
+  background:
+    linear-gradient(180deg, rgba(45, 212, 191, 0.16), rgba(45, 212, 191, 0.08)),
+    rgba(8, 20, 34, 0.78);
   color: var(--warm);
-  border: 1px solid rgba(244, 232, 193, 0.18);
+  border: 1px solid rgba(244, 232, 193, 0.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 14px 30px rgba(2, 6, 23, 0.28);
 }
 
 .section-eyebrow-title {
   font-size: 1.45rem;
   font-weight: 800;
+  line-height: 1;
   letter-spacing: 0.06em;
+  color: #f8fafc;
+  text-shadow: 0 1px 18px rgba(45, 212, 191, 0.12);
 }
 
 .section-eyebrow-subtitle {
@@ -1408,7 +1417,9 @@ main.dashboard-grid {
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  margin-top: 4px;
+  line-height: 1;
+  padding-top: 6px;
+  border-top: 1px solid rgba(244, 232, 193, 0.18);
 }
 
 .section-subtitle {
@@ -2043,7 +2054,7 @@ main.dashboard-grid {
   }
 
   .section-eyebrow {
-    padding: 14px 20px;
+    padding: 14px 22px 13px;
   }
 
   .section-eyebrow-title {
