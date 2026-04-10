@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="intro.html">Introdução</a>
       <a href="process.html">Processo</a>
       <a href="manual.html">Manual</a>
@@ -19,7 +19,7 @@
       <a href="agile.html">Ágeis</a>
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -28,32 +28,32 @@
       <div class="section-header">
         <span>06</span>
         <div>
-          <h2>Carreira em QA</h2>
+          <h2>Carreira em Quality Assurance</h2>
           <p>Os próximos passos para crescer na área de qualidade.</p>
         </div>
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
         <div class="resource-card">
           <h4>Objetivos deste módulo</h4>
           <ul>
-            <li>Planejar sua jornada de carreira em QA</li>
+            <li>Planejar sua jornada de carreira em Quality Assurance</li>
             <li>Conhecer certificações, cargos e habilidades valorizadas</li>
             <li>Aprender a montar um currículo e se preparar para entrevistas</li>
           </ul>
         </div>
         <div class="resource-card">
           <h4>Atividade prática</h4>
-          <p>Use o template de currículo para criar seu próprio CV de QA e identifique 3 áreas para desenvolvimento futuro.</p>
+          <p>Use o template de currículo para criar seu próprio CV de Quality Assurance e identifique 3 áreas para desenvolvimento futuro.</p>
         </div>
 
         <h3>Habilidades técnicas essenciais</h3>
@@ -68,7 +68,7 @@
           </div>
           <div class="info-card">
             <h4>Ferramentas</h4>
-            <p>Jira, Postman, Selenium, JMeter, ferramentas de bug tracking.</p>
+            <p>Jira, Postman, Cypress, JMeter, ferramentas de bug tracking.</p>
           </div>
           <div class="info-card">
             <h4>Soft Skills</h4>
@@ -98,50 +98,50 @@
 
         <h3>Trajetórias de carreira</h3>
         <ul>
-          <li><strong>QA Analyst Júnior:</strong> Testes manuais básicos, aprendizado de ferramentas.</li>
-          <li><strong>QA Analyst Pleno:</strong> Testes complexos, automação básica, liderança técnica.</li>
-          <li><strong>QA Engineer:</strong> Foco em automação, desenvolvimento de frameworks.</li>
+          <li><strong>Quality Assurance Analyst Júnior:</strong> Testes manuais básicos, aprendizado de ferramentas.</li>
+          <li><strong>Quality Assurance Analyst Pleno:</strong> Testes complexos, automação básica, liderança técnica.</li>
+          <li><strong>Quality Assurance Engineer:</strong> Foco em automação, desenvolvimento de frameworks.</li>
           <li><strong>SDET (Software Development Engineer in Test):</strong> Desenvolvimento e testes integrados.</li>
-          <li><strong>QA Lead/Coordenador:</strong> Liderança de equipe, estratégia de qualidade.</li>
-          <li><strong>QA Manager:</strong> Gestão completa de qualidade, métricas organizacionais.</li>
+          <li><strong>Quality Assurance Lead/Coordenador:</strong> Liderança de equipe, estratégia de qualidade.</li>
+          <li><strong>Quality Assurance Manager:</strong> Gestão completa de qualidade, métricas organizacionais.</li>
           <li><strong>Test Automation Architect:</strong> Design de soluções de automação escaláveis.</li>
         </ul>
 
-        <h3>Exemplo prático: Template de Currículo QA</h3>
+        <h3>Exemplo prático: Template de Currículo em Quality Assurance</h3>
         <div class="resource-card">
-          <h4>Estrutura de CV para QA Analyst</h4>
+          <h4>Estrutura de CV para Quality Assurance Analyst</h4>
           <pre><code>JOÃO SILVA
-QA Analyst | São Paulo, SP | (11) 99999-9999 | joao.silva@email.com | linkedin.com/in/joaosilva
+Quality Assurance Analyst | São Paulo, SP | (11) 99999-9999 | joao.silva@email.com | linkedin.com/in/joaosilva
 
 RESUMO PROFISSIONAL
-QA Analyst com 3 anos de experiência em testes manuais e automação. Especialista em Selenium WebDriver,
+Quality Assurance Analyst com 3 anos de experiência em testes manuais e automação. Especialista em Cypress com JavaScript,
 JMeter e metodologias ágeis. Experiência em e-commerce e fintech. Certificado ISTQB Foundation Level.
 
 EXPERIÊNCIA PROFISSIONAL
-QA Analyst Pleno | TechCorp Ltda | Jan 2022 - Presente
+Quality Assurance Analyst Pleno | TechCorp Ltda | Jan 2022 - Presente
 - Executar testes funcionais, regressão e integração em aplicações web/mobile
-- Desenvolver e manter suíte de testes automatizados com Selenium + Java (redução de 60% no tempo de regressão)
+- Desenvolver e manter suíte de testes automatizados com Cypress + JavaScript (redução de 60% no tempo de regressão)
 - Criar e executar testes de performance com JMeter (até 1000 usuários simultâneos)
 - Participar de cerimônias ágeis (daily standups, planning, reviews)
 - Reportar bugs usando Jira e colaborar com desenvolvedores para resolução
 - Melhorar cobertura de testes de 45% para 85% através de estratégias de automação
 
-QA Analyst Júnior | StartupXYZ | Mar 2020 - Dez 2021
+Quality Assurance Analyst Júnior | StartupXYZ | Mar 2020 - Dez 2021
 - Realizar testes manuais exploratórios e funcionais
 - Criar casos de teste detalhados e executar testes de aceitação
-- Aprender e aplicar ferramentas de automação básica (Selenium IDE)
-- Participar de processo de QA desde requisitos até produção
+- Aprender e aplicar ferramentas de automação básica com Cypress em cenários críticos
+- Participar de processo de Quality Assurance desde requisitos até produção
 
 COMPETÊNCIAS TÉCNICAS
 - Linguagens: Java, JavaScript, Python, SQL
-- Ferramentas: Selenium WebDriver, JMeter, Postman, Jira, Git, Jenkins
+- Ferramentas: Cypress, JMeter, Postman, Jira, Git, Jenkins
 - Metodologias: Scrum, Kanban, TDD, BDD
 - Bancos de dados: MySQL, PostgreSQL, MongoDB
 - Outros: Linux, Docker, REST APIs, Mobile Testing
 
 CERTIFICAÇÕES
 - ISTQB Certified Tester Foundation Level (2023)
-- Selenium WebDriver Certification (2022)
+- Formação em Cypress e automação web (2022)
 - Scrum Master (2021)
 
 FORMAÇÃO ACADÊMICA
@@ -149,13 +149,13 @@ Bacharelado em Ciência da Computação | Universidade XYZ | 2016 - 2020
 
 PROJETOS PESSOAIS
 - Framework de automação open source (GitHub: 50+ stars)
-- Blog sobre QA e automação (500+ visitantes/mês)
+- Blog sobre Quality Assurance e automação (500+ visitantes/mês)
 - Contribuições para projetos open source de testing</code></pre>
         </div>
 
         <h3>Exemplo: Cenário de Entrevista Técnica</h3>
         <div class="resource-card">
-          <h4>Perguntas Comuns em Entrevistas QA</h4>
+          <h4>Perguntas Comuns em Entrevistas de Quality Assurance</h4>
           <div class="interview-scenario">
             <p><strong>Entrevistador:</strong> "Como você estruturaria testes para um sistema de login?"</p>
             <p><strong>Candidato:</strong> "Primeiro, identificaria os requisitos funcionais e não-funcionais. Criaria casos de teste cobrindo cenários positivos e negativos."</p>
@@ -172,26 +172,21 @@ PROJETOS PESSOAIS
             </ul>
             <br>
             <p><strong>Automação sugerida:</strong></p>
-            <pre><code>// Exemplo Selenium para teste de login
-WebDriver driver = new ChromeDriver();
-driver.get("https://app.example.com/login");
+            <pre><code>// Exemplo Cypress para teste de login
+cy.visit('https://app.example.com/login');
 
-WebElement username = driver.findElement(By.id("username"));
-WebElement password = driver.findElement(By.id("password"));
-WebElement loginBtn = driver.findElement(By.id("login-button"));
+cy.get('[data-cy="login-email-input"]').type('testuser');
+cy.get('[data-cy="login-password-input"]').type('validpassword');
+cy.get('[data-cy="login-submit-button"]').click();
 
-username.sendKeys("testuser");
-password.sendKeys("validpassword");
-loginBtn.click();
-
-// Assert success
-Assert.assertTrue(driver.getCurrentUrl().contains("/dashboard"));</code></pre>
+cy.url().should('include', '/dashboard');
+cy.get('[data-cy="dashboard-overview-section"]').should('be.visible');</code></pre>
           </div>
         </div>
 
         <h3>Exemplo: Plano de Desenvolvimento de Carreira</h3>
         <div class="resource-card">
-          <h4>Roadmap QA - 2 anos</h4>
+          <h4>Roadmap de Quality Assurance - 2 anos</h4>
           <div class="career-roadmap">
             <div class="roadmap-phase">
               <h5>Mês 1-3: Fundamentos Sólidos</h5>
@@ -206,7 +201,7 @@ Assert.assertTrue(driver.getCurrentUrl().contains("/dashboard"));</code></pre>
               <h5>Mês 4-6: Automação Básica</h5>
               <ul>
                 <li>JavaScript/TypeScript para automação</li>
-                <li>Selenium WebDriver do zero</li>
+                <li>Cypress com JavaScript do zero</li>
                 <li>Page Object Model</li>
                 <li>Testes de API com RestAssured</li>
               </ul>
@@ -281,10 +276,10 @@ Assert.assertTrue(driver.getCurrentUrl().contains("/dashboard"));</code></pre>
           </div>
         </div>
 
-        <h3>Desafios da carreira em QA</h3>
+        <h3>Desafios da carreira em Quality Assurance</h3>
         <ul>
           <li>Mudanças rápidas na tecnologia exigem aprendizado contínuo.</li>
-          <li>Percepção de que QA é "menos técnico" que desenvolvimento.</li>
+          <li>Percepção de que Quality Assurance é "menos técnico" que desenvolvimento.</li>
           <li>Dificuldade em demonstrar valor para stakeholders não-técnicos.</li>
           <li>Pressão por velocidade vs qualidade em ambientes ágeis.</li>
           <li>Manutenção de testes automatizados em aplicações voláteis.</li>

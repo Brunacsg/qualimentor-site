@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="process.html">Processo</a>
       <a href="manual.html">Manual</a>
       <a href="automation.html">Automação</a>
@@ -19,7 +19,7 @@
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
       <a href="career.html">Carreira</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -28,38 +28,38 @@
       <div class="section-header">
         <span>01</span>
         <div>
-          <h2>Introdução ao QA</h2>
+          <h2>Introdução à Qualidade de Software</h2>
           <p>Conhecimentos essenciais para qualquer profissional de Qualidade de Software.</p>
         </div>
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
         <div class="resource-card">
           <h4>Objetivos deste módulo</h4>
           <ul>
-            <li>Entender o papel do QA em projetos de software</li>
+            <li>Entender o papel de Quality Assurance em projetos de software</li>
             <li>Reconhecer a diferença entre prevenção e correção de defeitos</li>
-            <li>Identificar responsabilidades comuns de um analista de QA</li>
+            <li>Identificar responsabilidades comuns de um analista de Quality Assurance</li>
           </ul>
         </div>
         <div class="resource-card">
           <h4>Atividade prática</h4>
-          <p>Liste 3 responsabilidades de QA para um aplicativo de e-commerce e crie um mini-plano para validar o fluxo de checkout.</p>
+          <p>Liste 3 responsabilidades de Quality Assurance para um aplicativo de e-commerce e crie um mini-plano para validar o fluxo de checkout.</p>
         </div>
 
-        <h3>O papel do QA na engenharia de software</h3>
-        <p>O profissional de QA garante que o produto entregue seja confiável, funcional e esteja alinhado aos requisitos do cliente. QA não é apenas "quebrar" o software, mas prevenir problemas e melhorar processos.</p>
+        <h3>O papel de Quality Assurance na engenharia de software</h3>
+        <p>O profissional de Quality Assurance garante que o produto entregue seja confiável, funcional e esteja alinhado aos requisitos do cliente. Quality Assurance não é apenas "quebrar" o software, mas prevenir problemas e melhorar processos.</p>
 
-        <h3>Por que QA existe?</h3>
+        <h3>Por que a Qualidade de Software existe?</h3>
         <ul>
           <li>Detectar defeitos antes da entrega ao cliente.</li>
           <li>Reduzir riscos e retrabalho custoso.</li>
@@ -76,7 +76,7 @@
           </div>
           <div class=\"info-card\">
             <h4>Testes desde o início</h4>
-            <p>QA deve participar desde a concepção do projeto.</p>
+            <p>O profissional de Quality Assurance deve participar desde a concepção do projeto.</p>
           </div>
           <div class=\"info-card\">
             <h4>Transparência</h4>
@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <h3>Responsabilidades do QA</h3>
+        <h3>Responsabilidades de Quality Assurance</h3>
         <ul>
           <li>Revisar e validar requisitos funcionais e não-funcionais.</li>
           <li>Criar estratégias e planos de teste abrangentes.</li>
@@ -100,7 +100,7 @@
           <li>Garantir conformidade com padrões de qualidade.</li>
         </ul>
 
-        <h3>Exemplo prático: Dia a dia de um QA</h3>
+        <h3>Exemplo prático: Dia a dia de um profissional de Quality Assurance</h3>
         <div class="resource-card">
           <h4>Cenário: Lançamento de nova funcionalidade</h4>
           <p><strong>Manhã:</strong> Revisar requisitos da nova feature de login social</p>
@@ -111,9 +111,9 @@
 
         <h3>Exemplo de responsabilidade crítica</h3>
         <div class="resource-card">
-          <h4>Antes do QA:</h4>
+          <h4>Antes da atuação de Quality Assurance:</h4>
           <p>Desenvolvedor implementa feature de pagamento sem validações</p>
-          <p><strong>QA intervém:</strong> Identifica vulnerabilidades de SQL injection</p>
+          <p><strong>Quality Assurance intervém:</strong> Identifica vulnerabilidades de SQL injection</p>
           <p><strong>Resultado:</strong> Evita vazamento de dados de 10.000 usuários</p>
         </div>
       </div>

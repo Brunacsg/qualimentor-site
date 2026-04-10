@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="intro.html">Introdução</a>
       <a href="process.html">Processo</a>
       <a href="manual.html">Manual</a>
@@ -19,7 +19,7 @@
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
       <a href="career.html">Carreira</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -29,24 +29,24 @@
         <span>05</span>
         <div>
           <h2>Ferramentas e Ecossistema</h2>
-          <p>Conheça as principais ferramentas usadas por QA.</p>
+          <p>Conheça as principais ferramentas usadas em Qualidade de Software.</p>
         </div>
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
         <div class="resource-card">
           <h4>Objetivos deste módulo</h4>
           <ul>
-            <li>Conhecer as ferramentas essenciais de QA</li>
+            <li>Conhecer as ferramentas essenciais de Qualidade de Software</li>
             <li>Entender o papel de cada ferramenta no fluxo de qualidade</li>
             <li>Identificar integrações entre testes, rastreamento e CI/CD</li>
           </ul>
@@ -99,20 +99,20 @@
         <h3>Automação Web e UI</h3>
         <div class="card-grid">
           <div class="info-card">
-            <h4>Selenium WebDriver</h4>
-            <p>Padrão para automação web. Suporta Java, C#, Python, JavaScript.</p>
-          </div>
-          <div class="info-card">
             <h4>Cypress</h4>
-            <p>Rápido e confiável. JavaScript nativo, debugging integrado.</p>
+            <p>Referência para times front-end. JavaScript nativo, comandos encadeados e debugging excelente.</p>
           </div>
           <div class="info-card">
             <h4>Playwright</h4>
-            <p>Multi-browser, auto-wait, suporte a APIs modernas.</p>
+            <p>Ótimo para cenários multi-browser, múltiplos contextos e execução paralela moderna.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cypress Cloud</h4>
+            <p>Observabilidade, paralelismo e relatórios para escalar suites JavaScript em CI/CD.</p>
           </div>
           <div class="info-card">
             <h4>TestCafe</h4>
-            <p>No setup necessário, suporta todos os browsers modernos.</p>
+            <p>No setup necessário e com boa experiência para equipes que também preferem JavaScript.</p>
           </div>
         </div>
 
@@ -219,7 +219,7 @@ WHERE price <= 0 OR price > 99999.99;</code></pre>
 
         <h3>Exemplo: Configuração Jenkins Pipeline</h3>
         <div class="resource-card">
-          <h4>Jenkinsfile para QA</h4>
+          <h4>Jenkinsfile para Qualidade de Software</h4>
           <pre><code>pipeline {
     agent any
     stages {

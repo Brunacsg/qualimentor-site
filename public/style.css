@@ -310,6 +310,70 @@ main.dashboard-grid {
   margin: 0 0 10px;
 }
 
+.module-topic-accordion {
+  border-radius: 22px;
+  background: rgba(30, 41, 59, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  overflow: hidden;
+}
+
+.module-topic-header {
+  display: flex;
+}
+
+.module-topic-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.module-topic-toggle:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.module-topic-toggle:focus-visible {
+  outline: 2px solid rgba(56, 189, 248, 0.72);
+  outline-offset: -2px;
+}
+
+.module-topic-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.module-topic-indicator {
+  color: var(--accent);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.module-topic-accordion.is-open .module-topic-indicator {
+  color: #bae6fd;
+}
+
+.module-topic-panel {
+  padding: 0 22px 22px;
+  display: grid;
+  gap: 18px;
+}
+
+.module-topic-panel > :first-child {
+  margin-top: 0;
+}
+
+.module-topic-accordion.is-open {
+  border-color: rgba(56, 189, 248, 0.24);
+}
+
 .section-body ul {
   margin: 0;
   padding-left: 18px;

@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="intro.html">Introdução</a>
       <a href="process.html">Processo</a>
       <a href="manual.html">Manual</a>
@@ -20,7 +20,7 @@
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
       <a href="career.html">Carreira</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -35,12 +35,12 @@
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
@@ -48,7 +48,7 @@
           <h4>Objetivos deste módulo</h4>
           <ul>
             <li>Entender vulnerabilidades comuns em aplicações web</li>
-            <li>Aprender a usar ferramentas de segurança para QA</li>
+            <li>Aprender a usar ferramentas de segurança para Quality Assurance</li>
             <li>Praticar análise e documentação de riscos</li>
           </ul>
         </div>

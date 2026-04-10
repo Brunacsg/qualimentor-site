@@ -194,6 +194,13 @@ async function initDatabase() {
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS paymentReference TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS approvalSource TEXT');
   await pool.query('ALTER TABLE purchase_requests ADD COLUMN IF NOT EXISTS lastWebhookAt TEXT');
+
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_users_email_lower ON users (lower(email))');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_users_expiresat ON users (expiresAt)');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_purchase_requests_createdat ON purchase_requests (createdAt DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_purchase_requests_status_createdat ON purchase_requests (status, createdAt DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_credential_deliveries_createdat ON credential_deliveries (createdAt DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS idx_user_progress_userid_updatedat ON user_progress (userId, updatedAt DESC)');
 }
 
 module.exports = {

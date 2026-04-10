@@ -10,13 +10,13 @@
   <header class="site-header">
     <div class="logo">QualiMentor - Admin</div>
     <nav>
-      <a href="admin.html" class="active">Compras</a>
-      <button class="logout-button" onclick="logoutAdmin()">Sair</button>
+      <a href="admin.html" class="active" data-cy="admin-nav-purchases">Compras</a>
+      <button class="logout-button" onclick="logoutAdmin()" data-cy="admin-logout-button">Sair</button>
     </nav>
   </header>
 
   <main class="dashboard-grid admin-dashboard">
-    <section class="content-section">
+    <section class="content-section" data-admin-section="purchases">
       <div class="section-header">
         <span>📋</span>
         <div>
@@ -26,18 +26,23 @@
       </div>
 
       <div class="section-body">
-        <p id="adminStatusMessage" class="admin-status-message" aria-live="polite"></p>
+        <p id="adminStatusMessage" class="admin-status-message" aria-live="polite" data-cy="admin-status-message"></p>
         <div class="admin-flow-card">
           <strong>Fluxo recomendado com Mercado Pago</strong>
           <p>1. O aluno paga pelo link. 2. Você confirma no Mercado Pago que o pagamento foi aprovado. 3. No admin, clique em Simular webhook. 4. O sistema libera o acesso, envia o email e registra os dados no painel.</p>
         </div>
-        <div id="purchasesContainer" class="purchases-table-container">
+        <div class="admin-list-toolbar">
+          <input id="purchaseSearchInput" type="search" placeholder="Buscar por email, nome, status ou referência" onkeydown="handleSearchKeydown(event, 'purchases')" data-cy="admin-purchases-search-input">
+          <button type="button" class="secondary-button compact-button" onclick="applyListSearch('purchases')" data-cy="admin-purchases-search-button">Buscar</button>
+          <button type="button" class="secondary-button compact-button" onclick="refreshList('purchases')" data-cy="admin-purchases-refresh-button">Atualizar</button>
+        </div>
+        <div id="purchasesContainer" class="purchases-table-container" data-cy="admin-purchases-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando solicitações...</p>
         </div>
       </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-admin-section="system">
       <div class="section-header">
         <span>🛠️</span>
         <div>
@@ -47,13 +52,13 @@
       </div>
 
       <div class="section-body">
-        <div id="systemStatusContainer" class="system-status-grid">
+        <div id="systemStatusContainer" class="system-status-grid" data-cy="admin-system-status-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando diagnóstico...</p>
         </div>
       </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-admin-section="users">
       <div class="section-header">
         <span>👥</span>
         <div>
@@ -63,13 +68,18 @@
       </div>
 
       <div class="section-body">
-        <div id="usersContainer" class="purchases-table-container">
+        <div class="admin-list-toolbar">
+          <input id="usersSearchInput" type="search" placeholder="Buscar usuário por email ou nome" onkeydown="handleSearchKeydown(event, 'users')" data-cy="admin-users-search-input">
+          <button type="button" class="secondary-button compact-button" onclick="applyListSearch('users')" data-cy="admin-users-search-button">Buscar</button>
+          <button type="button" class="secondary-button compact-button" onclick="refreshList('users')" data-cy="admin-users-refresh-button">Atualizar</button>
+        </div>
+        <div id="usersContainer" class="purchases-table-container" data-cy="admin-users-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando usuários...</p>
         </div>
       </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-admin-section="progress">
       <div class="section-header">
         <span>📈</span>
         <div>
@@ -79,13 +89,18 @@
       </div>
 
       <div class="section-body">
-        <div id="usersProgressContainer" class="purchases-table-container">
+        <div class="admin-list-toolbar">
+          <input id="progressSearchInput" type="search" placeholder="Buscar progresso por email ou nome" onkeydown="handleSearchKeydown(event, 'progress')" data-cy="admin-progress-search-input">
+          <button type="button" class="secondary-button compact-button" onclick="applyListSearch('progress')" data-cy="admin-progress-search-button">Buscar</button>
+          <button type="button" class="secondary-button compact-button" onclick="refreshList('progress')" data-cy="admin-progress-refresh-button">Atualizar</button>
+        </div>
+        <div id="usersProgressContainer" class="purchases-table-container" data-cy="admin-progress-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando progresso...</p>
         </div>
       </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-admin-section="credentials">
       <div class="section-header">
         <span>🔐</span>
         <div>
@@ -95,7 +110,12 @@
       </div>
 
       <div class="section-body">
-        <div id="credentialsContainer" class="purchases-table-container">
+        <div class="admin-list-toolbar">
+          <input id="credentialsSearchInput" type="search" placeholder="Buscar credenciais por email ou nome" onkeydown="handleSearchKeydown(event, 'credentials')" data-cy="admin-credentials-search-input">
+          <button type="button" class="secondary-button compact-button" onclick="applyListSearch('credentials')" data-cy="admin-credentials-search-button">Buscar</button>
+          <button type="button" class="secondary-button compact-button" onclick="refreshList('credentials')" data-cy="admin-credentials-refresh-button">Atualizar</button>
+        </div>
+        <div id="credentialsContainer" class="purchases-table-container" data-cy="admin-credentials-container">
           <p style="text-align: center; color: var(--text-muted);">Carregando credenciais...</p>
         </div>
       </div>
@@ -109,44 +129,169 @@
       window.location.href = 'login.html';
     }
 
-    async function fetchPurchases() {
+    const DEFAULT_PAGE_SIZE = 20;
+    const adminSectionState = {
+      purchases: { loaded: false, loading: false },
+      system: { loaded: false, loading: false },
+      users: { loaded: false, loading: false },
+      progress: { loaded: false, loading: false },
+      credentials: { loaded: false, loading: false }
+    };
+    const adminLists = {
+      purchases: {
+        endpoint: '/purchase-requests',
+        containerId: 'purchasesContainer',
+        searchInputId: 'purchaseSearchInput',
+        responseKey: 'requests',
+        itemLabel: 'solicitações',
+        page: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+        search: ''
+      },
+      users: {
+        endpoint: '/users',
+        containerId: 'usersContainer',
+        searchInputId: 'usersSearchInput',
+        responseKey: 'users',
+        itemLabel: 'usuários',
+        page: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+        search: ''
+      },
+      progress: {
+        endpoint: '/users-progress',
+        containerId: 'usersProgressContainer',
+        searchInputId: 'progressSearchInput',
+        responseKey: 'summaries',
+        itemLabel: 'alunos',
+        page: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+        search: ''
+      },
+      credentials: {
+        endpoint: '/credential-deliveries',
+        containerId: 'credentialsContainer',
+        searchInputId: 'credentialsSearchInput',
+        responseKey: 'credentials',
+        itemLabel: 'credenciais',
+        page: 1,
+        pageSize: DEFAULT_PAGE_SIZE,
+        search: ''
+      }
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '-';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('pt-BR');
+    }
+
+    function buildPaginationFooter(sectionKey, pagination, itemLabel) {
+      if (!pagination) {
+        return '';
+      }
+
+      const start = pagination.total === 0 ? 0 : ((pagination.page - 1) * pagination.pageSize) + 1;
+      const end = Math.min(pagination.total, pagination.page * pagination.pageSize);
+
+      return `
+        <div class="admin-pagination" data-cy="admin-${sectionKey}-pagination">
+          <span class="admin-pagination-summary" data-cy="admin-${sectionKey}-pagination-summary">Mostrando ${start}-${end} de ${pagination.total} ${escapeHtml(itemLabel)}</span>
+          <div class="admin-pagination-actions" data-cy="admin-${sectionKey}-pagination-actions">
+            <button type="button" class="secondary-button compact-button" onclick="changeListPage('${sectionKey}', ${pagination.page - 1})" ${pagination.hasPreviousPage ? '' : 'disabled'} data-cy="admin-${sectionKey}-pagination-prev">Anterior</button>
+            <span data-cy="admin-${sectionKey}-pagination-page">Página ${pagination.page} de ${pagination.totalPages}</span>
+            <button type="button" class="secondary-button compact-button" onclick="changeListPage('${sectionKey}', ${pagination.page + 1})" ${pagination.hasNextPage ? '' : 'disabled'} data-cy="admin-${sectionKey}-pagination-next">Próxima</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEmptyState(containerId, message) {
+      document.getElementById(containerId).innerHTML = `<p style="text-align: center; color: var(--text-muted);">${escapeHtml(message)}</p>`;
+    }
+
+    async function fetchAdminList(sectionKey) {
+      const section = adminLists[sectionKey];
+      const params = new URLSearchParams({
+        page: String(section.page),
+        pageSize: String(section.pageSize)
+      });
+
+      if (section.search) {
+        params.set('search', section.search);
+      }
+
+      document.getElementById(section.containerId).innerHTML = '<p style="text-align: center; color: var(--text-muted);">Carregando...</p>';
+
       try {
-        const res = await fetch('/purchase-requests', {
+        const res = await fetch(`${section.endpoint}?${params.toString()}`, {
           headers: { 'x-admin-secret': ADMIN_SECRET }
         });
-
         const data = await res.json();
 
-        if (data.success) {
-          renderPurchases(data.requests);
-        } else {
-          document.getElementById('purchasesContainer').innerHTML = 
-            `<p style="color: red;">${data.message}</p>`;
+        if (!data.success) {
+          document.getElementById(section.containerId).innerHTML = `<p style="color: red;">${escapeHtml(data.message)}</p>`;
+          return false;
         }
+
+        if (sectionKey === 'purchases') {
+          renderPurchases(data.requests, data.pagination);
+          return true;
+        }
+
+        if (sectionKey === 'users') {
+          renderUsers(data.users, data.pagination);
+          return true;
+        }
+
+        if (sectionKey === 'progress') {
+          renderUsersProgress(data.summaries, data.pagination);
+          return true;
+        }
+
+        renderCredentials(data.credentials, data.pagination);
+        return true;
       } catch (err) {
-        document.getElementById('purchasesContainer').innerHTML = 
-          `<p style="color: red;">Erro ao carregar compras: ${err.message}</p>`;
+        document.getElementById(section.containerId).innerHTML = `<p style="color: red;">Erro ao carregar dados: ${escapeHtml(err.message)}</p>`;
+        return false;
       }
     }
 
-    async function fetchUsers() {
-      try {
-        const res = await fetch('/users', {
-          headers: { 'x-admin-secret': ADMIN_SECRET }
-        });
+    function applyListSearch(sectionKey) {
+      const section = adminLists[sectionKey];
+      section.search = String(document.getElementById(section.searchInputId).value || '').trim();
+      section.page = 1;
+      fetchAdminList(sectionKey);
+    }
 
-        const data = await res.json();
-
-        if (data.success) {
-          renderUsers(data.users);
-        } else {
-          document.getElementById('usersContainer').innerHTML =
-            `<p style="color: red;">${data.message}</p>`;
-        }
-      } catch (err) {
-        document.getElementById('usersContainer').innerHTML =
-          `<p style="color: red;">Erro ao carregar usuários: ${err.message}</p>`;
+    function handleSearchKeydown(event, sectionKey) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        applyListSearch(sectionKey);
       }
+    }
+
+    function changeListPage(sectionKey, page) {
+      if (page < 1) {
+        return;
+      }
+
+      adminLists[sectionKey].page = page;
+      fetchAdminList(sectionKey);
+    }
+
+    function refreshList(sectionKey) {
+      loadAdminSection(sectionKey, { force: true });
     }
 
     async function fetchSystemStatus() {
@@ -159,60 +304,84 @@
 
         if (data.success) {
           renderSystemStatus(data.status);
-        } else {
-          document.getElementById('systemStatusContainer').innerHTML =
-            `<p style="color: red;">${data.message}</p>`;
+          return true;
         }
+
+        document.getElementById('systemStatusContainer').innerHTML =
+          `<p style="color: red;">${escapeHtml(data.message)}</p>`;
+        return false;
       } catch (err) {
         document.getElementById('systemStatusContainer').innerHTML =
-          `<p style="color: red;">Erro ao carregar diagnóstico: ${err.message}</p>`;
+          `<p style="color: red;">Erro ao carregar diagnóstico: ${escapeHtml(err.message)}</p>`;
+        return false;
       }
     }
 
-    async function fetchUsersProgress() {
-      try {
-        const res = await fetch('/users-progress', {
-          headers: { 'x-admin-secret': ADMIN_SECRET }
-        });
+    async function loadAdminSection(sectionKey, options = {}) {
+      const state = adminSectionState[sectionKey];
+      if (!state || state.loading) {
+        return;
+      }
 
-        const data = await res.json();
+      if (state.loaded && !options.force) {
+        return;
+      }
 
-        if (data.success) {
-          renderUsersProgress(data.summaries);
-        } else {
-          document.getElementById('usersProgressContainer').innerHTML =
-            `<p style="color: red;">${data.message}</p>`;
+      state.loading = true;
+      let success = false;
+
+      if (sectionKey === 'system') {
+        success = await fetchSystemStatus();
+      } else {
+        success = await fetchAdminList(sectionKey);
+      }
+
+      state.loading = false;
+      if (success) {
+        state.loaded = true;
+      }
+    }
+
+    function refreshLoadedAdminSections(options = {}) {
+      const sectionsToRefresh = ['purchases', 'system', 'users', 'progress', 'credentials'];
+      sectionsToRefresh.forEach((sectionKey) => {
+        if (options.forceSections?.includes(sectionKey) || adminSectionState[sectionKey].loaded) {
+          loadAdminSection(sectionKey, { force: true });
         }
-      } catch (err) {
-        document.getElementById('usersProgressContainer').innerHTML =
-          `<p style="color: red;">Erro ao carregar progresso: ${err.message}</p>`;
-      }
+      });
     }
 
-    async function fetchCredentials() {
-      try {
-        const res = await fetch('/credential-deliveries', {
-          headers: { 'x-admin-secret': ADMIN_SECRET }
+    function setupLazySectionLoading() {
+      const sections = Array.from(document.querySelectorAll('[data-admin-section]'));
+      if (!('IntersectionObserver' in window)) {
+        sections.forEach((section) => {
+          loadAdminSection(section.dataset.adminSection);
         });
-
-        const data = await res.json();
-
-        if (data.success) {
-          renderCredentials(data.credentials);
-        } else {
-          document.getElementById('credentialsContainer').innerHTML =
-            `<p style="color: red;">${data.message}</p>`;
-        }
-      } catch (err) {
-        document.getElementById('credentialsContainer').innerHTML =
-          `<p style="color: red;">Erro ao carregar credenciais: ${err.message}</p>`;
+        return;
       }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const sectionKey = entry.target.dataset.adminSection;
+          loadAdminSection(sectionKey);
+          observer.unobserve(entry.target);
+        });
+      }, {
+        rootMargin: '200px 0px'
+      });
+
+      sections.forEach((section) => observer.observe(section));
+
+      loadAdminSection('purchases');
     }
 
-    function renderPurchases(requests) {
+    function renderPurchases(requests, pagination) {
       if (!requests || requests.length === 0) {
-        document.getElementById('purchasesContainer').innerHTML = 
-          '<p style="text-align: center; color: var(--text-muted);">Nenhuma solicitação de compra ainda.</p>';
+        renderEmptyState('purchasesContainer', 'Nenhuma solicitação de compra encontrada.');
         return;
       }
 
@@ -233,26 +402,26 @@
       `;
 
       requests.forEach(req => {
-        const date = new Date(req.createdAt).toLocaleDateString('pt-BR');
+        const date = formatDate(req.createdAt);
         const statusClass = req.status === 'approved' ? 'status-approved' : 'status-pending';
         const statusText = req.status === 'approved' ? 'Aprovada' : 'Pendente';
         const approvalSource = req.approvalSource
-          ? `${req.approvalSource}${req.paymentProvider ? ` / ${req.paymentProvider}` : ''}`
+          ? `${escapeHtml(req.approvalSource)}${req.paymentProvider ? ` / ${escapeHtml(req.paymentProvider)}` : ''}`
           : '-';
         const actionBtn = req.status === 'approved' 
           ? '<span style="color: var(--text-muted);">Já aprovada</span>'
           : `
-            <div class="admin-actions">
-              <button onclick="approveRequest(${req.id}, '${ADMIN_SECRET}')" class="approve-button">Aprovar</button>
-              <button onclick="simulateWebhook(${req.id}, '${ADMIN_SECRET}')" class="simulate-button">Simular webhook</button>
+            <div class="admin-actions" data-cy="admin-purchase-actions-${req.id}">
+              <button onclick="approveRequest(${req.id})" class="approve-button" data-cy="admin-approve-purchase-${req.id}">Aprovar</button>
+              <button onclick="simulateWebhook(${req.id})" class="simulate-button" data-cy="admin-simulate-webhook-${req.id}">Simular webhook</button>
             </div>
           `;
 
         html += `
-          <tr>
-            <td>${req.email}</td>
-            <td>${req.name || '-'}</td>
-            <td><code>${req.pixKey}</code></td>
+          <tr data-cy="admin-purchase-row-${req.id}">
+            <td>${escapeHtml(req.email)}</td>
+            <td>${escapeHtml(req.name || '-')}</td>
+            <td><code>${escapeHtml(req.pixKey)}</code></td>
             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
             <td>${approvalSource}</td>
             <td>${date}</td>
@@ -264,15 +433,15 @@
       html += `
           </tbody>
         </table>
+        ${buildPaginationFooter('purchases', pagination, 'solicitações')}
       `;
 
       document.getElementById('purchasesContainer').innerHTML = html;
     }
 
-    function renderUsers(users) {
+    function renderUsers(users, pagination) {
       if (!users || users.length === 0) {
-        document.getElementById('usersContainer').innerHTML =
-          '<p style="text-align: center; color: var(--text-muted);">Nenhum usuário cadastrado ainda.</p>';
+        renderEmptyState('usersContainer', 'Nenhum usuário encontrado.');
         return;
       }
 
@@ -291,15 +460,15 @@
       `;
 
       users.forEach(user => {
-        const expiresAt = new Date(user.expiresAt).toLocaleDateString('pt-BR');
+        const expiresAt = formatDate(user.expiresAt);
         const sessionClass = user.isActive ? 'status-approved' : 'status-pending';
         const sessionText = user.isActive ? 'Ativa' : 'Inativa';
 
         html += `
-          <tr>
+          <tr data-cy="admin-user-row-${user.id}">
             <td>${user.id}</td>
-            <td>${user.name || '-'}</td>
-            <td>${user.email}</td>
+            <td>${escapeHtml(user.name || '-')}</td>
+            <td>${escapeHtml(user.email)}</td>
             <td>${expiresAt}</td>
             <td><span class="status-badge ${sessionClass}">${sessionText}</span></td>
           </tr>
@@ -309,6 +478,7 @@
       html += `
           </tbody>
         </table>
+        ${buildPaginationFooter('users', pagination, 'usuários')}
       `;
 
       document.getElementById('usersContainer').innerHTML = html;
@@ -322,11 +492,11 @@
       }
 
       let html = `
-        <div class="system-meta-card">
+        <div class="system-meta-card" data-cy="admin-system-environment-card">
           <strong>Ambiente</strong>
           <span>${status.environment}</span>
         </div>
-        <div class="system-meta-card">
+        <div class="system-meta-card" data-cy="admin-system-database-card">
           <strong>Banco atual</strong>
           <span>${status.databasePath}</span>
         </div>
@@ -337,12 +507,12 @@
         const badgeText = item.ok ? 'OK' : 'Pendente';
 
         html += `
-          <article class="system-check-card">
+          <article class="system-check-card" data-cy="admin-system-check-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}">
             <div class="system-check-header">
               <strong>${item.label}</strong>
               <span class="status-badge ${badgeClass}">${badgeText}</span>
             </div>
-            <p>${item.detail}</p>
+            <p>${escapeHtml(item.detail)}</p>
           </article>
         `;
       });
@@ -350,10 +520,9 @@
       document.getElementById('systemStatusContainer').innerHTML = html;
     }
 
-    function renderUsersProgress(users) {
+    function renderUsersProgress(users, pagination) {
       if (!users || users.length === 0) {
-        document.getElementById('usersProgressContainer').innerHTML =
-          '<p style="text-align: center; color: var(--text-muted);">Nenhum progresso registrado ainda.</p>';
+        renderEmptyState('usersProgressContainer', 'Nenhum progresso encontrado.');
         return;
       }
 
@@ -373,16 +542,14 @@
       `;
 
       users.forEach(user => {
-        const lastUpdated = user.lastUpdatedAt
-          ? new Date(user.lastUpdatedAt).toLocaleDateString('pt-BR')
-          : '-';
+        const lastUpdated = formatDate(user.lastUpdatedAt);
         const certificateClass = user.certificateEligible ? 'status-approved' : 'status-pending';
         const certificateText = user.certificateEligible ? 'Liberado' : 'Pendente';
 
         html += `
-          <tr>
-            <td>${user.name || '-'}</td>
-            <td>${user.email}</td>
+          <tr data-cy="admin-progress-row-${user.id}">
+            <td>${escapeHtml(user.name || '-')}</td>
+            <td>${escapeHtml(user.email)}</td>
             <td>${user.completedModules} / ${user.totalModules}</td>
             <td>${user.quizAverage}%</td>
             <td>${lastUpdated}</td>
@@ -394,15 +561,15 @@
       html += `
           </tbody>
         </table>
+        ${buildPaginationFooter('progress', pagination, 'alunos')}
       `;
 
       document.getElementById('usersProgressContainer').innerHTML = html;
     }
 
-    function renderCredentials(credentials) {
+    function renderCredentials(credentials, pagination) {
       if (!credentials || credentials.length === 0) {
-        document.getElementById('credentialsContainer').innerHTML =
-          '<p style="text-align: center; color: var(--text-muted);">Nenhuma credencial gerada ainda.</p>';
+        renderEmptyState('credentialsContainer', 'Nenhuma credencial encontrada.');
         return;
       }
 
@@ -420,13 +587,13 @@
       `;
 
       credentials.forEach(item => {
-        const createdAt = new Date(item.createdAt).toLocaleDateString('pt-BR');
+        const createdAt = formatDate(item.createdAt);
 
         html += `
-          <tr>
-            <td>${item.name || '-'}</td>
-            <td>${item.email}</td>
-            <td><code>${item.plainPassword}</code></td>
+          <tr data-cy="admin-credential-row-${item.id}">
+            <td>${escapeHtml(item.name || '-')}</td>
+            <td>${escapeHtml(item.email)}</td>
+            <td><code>${escapeHtml(item.plainPassword)}</code></td>
             <td>${createdAt}</td>
           </tr>
         `;
@@ -435,12 +602,13 @@
       html += `
           </tbody>
         </table>
+        ${buildPaginationFooter('credentials', pagination, 'credenciais')}
       `;
 
       document.getElementById('credentialsContainer').innerHTML = html;
     }
 
-    async function approveRequest(requestId, secret) {
+    async function approveRequest(requestId) {
       if (!confirm('Tem certeza que deseja aprovar esta compra?')) return;
 
       try {
@@ -448,7 +616,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-admin-secret': secret
+            'x-admin-secret': ADMIN_SECRET
           },
           body: JSON.stringify({ requestId })
         });
@@ -457,11 +625,7 @@
 
         if (data.success) {
           showAdminStatus('Compra aprovada manualmente e email enviado ao cliente.', 'success');
-          fetchPurchases();
-          fetchSystemStatus();
-          fetchUsers();
-          fetchUsersProgress();
-          fetchCredentials();
+          refreshLoadedAdminSections({ forceSections: ['purchases', 'system'] });
         } else {
           showAdminStatus(`Erro: ${data.message}`, 'error');
         }
@@ -470,7 +634,7 @@
       }
     }
 
-    async function simulateWebhook(requestId, secret) {
+    async function simulateWebhook(requestId) {
       if (!confirm('Simular a confirmação automática de pagamento para esta compra?')) return;
 
       try {
@@ -478,7 +642,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-admin-secret': secret
+            'x-admin-secret': ADMIN_SECRET
           },
           body: JSON.stringify({ requestId, paymentProvider: 'mercado-pago-simulado' })
         });
@@ -487,11 +651,7 @@
 
         if (data.success) {
           showAdminStatus('Webhook simulado com sucesso. Acesso liberado automaticamente.', 'success');
-          fetchPurchases();
-          fetchSystemStatus();
-          fetchUsers();
-          fetchUsersProgress();
-          fetchCredentials();
+          refreshLoadedAdminSections({ forceSections: ['purchases', 'system'] });
         } else {
           showAdminStatus(`Erro: ${data.message}`, 'error');
         }
@@ -510,13 +670,8 @@
       window.location.href = 'login.html';
     }
 
-    // Load on page load
     window.addEventListener('DOMContentLoaded', () => {
-      fetchPurchases();
-      fetchSystemStatus();
-      fetchUsers();
-      fetchUsersProgress();
-      fetchCredentials();
+      setupLazySectionLoading();
     });
   </script>
 
@@ -569,10 +724,61 @@
       line-height: 1.6;
     }
 
+    .admin-list-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .admin-list-toolbar input {
+      flex: 1 1 280px;
+      min-width: 220px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(15, 23, 42, 0.68);
+      color: var(--text);
+    }
+
+    .compact-button {
+      min-height: auto;
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
+
     .admin-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+    }
+
+    .admin-pagination {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .admin-pagination-summary {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .admin-pagination-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .admin-pagination-actions span {
+      color: var(--text-muted);
+      font-size: 0.92rem;
     }
 
     .system-status-grid {

@@ -1,4 +1,4 @@
-# 🚀 GUIA RÁPIDO - PORTAL QA
+# 🚀 GUIA RÁPIDO - PORTAL QUALIDADE DE SOFTWARE
 
 ## Começar em 3 passos
 
@@ -15,6 +15,7 @@ set DATABASE_URL=postgresql://usuario:senha@host:5432/database
 
 # (Opcional) Se usar email real:
 set ADMIN_EMAIL=voce@email.com
+set PAYMENT_CLICK_NOTIFY_EMAIL=voce@email.com
 set SMTP_HOST=smtp.gmail.com
 set SMTP_PORT=587
 set SMTP_USER=seu-email@gmail.com
@@ -47,7 +48,7 @@ Servidor rodando em: **http://localhost:3000**
 
 ### 1️⃣ Cliente acessa landing
 - Vê descrição do curso
-- Clica em "Começar a estudar QA agora"
+- Clica em "Começar a estudar Qualidade de Software agora"
 
 ### 2️⃣ Cliente preenche cadastro
 - Informa nome e email
@@ -120,7 +121,7 @@ Se SMTP não estiver configurado, emails aparecem assim:
 ```
 --- EMAIL SIMULADO ---
 Para: aluno@email.com
-Assunto: Compra de curso QA aprovada
+Assunto: Compra de curso de Qualidade de Software aprovada
 Seu pagamento foi aprovado...
 ----------------------
 ```
@@ -154,7 +155,7 @@ Procurar por: "R$ 197,00"
 
 ### Mudar nome do curso
 Editar: `public/index.html`
-Procurar por: "Portal QA"
+Procurar por: "Portal Qualidade de Software"
 
 ### Adicionar novo módulo
 1. Criar `public/novo-modulo.html`

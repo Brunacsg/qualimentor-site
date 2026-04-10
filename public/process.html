@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="intro.html">Introdução</a>
       <a href="manual.html">Manual</a>
       <a href="automation.html">Automação</a>
@@ -19,7 +19,7 @@
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
       <a href="career.html">Carreira</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -29,17 +29,17 @@
         <span>02</span>
         <div>
           <h2>Ciclo de Teste e Processos</h2>
-          <p>Entenda o fluxo completo do QA em um projeto.</p>
+          <p>Entenda o fluxo completo da Qualidade de Software em um projeto.</p>
         </div>
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
@@ -48,7 +48,7 @@
           <ul>
             <li>Aprender o ciclo completo do STLC</li>
             <li>Entender como métricas de qualidade são usadas para decisões</li>
-            <li>Reconhecer os principais artefatos de planejamento de QA</li>
+            <li>Reconhecer os principais artefatos de planejamento de Qualidade de Software</li>
           </ul>
         </div>
         <div class="resource-card">
@@ -84,7 +84,7 @@
           </div>
         </div>
 
-        <h3>Atividades importantes do QA</h3>
+        <h3>Atividades importantes de Quality Assurance</h3>
         <ul>
           <li><strong>Análise de requisitos:</strong> Garantir clareza e testabilidade.</li>
           <li><strong>Definição de critérios de aceitação:</strong> O que define "pronto".</li>

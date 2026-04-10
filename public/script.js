@@ -19,10 +19,10 @@ const CERTIFICATE_CNPJ = '59.758.519/0001-86';
 const MODULE_QUIZZES = {
   'module-1': {
     title: 'Questionário do módulo',
-    description: 'Revise os conceitos centrais sobre o papel do QA e seus princípios de atuação.',
+    description: 'Revise os conceitos centrais sobre o papel de Quality Assurance e seus princípios de atuação.',
     questions: [
       {
-        prompt: 'Qual é um dos principais objetivos do QA em um projeto?',
+        prompt: 'Qual é um dos principais objetivos de Quality Assurance em um projeto?',
         options: [
           'Apenas corrigir bugs depois da produção',
           'Garantir qualidade, reduzir riscos e melhorar processos',
@@ -30,7 +30,7 @@ const MODULE_QUIZZES = {
           'Escrever apenas documentação técnica'
         ],
         answer: 1,
-        explanation: 'QA atua para prevenir defeitos, reduzir riscos e aumentar a confiança no produto.'
+        explanation: 'Quality Assurance atua para prevenir defeitos, reduzir riscos e aumentar a confiança no produto.'
       },
       {
         prompt: 'O princípio “prevenção vs correção” significa que:',
@@ -38,13 +38,13 @@ const MODULE_QUIZZES = {
           'Corrigir defeitos sempre custa menos',
           'Prevenir defeitos tende a ser mais eficiente do que corrigi-los depois',
           'Defeitos só devem ser tratados no fim do projeto',
-          'QA não precisa participar do início do projeto'
+          'Quality Assurance não precisa participar do início do projeto'
         ],
         answer: 1,
         explanation: 'O módulo reforça que prevenir problemas cedo reduz retrabalho e custo.'
       },
       {
-        prompt: 'Qual das opções abaixo representa uma responsabilidade típica de QA?',
+        prompt: 'Qual das opções abaixo representa uma responsabilidade típica de Quality Assurance?',
         options: [
           'Ignorar requisitos não-funcionais',
           'Executar testes, registrar defeitos e acompanhar sua resolução',
@@ -52,7 +52,7 @@ const MODULE_QUIZZES = {
           'Alterar regras de negócio sem alinhamento'
         ],
         answer: 1,
-        explanation: 'QA revisa requisitos, executa testes e acompanha defeitos até a resolução.'
+        explanation: 'Quality Assurance revisa requisitos, executa testes e acompanha defeitos até a resolução.'
       }
     ]
   },
@@ -87,7 +87,7 @@ const MODULE_QUIZZES = {
         options: [
           'Quando a execução pode ser considerada concluída',
           'Quais browsers serão usados',
-          'O salário do QA responsável',
+          'O salário do profissional de Quality Assurance responsável',
           'A tecnologia escolhida pelo backend'
         ],
         answer: 0,
@@ -175,7 +175,7 @@ const MODULE_QUIZZES = {
   },
   'module-5': {
     title: 'Questionário do módulo',
-    description: 'Revise as ferramentas de QA para gestão, bugs, APIs e CI/CD.',
+    description: 'Revise as ferramentas de Qualidade de Software para gestão, bugs, APIs e CI/CD.',
     questions: [
       {
         prompt: 'Qual ferramenta do módulo é amplamente usada para bug tracking com workflows customizáveis?',
@@ -233,7 +233,7 @@ const MODULE_QUIZZES = {
           'Ignorar critérios de aceitação',
           'Usar linguagem natural para descrever comportamentos e cenários',
           'Executar apenas testes unitários',
-          'Eliminar a participação do QA'
+          'Eliminar a participação de Quality Assurance'
         ],
         answer: 1,
         explanation: 'BDD usa cenários em linguagem natural, frequentemente com Gherkin.'
@@ -331,10 +331,10 @@ const MODULE_QUIZZES = {
   },
   'module-9': {
     title: 'Questionário do módulo',
-    description: 'Confira se você absorveu as principais trilhas, habilidades e próximos passos da carreira em QA.',
+    description: 'Confira se você absorveu as principais trilhas, habilidades e próximos passos da carreira em Quality Assurance.',
     questions: [
       {
-        prompt: 'Qual certificação foi apresentada como base internacional para QA?',
+        prompt: 'Qual certificação foi apresentada como base internacional para Quality Assurance?',
         options: [
           'ISTQB Foundation',
           'CCNA',
@@ -342,18 +342,18 @@ const MODULE_QUIZZES = {
           'PMP'
         ],
         answer: 0,
-        explanation: 'ISTQB Foundation foi citada como certificação básica importante para QA.'
+        explanation: 'ISTQB Foundation foi citada como certificação básica importante para Quality Assurance.'
       },
       {
         prompt: 'Qual trajetória tem foco forte em automação e desenvolvimento de frameworks de teste?',
         options: [
-          'QA Engineer',
+          'Quality Assurance Engineer',
           'Product Owner',
           'UX Writer',
           'Scrum Master júnior'
         ],
         answer: 0,
-        explanation: 'O módulo destaca QA Engineer como perfil mais técnico com foco em automação.'
+        explanation: 'O módulo destaca Quality Assurance Engineer como perfil mais técnico com foco em automação.'
       },
       {
         prompt: 'Entre as habilidades técnicas essenciais citadas, está:',
@@ -373,7 +373,7 @@ const MODULE_QUIZZES = {
 const MODULE_QUIZ_EXPANSIONS = {
   'module-1': [
     {
-      prompt: 'Quando o QA participa cedo da descoberta de requisitos, o principal ganho é:',
+      prompt: 'Quando Quality Assurance participa cedo da descoberta de requisitos, o principal ganho é:',
       options: [
         'Aumentar a quantidade de bugs em produção',
         'Reduzir ambiguidades e detectar riscos antes da construção',
@@ -384,7 +384,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Participar cedo ajuda a esclarecer expectativas e evita que defeitos sejam construídos no produto.'
     },
     {
-      prompt: 'Qual atitude mostra visão de negócio em QA?',
+      prompt: 'Qual atitude mostra visão de negócio em Quality Assurance?',
       options: [
         'Priorizar todos os defeitos da mesma forma',
         'Avaliar impacto do defeito sobre cliente, receita e operação',
@@ -392,10 +392,10 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Testar sem considerar contexto de uso'
       ],
       answer: 1,
-      explanation: 'QA maduro prioriza risco com base em impacto real para cliente e negócio.'
+      explanation: 'Quality Assurance maduro prioriza risco com base em impacto real para cliente e negócio.'
     },
     {
-      prompt: 'Uma boa colaboração entre QA e desenvolvimento depende de:',
+      prompt: 'Uma boa colaboração entre Quality Assurance e desenvolvimento depende de:',
       options: [
         'Comunicação clara e evidências objetivas',
         'Mensagens vagas sobre o problema',
@@ -419,8 +419,8 @@ const MODULE_QUIZ_EXPANSIONS = {
     {
       prompt: 'Qual frase resume melhor a qualidade como responsabilidade compartilhada?',
       options: [
-        'Somente o QA deve garantir qualidade',
-        'Qualidade depende da colaboração entre produto, desenvolvimento e QA',
+        'Somente Quality Assurance deve garantir qualidade',
+        'Qualidade depende da colaboração entre produto, desenvolvimento e Quality Assurance',
         'O cliente identifica todos os problemas importantes',
         'Testes substituem decisões de engenharia'
       ],
@@ -466,7 +466,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       prompt: 'Critérios de entrada ajudam o time a decidir se:',
       options: [
         'Já existe base suficiente para iniciar a etapa de testes',
-        'O QA deve ignorar ambientes instáveis',
+        'Quality Assurance deve ignorar ambientes instáveis',
         'Todos os defeitos foram corrigidos',
         'O roadmap do semestre foi encerrado'
       ],
@@ -477,7 +477,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       prompt: 'Uma métrica de cobertura de testes ajuda a responder:',
       options: [
         'Quanto do escopo planejado foi validado',
-        'Qual é o salário médio do QA',
+        'Qual é o salário médio em Quality Assurance',
         'Quantas reuniões ocorreram na sprint',
         'Quem aprovou o deploy'
       ],
@@ -580,7 +580,7 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Urgência de negócio para correção',
         'Apenas o nome do módulo afetado',
         'Somente o tamanho do print anexado',
-        'A preferência do QA por um tipo de teste'
+        'A preferência do profissional de Quality Assurance por um tipo de teste'
       ],
       answer: 0,
       explanation: 'Prioridade combina impacto, urgência e contexto de negócio.'
@@ -733,7 +733,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Esses recursos aceleram testes repetitivos e melhoram organização.'
     },
     {
-      prompt: 'Uma integração de QA com CI/CD traz como ganho principal:',
+      prompt: 'Uma integração de Quality Assurance com CI/CD traz como ganho principal:',
       options: [
         'Feedback rápido sobre regressões antes da entrega',
         'Fim da necessidade de análise de logs',
@@ -755,7 +755,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Versionamento ajuda a controlar mudanças, colaborar e voltar para estados confiáveis.'
     },
     {
-      prompt: 'Ao escolher uma ferramenta de QA, um critério relevante é:',
+      prompt: 'Ao escolher uma ferramenta de Qualidade de Software, um critério relevante é:',
       options: [
         'Adequação ao problema, integração com o time e custo operacional',
         'Apenas a cor da interface',
@@ -768,7 +768,7 @@ const MODULE_QUIZ_EXPANSIONS = {
   ],
   'module-6': [
     {
-      prompt: 'Em times ágeis, QA agrega valor ao participar de refinamentos porque:',
+      prompt: 'Em times ágeis, Quality Assurance agrega valor ao participar de refinamentos porque:',
       options: [
         'Ajuda a antecipar critérios, riscos e cenários de teste',
         'Elimina a necessidade de backlog',
@@ -795,13 +795,13 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Claros, observável e alinhado ao comportamento esperado',
         'Cheio de detalhes técnicos irrelevantes para o negócio',
         'Ambíguo para acomodar qualquer resultado',
-        'Usado apenas por QA, sem participação do time'
+        'Usado apenas por Quality Assurance, sem participação do time'
       ],
       answer: 0,
       explanation: 'BDD funciona melhor quando descreve comportamento de forma clara e colaborativa.'
     },
     {
-      prompt: 'Em uma retrospectiva, o olhar de QA pode contribuir para:',
+      prompt: 'Em uma retrospectiva, o olhar de Quality Assurance pode contribuir para:',
       options: [
         'Melhorar processo, fluxo de defeitos e qualidade da entrega',
         'Cancelar todo planejamento seguinte',
@@ -812,7 +812,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Retrospectiva é espaço para ajustes de processo, comunicação e qualidade.'
     },
     {
-      prompt: 'Integração contínua favorece QA porque:',
+      prompt: 'Integração contínua favorece Quality Assurance porque:',
       options: [
         'Entrega feedback frequente sobre quebras logo após mudanças',
         'Reduz a visibilidade sobre defeitos',
@@ -834,7 +834,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Em times maduros, qualidade é construída continuamente.'
     },
     {
-      prompt: 'DevSecOps amplia a visão do QA ao incluir também:',
+      prompt: 'DevSecOps amplia a visão de Quality Assurance ao incluir também:',
       options: [
         'Segurança e conformidade no fluxo contínuo de entrega',
         'Somente testes manuais de interface',
@@ -913,7 +913,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Controle de acesso inadequado é um risco alto em aplicações com dados sensíveis.'
     },
     {
-      prompt: 'Ao relatar vulnerabilidades, o QA deve priorizar:',
+      prompt: 'Ao relatar vulnerabilidades, o profissional de Quality Assurance deve priorizar:',
       options: [
         'Impacto, evidências e possibilidade de exploração',
         'Apenas prints sem explicação',
@@ -1005,7 +1005,7 @@ const MODULE_QUIZ_EXPANSIONS = {
   ],
   'module-9': [
     {
-      prompt: 'Construir portfólio em QA ajuda porque:',
+      prompt: 'Construir portfólio em Quality Assurance ajuda porque:',
       options: [
         'Demonstra raciocínio, prática e repertório em processos reais',
         'Substitui totalmente entrevistas',
@@ -1013,10 +1013,10 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Serve apenas para redes sociais'
       ],
       answer: 0,
-      explanation: 'Portfólio mostra na prática como a pessoa pensa, executa e comunica QA.'
+      explanation: 'Portfólio mostra na prática como a pessoa pensa, executa e comunica Quality Assurance.'
     },
     {
-      prompt: 'Em uma entrevista de QA, costuma gerar valor explicar:',
+      prompt: 'Em uma entrevista de Quality Assurance, costuma gerar valor explicar:',
       options: [
         'Como você prioriza riscos, registra defeitos e toma decisões de teste',
         'Apenas qual ferramenta você acha bonita',
@@ -1027,7 +1027,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Entrevistadores valorizam raciocínio prático e capacidade de decisão.'
     },
     {
-      prompt: 'Para crescer em QA, é útil combinar habilidades técnicas com:',
+      prompt: 'Para crescer em Quality Assurance, é útil combinar habilidades técnicas com:',
       options: [
         'Comunicação, visão de negócio e colaboração',
         'Apenas decorar siglas',
@@ -1035,10 +1035,10 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Evitar contato com produto e desenvolvimento'
       ],
       answer: 0,
-      explanation: 'Carreira forte em QA une técnica com comunicação e contexto de negócio.'
+      explanation: 'Carreira forte em Quality Assurance une técnica com comunicação e contexto de negócio.'
     },
     {
-      prompt: 'Aprender SQL é importante em QA porque:',
+      prompt: 'Aprender SQL é importante em Quality Assurance porque:',
       options: [
         'Ajuda a validar dados e investigar comportamentos no backend',
         'Serve apenas para times de marketing',
@@ -1049,7 +1049,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'SQL permite validar persistência, integrações e consistência de dados.'
     },
     {
-      prompt: 'Uma postura profissional em QA inclui:',
+      prompt: 'Uma postura profissional em Quality Assurance inclui:',
       options: [
         'Aprendizado contínuo e melhoria constante do processo',
         'Dependência total de instruções prontas',
@@ -1057,10 +1057,10 @@ const MODULE_QUIZ_EXPANSIONS = {
         'Ignorar métricas e retrospectivas'
       ],
       answer: 0,
-      explanation: 'QA evolui com estudo contínuo, prática e ajuste constante de processo.'
+      explanation: 'Quality Assurance evolui com estudo contínuo, prática e ajuste constante de processo.'
     },
     {
-      prompt: 'Ao montar currículo para QA, faz mais sentido destacar:',
+      prompt: 'Ao montar currículo para Quality Assurance, faz mais sentido destacar:',
       options: [
         'Resultados, ferramentas, contexto e responsabilidades exercidas',
         'Somente cursos sem aplicação',
@@ -1071,7 +1071,7 @@ const MODULE_QUIZ_EXPANSIONS = {
       explanation: 'Currículo eficaz mostra impacto, contexto e repertório prático.'
     },
     {
-      prompt: 'A evolução de carreira em QA costuma ser fortalecida por:',
+      prompt: 'A evolução de carreira em Quality Assurance costuma ser fortalecida por:',
       options: [
         'Especialização progressiva e exposição a diferentes contextos de teste',
         'Repetir sempre o mesmo tipo de atividade sem aprofundamento',
@@ -1095,13 +1095,13 @@ Object.entries(MODULE_QUIZ_EXPANSIONS).forEach(([moduleId, questions]) => {
 
 const MODULE_DETAILED_CONTENT = {
   'module-1': {
-    summary: 'Este aprofundamento transforma a introdução em uma base real de curso, conectando o papel do QA à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
+    summary: 'Este aprofundamento transforma a introdução em uma base real de curso, conectando o papel de Quality Assurance à operação do dia a dia, ao impacto no negócio e à forma como a qualidade influencia o ciclo inteiro de desenvolvimento.',
     sections: [
       {
-        heading: 'Como QA gera valor para o negócio',
+        heading: 'Como Quality Assurance gera valor para o negócio',
         paragraphs: [
-          'Em um curso profissionalizante de QA, é essencial entender que qualidade não é um fim isolado. O QA protege receita, reputação e experiência do cliente. Um defeito em login, checkout, cálculo de frete ou emissão de nota pode gerar perda de conversão, chamados de suporte, devoluções e desgaste da marca.',
-          'Por isso, o profissional de QA precisa saber traduzir problemas técnicos em impacto de negócio. Ao priorizar testes, não basta perguntar “o que pode quebrar?”, mas também “o que acontece com cliente, operação, suporte e faturamento se isso falhar?”. Esse raciocínio é o que diferencia um executor de testes de um profissional estratégico.'
+          'Em um curso profissionalizante de Quality Assurance, é essencial entender que qualidade não é um fim isolado. Quality Assurance protege receita, reputação e experiência do cliente. Um defeito em login, checkout, cálculo de frete ou emissão de nota pode gerar perda de conversão, chamados de suporte, devoluções e desgaste da marca.',
+          'Por isso, o profissional de Quality Assurance precisa saber traduzir problemas técnicos em impacto de negócio. Ao priorizar testes, não basta perguntar “o que pode quebrar?”, mas também “o que acontece com cliente, operação, suporte e faturamento se isso falhar?”. Esse raciocínio é o que diferencia um executor de testes de um profissional estratégico.'
         ],
         bullets: [
           'Risco técnico: falha de validação, integração ou regra de negócio.',
@@ -1111,10 +1111,10 @@ const MODULE_DETAILED_CONTENT = {
         ]
       },
       {
-        heading: 'Mentalidade de QA moderno',
+        heading: 'Mentalidade moderna de Quality Assurance',
         paragraphs: [
-          'QA moderno participa desde a descoberta do problema até a validação da solução em produção. Isso inclui revisar requisitos, levantar ambiguidades, sugerir critérios de aceitação, definir cenários críticos, validar dados e acompanhar métricas após o release.',
-          'Outro ponto central é a comunicação. Um bom QA sabe registrar defeitos com clareza, negociar prioridade, demonstrar risco com evidências e alinhar expectativa com produto e desenvolvimento. Em equipes maduras, qualidade é uma responsabilidade compartilhada, mas o QA frequentemente atua como facilitador dessa disciplina.'
+          'Quality Assurance moderno participa desde a descoberta do problema até a validação da solução em produção. Isso inclui revisar requisitos, levantar ambiguidades, sugerir critérios de aceitação, definir cenários críticos, validar dados e acompanhar métricas após o release.',
+          'Outro ponto central é a comunicação. Um bom profissional de Quality Assurance sabe registrar defeitos com clareza, negociar prioridade, demonstrar risco com evidências e alinhar expectativa com produto e desenvolvimento. Em equipes maduras, qualidade é uma responsabilidade compartilhada, mas Quality Assurance frequentemente atua como facilitador dessa disciplina.'
         ],
         bullets: [
           'Participar da definição de requisitos e critérios de aceite.',
@@ -1125,16 +1125,16 @@ const MODULE_DETAILED_CONTENT = {
       }
     ],
     exerciseTitle: 'Passo a passo do exercício prático',
-    exerciseIntro: 'O objetivo é montar uma visão inicial de QA para um fluxo de checkout de e-commerce, conectando responsabilidades, riscos e ações de validação.',
+    exerciseIntro: 'O objetivo é montar uma visão inicial de Quality Assurance para um fluxo de checkout de e-commerce, conectando responsabilidades, riscos e ações de validação.',
     steps: [
       'Escolha um cenário simples de compra: produto no carrinho, preenchimento de endereço, escolha de frete e pagamento.',
-      'Liste 3 responsabilidades de QA nesse fluxo, por exemplo: revisar regras de cálculo, validar mensagens de erro e testar integração de pagamento.',
+      'Liste 3 responsabilidades de Quality Assurance nesse fluxo, por exemplo: revisar regras de cálculo, validar mensagens de erro e testar integração de pagamento.',
       'Mapeie pelo menos 5 riscos: cupom inválido aceito, valor final incorreto, frete divergente, pagamento duplicado e falha de confirmação.',
       'Transforme os riscos em ações de teste. Para cada risco, escreva o que será validado, em qual etapa e com qual resultado esperado.',
       'Feche o exercício com um mini-plano contendo objetivo, escopo, riscos prioritários e próximos passos de execução.'
     ],
     deliverables: [
-      'Lista de responsabilidades do QA no fluxo.',
+      'Lista de responsabilidades de Quality Assurance no fluxo.',
       'Mapa de riscos do checkout.',
       'Mini-plano de validação com prioridade e objetivo.'
     ]
@@ -1159,7 +1159,7 @@ const MODULE_DETAILED_CONTENT = {
         heading: 'Métricas que ajudam a decidir',
         paragraphs: [
           'Métricas não devem servir apenas para “encher relatório”. Elas precisam apoiar decisão. Cobertura de testes mostra amplitude. Tempo médio de resolução mostra fluidez do processo. Defeitos por severidade ajudam a entender risco residual. Reabertura de bugs pode sinalizar falha de entendimento ou baixa qualidade na correção.',
-          'Um QA mais maduro não apresenta números isolados; ele conta a história por trás deles. Exemplo: “Cobertura subiu, mas os defeitos críticos também cresceram na integração de pagamento. Precisamos revisar critérios de entrada e aumentar testes de contrato”.'
+          'Um profissional de Quality Assurance mais maduro não apresenta números isolados; ele conta a história por trás deles. Exemplo: “Cobertura subiu, mas os defeitos críticos também cresceram na integração de pagamento. Precisamos revisar critérios de entrada e aumentar testes de contrato”.'
         ],
         bullets: [
           'Cobertura sem criticidade pode gerar falsa segurança.',
@@ -1190,7 +1190,7 @@ const MODULE_DETAILED_CONTENT = {
       {
         heading: 'Estratégia de cobertura em testes manuais',
         paragraphs: [
-          'Testar manualmente não significa clicar aleatoriamente. Uma estratégia de cobertura profissional combina cenários positivos, negativos, alternativos, de borda, de integração e de usabilidade. O QA precisa decidir o que é essencial em função de risco, frequência de uso e criticidade de negócio.',
+          'Testar manualmente não significa clicar aleatoriamente. Uma estratégia de cobertura profissional combina cenários positivos, negativos, alternativos, de borda, de integração e de usabilidade. O profissional de Quality Assurance precisa decidir o que é essencial em função de risco, frequência de uso e criticidade de negócio.',
           'Além disso, bons testes manuais equilibram roteiro e observação. Um caso de teste estruturado garante repetibilidade. Já o olhar exploratório permite identificar mensagens confusas, comportamento inesperado ou lacunas de requisito que um roteiro formal talvez não cubra.'
         ],
         bullets: [
@@ -1215,7 +1215,7 @@ const MODULE_DETAILED_CONTENT = {
       }
     ],
     exerciseTitle: 'Passo a passo do exercício prático',
-    exerciseIntro: 'Você vai produzir três casos de teste para cadastro e dois defeitos esperados, como se estivesse preparando a documentação inicial de QA.',
+    exerciseIntro: 'Você vai produzir três casos de teste para cadastro e dois defeitos esperados, como se estivesse preparando a documentação inicial de Quality Assurance.',
     steps: [
       'Escolha o fluxo de cadastro com campos obrigatórios, validação de email e confirmação de senha.',
       'Escreva o primeiro caso de teste para cadastro válido, incluindo pré-condição, passos, dados e resultado esperado.',
@@ -1281,7 +1281,7 @@ const MODULE_DETAILED_CONTENT = {
         heading: 'Ferramentas como cadeia de trabalho',
         paragraphs: [
           'Em um ambiente profissional, as ferramentas não vivem isoladas. O caso de teste nasce no gerenciamento, a evidência pode ser anexada no rastreador de defeitos, o build é executado no pipeline e os resultados voltam para dashboards e relatórios. Entender essas conexões é tão importante quanto conhecer o nome de cada ferramenta.',
-          'Um QA de maior senioridade sabe escolher o conjunto mais adequado para o contexto do time. Nem sempre a ferramenta “mais famosa” é a melhor. O critério inclui orçamento, curva de aprendizado, integração com stack existente e maturidade da equipe.'
+          'Um profissional de Quality Assurance de maior senioridade sabe escolher o conjunto mais adequado para o contexto do time. Nem sempre a ferramenta “mais famosa” é a melhor. O critério inclui orçamento, curva de aprendizado, integração com stack existente e maturidade da equipe.'
         ],
         bullets: [
           'Ferramentas devem apoiar o processo, não complicá-lo.',
@@ -1305,7 +1305,7 @@ const MODULE_DETAILED_CONTENT = {
       }
     ],
     exerciseTitle: 'Passo a passo do exercício prático',
-    exerciseIntro: 'Você vai montar uma stack mínima de QA para um projeto com testes manuais, automação e gestão de defeitos.',
+    exerciseIntro: 'Você vai montar uma stack mínima de Qualidade de Software para um projeto com testes manuais, automação e gestão de defeitos.',
     steps: [
       'Defina o cenário: por exemplo, uma aplicação web com frontend, API e deploy contínuo.',
       'Escolha uma ferramenta para gestão de testes, uma para bug tracking, uma para API, uma para automação UI e uma para CI/CD.',
@@ -1314,18 +1314,18 @@ const MODULE_DETAILED_CONTENT = {
       'Finalize apontando integrações desejadas entre as ferramentas e quais relatórios você pretende extrair.'
     ],
     deliverables: [
-      'Mapa da stack de QA.',
+      'Mapa da stack de Qualidade de Software.',
       'Justificativa de escolha por ferramenta.',
       'Fluxo operacional entre requisitos, testes, bugs e pipeline.'
     ]
   },
   'module-6': {
-    summary: 'O módulo agora aprofunda a atuação do QA em times ágeis, cobrindo colaboração, refinamento, critérios de aceite e o papel da qualidade em ciclos curtos e contínuos.',
+    summary: 'O módulo agora aprofunda a atuação de Quality Assurance em times ágeis, cobrindo colaboração, refinamento, critérios de aceite e o papel da qualidade em ciclos curtos e contínuos.',
     sections: [
       {
-        heading: 'QA como agente de clareza em times ágeis',
+        heading: 'Quality Assurance como agente de clareza em times ágeis',
         paragraphs: [
-          'Em contextos ágeis, QA não entra apenas no fim da sprint. O profissional ajuda a esclarecer histórias, levantar riscos cedo e reduzir retrabalho. Uma boa pergunta no refinement pode evitar dias de desenvolvimento em cima de um requisito ambíguo.',
+          'Em contextos ágeis, Quality Assurance não entra apenas no fim da sprint. O profissional ajuda a esclarecer histórias, levantar riscos cedo e reduzir retrabalho. Uma boa pergunta no refinement pode evitar dias de desenvolvimento em cima de um requisito ambíguo.',
           'Isso exige participação ativa em ceremonies, leitura crítica de histórias, validação de critérios de aceitação e alinhamento com desenvolvimento e produto. Quanto menor o ciclo de entrega, maior a importância de detectar ruído cedo.'
         ],
         bullets: [
@@ -1338,22 +1338,22 @@ const MODULE_DETAILED_CONTENT = {
       {
         heading: 'DevOps, BDD e Definition of Done na prática',
         paragraphs: [
-          'BDD e ATDD ajudam a alinhar negócio, desenvolvimento e QA em torno do comportamento esperado. Já o DevOps amplia a responsabilidade da qualidade para o pipeline, infraestrutura, monitoramento e feedback contínuo. O QA deixa de atuar apenas em funcionalidade e passa a influenciar a forma como o software é entregue.',
+          'BDD e ATDD ajudam a alinhar negócio, desenvolvimento e Quality Assurance em torno do comportamento esperado. Já o DevOps amplia a responsabilidade da qualidade para o pipeline, infraestrutura, monitoramento e feedback contínuo. Quality Assurance deixa de atuar apenas em funcionalidade e passa a influenciar a forma como o software é entregue.',
           'A Definition of Done precisa refletir essa maturidade. Não basta “código pronto”; o item precisa incluir testes, evidências, documentação mínima, validação de ambiente e ausência de riscos críticos remanescentes.'
         ],
         bullets: [
           'BDD aproxima requisito e teste.',
           'DevOps amplia a visão de qualidade para entrega contínua.',
           'DoD bem definida reduz discussão subjetiva sobre “pronto”.',
-          'QA contribui com prevenção e observabilidade.'
+          'Quality Assurance contribui com prevenção e observabilidade.'
         ]
       }
     ],
     exerciseTitle: 'Passo a passo do exercício prático',
-    exerciseIntro: 'Você vai montar um roteiro de daily standup em que o QA comunica progresso, risco e bloqueios com objetividade.',
+    exerciseIntro: 'Você vai montar um roteiro de daily standup em que o profissional de Quality Assurance comunica progresso, risco e bloqueios com objetividade.',
     steps: [
       'Escolha um contexto simples, como uma sprint que está entregando login, cadastro e recuperação de senha.',
-      'Escreva o que o QA fez ontem: por exemplo, revisou critérios, executou casos críticos e abriu dois defeitos major.',
+      'Escreva o que o profissional de Quality Assurance fez ontem: por exemplo, revisou critérios, executou casos críticos e abriu dois defeitos major.',
       'Escreva o plano de hoje: criar cenários de regressão, validar correções e preparar smoke test para staging.',
       'Liste um bloqueio realista, como ausência de ambiente, massa de dados incompleta ou endpoint instável.',
       'Finalize com uma frase objetiva de risco, mostrando impacto caso o bloqueio permaneça até o fim da sprint.'
@@ -1371,7 +1371,7 @@ const MODULE_DETAILED_CONTENT = {
         heading: 'Pensamento orientado a risco em segurança',
         paragraphs: [
           'Testar segurança não é sair executando payloads sem contexto. O primeiro passo é entender superfície de ataque, ativos críticos e impacto de exploração. Em muitos casos, o problema mais grave não é a vulnerabilidade em si, mas o dado exposto, a permissão indevida ou a ausência de rastreabilidade do incidente.',
-          'QA pode contribuir muito ao testar autenticação, autorização, exposição de informações sensíveis, mensagens de erro excessivas, sessão, headers, validação de entrada e componentes desatualizados. Mesmo sem ser um especialista em pentest, o profissional de qualidade pode elevar muito o padrão do produto.'
+          'Quality Assurance pode contribuir muito ao testar autenticação, autorização, exposição de informações sensíveis, mensagens de erro excessivas, sessão, headers, validação de entrada e componentes desatualizados. Mesmo sem ser um especialista em pentest, o profissional de qualidade pode elevar muito o padrão do produto.'
         ],
         bullets: [
           'Mapear ativos críticos e pontos de entrada.',
@@ -1429,7 +1429,7 @@ const MODULE_DETAILED_CONTENT = {
         heading: 'Interpretação e comunicação dos resultados',
         paragraphs: [
           'Um bom relatório de performance separa sintoma de causa provável. Exemplo: tempo de resposta cresceu após 150 usuários, CPU subiu pouco, mas memória e conexões com banco saturaram. Isso direciona investigação. Sem essa leitura, o time recebe apenas números sem ação clara.',
-          'Em nível profissional, QA também precisa recomendar próximos passos: repetir teste com cache aquecido, isolar endpoint, revisar consulta SQL, validar pool de conexões ou medir impacto de compressão e CDN.'
+          'Em nível profissional, Quality Assurance também precisa recomendar próximos passos: repetir teste com cache aquecido, isolar endpoint, revisar consulta SQL, validar pool de conexões ou medir impacto de compressão e CDN.'
         ],
         bullets: [
           'Cruze métricas para formular hipótese técnica.',
@@ -1460,8 +1460,8 @@ const MODULE_DETAILED_CONTENT = {
       {
         heading: 'Construção de posicionamento profissional',
         paragraphs: [
-          'Crescer em QA exige mais do que consumir conteúdo técnico. O profissional precisa construir evidência de capacidade: projetos, testes automatizados, relatórios, estudo de caso, GitHub, participação em comunidades e capacidade de explicar decisões. Recrutadores e líderes avaliam cada vez mais a clareza com que o candidato demonstra raciocínio de qualidade.',
-          'Outro ponto importante é escolher um eixo de aprofundamento sem abandonar a base. Um QA pode caminhar para automação, performance, segurança ou liderança, mas continua precisando dominar fundamentos, comunicação e visão de produto.'
+          'Crescer em Quality Assurance exige mais do que consumir conteúdo técnico. O profissional precisa construir evidência de capacidade: projetos, testes automatizados, relatórios, estudo de caso, GitHub, participação em comunidades e capacidade de explicar decisões. Recrutadores e líderes avaliam cada vez mais a clareza com que o candidato demonstra raciocínio de qualidade.',
+          'Outro ponto importante é escolher um eixo de aprofundamento sem abandonar a base. Um profissional de Quality Assurance pode caminhar para automação, performance, segurança ou liderança, mas continua precisando dominar fundamentos, comunicação e visão de produto.'
         ],
         bullets: [
           'Construa evidências práticas do que sabe fazer.',
@@ -1485,12 +1485,12 @@ const MODULE_DETAILED_CONTENT = {
       }
     ],
     exerciseTitle: 'Passo a passo do exercício prático',
-    exerciseIntro: 'Você vai transformar o conteúdo do módulo em um plano concreto de carreira e em um currículo mais forte para QA.',
+    exerciseIntro: 'Você vai transformar o conteúdo do módulo em um plano concreto de carreira e em um currículo mais forte para Quality Assurance.',
     steps: [
       'Abra o template de currículo do módulo e substitua as partes genéricas por sua experiência real, mesmo que seja acadêmica ou de projeto próprio.',
       'Liste três competências que você já possui e três lacunas que precisa desenvolver para a vaga que deseja.',
       'Monte um plano de 90 dias com estudo, prática e evidência: por exemplo SQL, API testing e automação básica.',
-      'Atualize LinkedIn e GitHub com descrição profissional, tecnologias estudadas e um pequeno projeto de QA.',
+      'Atualize LinkedIn e GitHub com descrição profissional, tecnologias estudadas e um pequeno projeto de Quality Assurance.',
       'Finalize revisando sua narrativa de entrevista: como você testaria login, como reportaria defeitos e como estruturaria uma regressão.'
     ],
     deliverables: [
@@ -1504,23 +1504,23 @@ const MODULE_DETAILED_CONTENT = {
 const MODULE_LEARNING_EXTRAS = {
   'module-1': {
     caseTitle: 'Estudo de caso: checkout com alta taxa de abandono',
-    caseScenario: 'Uma loja virtual percebe queda de conversão no checkout após uma atualização. O QA precisa analisar o fluxo, identificar riscos e propor validações prioritárias antes de um novo release.',
+    caseScenario: 'Uma loja virtual percebe queda de conversão no checkout após uma atualização. O profissional de Quality Assurance precisa analisar o fluxo, identificar riscos e propor validações prioritárias antes de um novo release.',
     caseTasks: [
       'Levante hipóteses de falha com impacto direto em conversão, como cálculo incorreto, falha no botão de pagamento ou mensagem confusa.',
       'Defina quais cenários devem ser testados primeiro com base em risco de negócio.',
       'Explique como você apresentaria esse risco para produto e desenvolvimento.'
     ],
     checklist: [
-      'Consigo explicar o papel de QA além de “testar bugs”.',
+      'Consigo explicar o papel de Quality Assurance além de “testar bugs”.',
       'Sei relacionar risco técnico com impacto de negócio.',
       'Entendo o conceito de prevenção versus correção.',
-      'Consigo listar responsabilidades centrais de QA.',
+      'Consigo listar responsabilidades centrais de Quality Assurance.',
       'Sei priorizar validações com foco no cliente final.'
     ],
     recap: [
-      'QA protege valor de negócio, não apenas qualidade técnica isolada.',
+      'Quality Assurance protege valor de negócio, não apenas qualidade técnica isolada.',
       'Prioridade de teste deve considerar impacto, frequência e criticidade.',
-      'Comunicação clara é parte essencial do trabalho de QA.'
+      'Comunicação clara é parte essencial do trabalho de Quality Assurance.'
     ]
   },
   'module-2': {
@@ -1588,7 +1588,7 @@ const MODULE_LEARNING_EXTRAS = {
   },
   'module-5': {
     caseTitle: 'Estudo de caso: time com ferramentas desconectadas',
-    caseScenario: 'Os casos de teste ficam em um lugar, os bugs em outro, o pipeline não publica resultados e ninguém confia nos relatórios de QA.',
+    caseScenario: 'Os casos de teste ficam em um lugar, os bugs em outro, o pipeline não publica resultados e ninguém confia nos relatórios de Quality Assurance.',
     caseTasks: [
       'Desenhe uma stack mínima conectando gestão, execução, bugs e CI/CD.',
       'Explique quais integrações são prioritárias e por quê.',
@@ -1611,19 +1611,19 @@ const MODULE_LEARNING_EXTRAS = {
     caseTitle: 'Estudo de caso: user story ambígua perto do fim da sprint',
     caseScenario: 'Uma história de login social está quase pronta, mas os critérios de aceitação não deixam claro como lidar com conta já existente e falha do provedor externo.',
     caseTasks: [
-      'Escreva perguntas que o QA faria no refinement.',
+      'Escreva perguntas que o profissional de Quality Assurance faria no refinement.',
       'Transforme a história em cenários testáveis.',
       'Defina uma mini Definition of Done para essa entrega.'
     ],
     checklist: [
-      'Entendo o papel do QA em cerimônias ágeis.',
+      'Entendo o papel de Quality Assurance em cerimônias ágeis.',
       'Consigo transformar critérios em cenários de teste.',
       'Sei explicar BDD, TDD e shift left com exemplos.',
       'Entendo o valor de DoD bem definida.',
       'Consigo comunicar risco em ciclos curtos de entrega.'
     ],
     recap: [
-      'QA em ágil atua cedo para reduzir retrabalho.',
+      'Quality Assurance em ágil atua cedo para reduzir retrabalho.',
       'BDD ajuda a alinhar requisito e comportamento esperado.',
       'Definition of Done forte melhora previsibilidade e qualidade.'
     ]
@@ -1671,8 +1671,8 @@ const MODULE_LEARNING_EXTRAS = {
     ]
   },
   'module-9': {
-    caseTitle: 'Estudo de caso: preparação para vaga de QA pleno',
-    caseScenario: 'Um aluno já conhece fundamentos, mas precisa organizar currículo, portfólio e discurso técnico para disputar vagas melhores em QA.',
+    caseTitle: 'Estudo de caso: preparação para vaga de Quality Assurance pleno',
+    caseScenario: 'Um aluno já conhece fundamentos, mas precisa organizar currículo, portfólio e discurso técnico para disputar vagas melhores em Quality Assurance.',
     caseTasks: [
       'Monte três evidências concretas para colocar no currículo ou portfólio.',
       'Defina um plano de 90 dias com foco em evolução técnica.',
@@ -1681,7 +1681,7 @@ const MODULE_LEARNING_EXTRAS = {
     checklist: [
       'Consigo explicar minhas habilidades com clareza.',
       'Tenho plano de evolução técnica realista.',
-      'Entendo trilhas de carreira em QA.',
+      'Entendo trilhas de carreira em Quality Assurance.',
       'Sei transformar estudo em evidência prática.',
       'Consigo me posicionar melhor em entrevistas.'
     ],
@@ -1996,10 +1996,10 @@ function buildCertificateMarkup() {
 
   if (completed < total) {
     return `
-      <div class="resource-card certificate-locked-card">
+      <div class="resource-card certificate-locked-card" data-cy="certificate-locked-card">
         <h3>Certificado de conclusão</h3>
         <p>Finalize todos os ${total} módulos e aprove os quizzes mínimos para liberar seu certificado.</p>
-        <p id="certificate-status" class="certificate-status">Conclua ${total - completed} módulo(s) para liberar o certificado</p>
+        <p id="certificate-status" class="certificate-status" data-cy="certificate-status">Conclua ${total - completed} módulo(s) para liberar o certificado</p>
       </div>
     `;
   }
@@ -2011,24 +2011,24 @@ function buildCertificateMarkup() {
 
   if (!studentName) {
     return `
-      <div class="certificate-card certificate-card-pending-name">
+      <div class="certificate-card certificate-card-pending-name" data-cy="certificate-pending-card">
         <div class="certificate-frame certificate-frame-pending">
           <p class="certificate-label">Último passo</p>
           <h3>Emita o certificado com o nome do aluno</h3>
           <p class="certificate-text">Informe o nome completo que deve aparecer no certificado. Esse nome ficará salvo no perfil do aluno.</p>
-          <form class="certificate-name-form" onsubmit="handleCertificateNameSubmit(event)">
+          <form class="certificate-name-form" onsubmit="handleCertificateNameSubmit(event)" data-cy="certificate-name-form">
             <label for="certificateStudentName">Nome completo no certificado</label>
-            <input id="certificateStudentName" name="certificateStudentName" type="text" placeholder="Ex.: Maria Fernanda Souza" minlength="3" required>
-            <button type="submit" class="primary-button">Salvar nome e emitir certificado</button>
+            <input id="certificateStudentName" name="certificateStudentName" type="text" placeholder="Ex.: Maria Fernanda Souza" minlength="3" required data-cy="certificate-name-input">
+            <button type="submit" class="primary-button" data-cy="certificate-name-submit">Salvar nome e emitir certificado</button>
           </form>
-          <p id="certificate-name-message" class="certificate-status"></p>
+          <p id="certificate-name-message" class="certificate-status" data-cy="certificate-name-message"></p>
         </div>
       </div>
     `;
   }
 
   return `
-    <div class="certificate-card" id="certificate-card">
+    <div class="certificate-card" id="certificate-card" data-cy="certificate-card">
       <div class="certificate-frame">
         <div class="certificate-corner certificate-corner-left"></div>
         <div class="certificate-corner certificate-corner-right"></div>
@@ -2040,7 +2040,7 @@ function buildCertificateMarkup() {
           </div>
         </div>
         <p class="certificate-label">Certificado de Conclusão</p>
-        <h3>Curso Completo de QA</h3>
+        <h3>Curso Completo de Qualidade de Software</h3>
         <p class="certificate-text">Certificamos que</p>
         <p class="certificate-student">${escapeHtml(studentName)}</p>
         <p class="certificate-text">concluiu com aproveitamento a trilha completa de Qualidade de Software, validando o aprendizado com exercícios e questionários ao longo dos 9 módulos do programa.</p>
@@ -2073,9 +2073,9 @@ function buildCertificateMarkup() {
           <p>Diretoria Qualimentor</p>
         </div>
       </div>
-      <div class="certificate-actions">
-        <button type="button" class="primary-button" onclick="printCertificate()">Imprimir certificado</button>
-        <p id="certificate-status" class="certificate-status">Certificado liberado</p>
+      <div class="certificate-actions" data-cy="certificate-actions">
+        <button type="button" class="primary-button" onclick="printCertificate()" data-cy="certificate-print-button">Imprimir certificado</button>
+        <p id="certificate-status" class="certificate-status" data-cy="certificate-status">Certificado liberado</p>
       </div>
     </div>
   `;
@@ -2238,35 +2238,35 @@ function buildQuizMarkup(moduleId) {
 
   const questionsMarkup = quiz.questions.map((question, index) => {
     const optionsMarkup = question.options.map((option, optionIndex) => `
-      <label class="quiz-option">
-        <input type="radio" name="quiz-question-${index}" value="${optionIndex}">
+      <label class="quiz-option" data-cy="quiz-option-label-${index}-${optionIndex}">
+        <input type="radio" name="quiz-question-${index}" value="${optionIndex}" data-cy="quiz-option-input-${index}-${optionIndex}">
         <span>${option}</span>
       </label>
     `).join('');
 
     return `
-      <fieldset class="quiz-question" data-question-index="${index}" data-correct-answer="${question.answer}">
+      <fieldset class="quiz-question" data-question-index="${index}" data-correct-answer="${question.answer}" data-cy="quiz-question-${index}">
         <legend>${index + 1}. ${question.prompt}</legend>
         <div class="quiz-options">${optionsMarkup}</div>
-        <p class="quiz-explanation" hidden>${question.explanation}</p>
+        <p class="quiz-explanation" hidden data-cy="quiz-explanation-${index}">${question.explanation}</p>
       </fieldset>
     `;
   }).join('');
 
   return `
-    <div class="quiz-card" id="module-quiz">
-      <div class="quiz-header">
+    <div class="quiz-card" id="module-quiz" data-cy="module-quiz-card">
+      <div class="quiz-header" data-cy="module-quiz-header">
         <h3>${quiz.title}</h3>
         <p>${quiz.description}</p>
         <p class="quiz-requirement">Aproveitamento mínimo para concluir o módulo: ${requiredCorrectAnswers} de ${quiz.questions.length} acertos.</p>
       </div>
-      <form id="module-quiz-form" class="quiz-form">
+      <form id="module-quiz-form" class="quiz-form" data-cy="module-quiz-form">
         ${questionsMarkup}
-        <div class="quiz-actions">
-          <button type="submit" class="primary-button">Enviar respostas</button>
-          <button type="button" id="reset-quiz-button" class="secondary-button">Refazer questionário</button>
+        <div class="quiz-actions" data-cy="module-quiz-actions">
+          <button type="submit" class="primary-button" data-cy="module-quiz-submit">Enviar respostas</button>
+          <button type="button" id="reset-quiz-button" class="secondary-button" data-cy="module-quiz-reset">Refazer questionário</button>
         </div>
-        <p id="quiz-result" class="quiz-result" aria-live="polite"></p>
+        <p id="quiz-result" class="quiz-result" aria-live="polite" data-cy="module-quiz-result"></p>
       </form>
     </div>
   `;
@@ -2532,6 +2532,120 @@ function resetQuiz() {
   }
 }
 
+function initializeModuleTopicAccordions() {
+  const sectionBody = document.querySelector('.section-body');
+  if (!sectionBody || !document.body.dataset.module) {
+    return;
+  }
+
+  const children = Array.from(sectionBody.children);
+  if (!children.some((child) => child.tagName === 'H3')) {
+    return;
+  }
+
+  const existingAccordions = sectionBody.querySelectorAll('.module-topic-accordion').length;
+  let accordionIndex = existingAccordions;
+
+  for (let index = 0; index < children.length; index += 1) {
+    const heading = children[index];
+
+    if (heading.tagName !== 'H3' || heading.parentElement !== sectionBody) {
+      continue;
+    }
+
+    const topicNodes = [];
+    let scanIndex = index + 1;
+
+    while (scanIndex < children.length && children[scanIndex].tagName !== 'H3') {
+      topicNodes.push(children[scanIndex]);
+      scanIndex += 1;
+    }
+
+    if (topicNodes.length === 0) {
+      continue;
+    }
+
+    const accordionId = `module-topic-panel-${accordionIndex}`;
+    const accordion = document.createElement('article');
+    accordion.className = 'module-topic-accordion';
+    accordion.dataset.cy = `module-topic-${accordionIndex}`;
+
+    const header = document.createElement('div');
+    header.className = 'module-topic-header';
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'module-topic-toggle';
+    button.setAttribute('aria-controls', accordionId);
+    button.setAttribute('data-cy', `module-topic-toggle-${accordionIndex}`);
+
+    const title = document.createElement('span');
+    title.className = 'module-topic-title';
+    title.textContent = heading.textContent?.trim() || `Tópico ${accordionIndex + 1}`;
+
+    const indicator = document.createElement('span');
+    indicator.className = 'module-topic-indicator';
+    indicator.setAttribute('aria-hidden', 'true');
+    indicator.textContent = 'Expandir';
+
+    button.append(title, indicator);
+    header.appendChild(button);
+
+    const panel = document.createElement('div');
+    panel.id = accordionId;
+    panel.className = 'module-topic-panel';
+    panel.setAttribute('data-cy', `module-topic-panel-${accordionIndex}`);
+
+    topicNodes.forEach((node) => {
+      panel.appendChild(node);
+    });
+
+    const shouldStartOpen = false;
+    accordion.classList.toggle('is-open', shouldStartOpen);
+    button.setAttribute('aria-expanded', shouldStartOpen ? 'true' : 'false');
+    indicator.textContent = shouldStartOpen ? 'Recolher' : 'Expandir';
+    panel.hidden = !shouldStartOpen;
+
+    button.addEventListener('click', () => {
+      const isOpen = accordion.classList.toggle('is-open');
+
+      sectionBody.querySelectorAll('.module-topic-accordion').forEach((item) => {
+        if (item === accordion) {
+          return;
+        }
+
+        item.classList.remove('is-open');
+        const itemButton = item.querySelector('.module-topic-toggle');
+        const itemPanel = item.querySelector('.module-topic-panel');
+        const itemIndicator = item.querySelector('.module-topic-indicator');
+
+        if (itemButton) {
+          itemButton.setAttribute('aria-expanded', 'false');
+        }
+
+        if (itemPanel) {
+          itemPanel.hidden = true;
+        }
+
+        if (itemIndicator) {
+          itemIndicator.textContent = 'Expandir';
+        }
+      });
+
+      button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      indicator.textContent = isOpen ? 'Recolher' : 'Expandir';
+      panel.hidden = !isOpen;
+    });
+
+    accordion.append(header, panel);
+    sectionBody.insertBefore(accordion, heading);
+    heading.remove();
+
+    accordionIndex += 1;
+    index = scanIndex - 1;
+  }
+}
+
 async function toggleModuleCompletion() {
   const moduleId = document.body.dataset.module;
   if (!moduleId) return;
@@ -2572,6 +2686,7 @@ async function initializeAuthenticatedPages() {
   renderModuleLearningExtras();
   renderModuleQuiz();
   renderCertificateSection();
+  initializeModuleTopicAccordions();
 
   const completeButton = document.getElementById('complete-module-button');
   if (completeButton && !completeButton.dataset.boundClick) {

@@ -10,7 +10,7 @@
   <header class="site-header">
     <div class="logo">QualiMentor</div>
     <nav>
-      <a href="dashboard.html">Dashboard</a>
+      <a href="dashboard.html" data-cy="module-nav-dashboard">Dashboard</a>
       <a href="intro.html">Introdução</a>
       <a href="process.html">Processo</a>
       <a href="manual.html">Manual</a>
@@ -19,7 +19,7 @@
       <a href="security.html">Segurança</a>
       <a href="performance.html">Performance</a>
       <a href="career.html">Carreira</a>
-      <button class="logout-button" onclick="logout()">Sair</button>
+      <button class="logout-button" onclick="logout()" data-cy="module-logout-button">Sair</button>
     </nav>
   </header>
 
@@ -34,12 +34,12 @@
       </div>
       <div class="progress-panel">
         <div class="progress-summary">
-          <p><strong>Status do módulo:</strong> <span id="module-status-text">Não iniciado</span></p>
-          <p><strong>Progresso:</strong> <span id="module-progress-percent">0%</span></p>
+          <p><strong>Status do módulo:</strong> <span id="module-status-text" data-cy="module-status-text">Não iniciado</span></p>
+          <p><strong>Progresso:</strong> <span id="module-progress-percent" data-cy="module-progress-percent">0%</span></p>
         </div>
         <div class="progress-actions">
-          <button id="complete-module-button" class="primary-button">Marcar módulo como concluído</button>
-          <a id="next-module-link" class="secondary-button" href="#">Próximo módulo</a>
+          <button id="complete-module-button" class="primary-button" data-cy="complete-module-button">Marcar módulo como concluído</button>
+          <a id="next-module-link" class="secondary-button" href="#" data-cy="next-module-link">Próximo módulo</a>
         </div>
       </div>
       <div class="section-body">
@@ -63,7 +63,7 @@
           <li>Maior confiabilidade e consistência na execução.</li>
           <li>Execução contínua em pipelines de CI/CD.</li>
           <li>Validação rápida de integrações críticas.</li>
-          <li>Liberação de QA para testes exploratórios e de valor agregado.</li>
+          <li>Liberação de profissionais de Quality Assurance para testes exploratórios e de valor agregado.</li>
           <li>Feedback mais rápido para desenvolvedores.</li>
           <li>Redução de custos a longo prazo.</li>
         </ul>
@@ -93,7 +93,7 @@
           </div>
           <div class="info-card">
             <h4>UI/E2E</h4>
-            <p>Simulam jornada completa do usuário. Frameworks: Selenium, Cypress, Playwright.</p>
+            <p>Simulam jornada completa do usuário. Frameworks: Cypress, Playwright e WebdriverIO com foco em JavaScript.</p>
           </div>
           <div class="info-card">
             <h4>Performance</h4>
@@ -118,16 +118,16 @@
         <h3>Frameworks populares</h3>
         <div class="card-grid">
           <div class="info-card">
-            <h4>Selenium WebDriver</h4>
-            <p>Padrão para automação web. Suporta múltiplas linguagens.</p>
-          </div>
-          <div class="info-card">
-            <h4>Cypress</h4>
-            <p>Rápido e confiável para aplicações modernas. JavaScript nativo.</p>
+            <h4>Cypress + JavaScript</h4>
+            <p>Alta produtividade para testes E2E, componentes e APIs com excelente experiência de debugging.</p>
           </div>
           <div class="info-card">
             <h4>Playwright</h4>
-            <p>Multi-browser, multi-contexto. Suporte nativo a APIs modernas.</p>
+            <p>Boa opção para multi-browser e cenários cross-context, também com suporte forte a JavaScript.</p>
+          </div>
+          <div class="info-card">
+            <h4>Cypress Cloud</h4>
+            <p>Executa paralelismo, gravações e analytics para escalar suites de automação em CI/CD.</p>
           </div>
           <div class="info-card">
             <h4>Appium</h4>
@@ -135,71 +135,69 @@
           </div>
         </div>
 
-        <h3>Exemplo prático: Teste automatizado com Selenium</h3>
+        <h3>Exemplo prático: Teste automatizado com Cypress</h3>
         <div class="resource-card">
-          <h4>Teste de Login - Java + Selenium</h4>
-          <pre><code>// Exemplo de teste automatizado
-@Test
-public void testLoginValido() {
-    driver.get("https://minhaapp.com/login");
+          <h4>Teste de Login - Cypress + JavaScript</h4>
+          <pre><code>// cypress/e2e/login.cy.js
+describe('Login', () => {
+  it('deve autenticar com credenciais válidas', () => {
+    cy.visit('https://minhaapp.com/login');
 
-    WebElement emailField = driver.findElement(By.id("email"));
-    WebElement passwordField = driver.findElement(By.id("password"));
-    WebElement loginButton = driver.findElement(By.id("login-btn"));
+    cy.get('[data-cy="login-email-input"]').type('usuario@teste.com');
+    cy.get('[data-cy="login-password-input"]').type('senha123');
+    cy.get('[data-cy="login-submit-button"]').click();
 
-    emailField.sendKeys("usuario@teste.com");
-    passwordField.sendKeys("senha123");
-    loginButton.click();
-
-    WebElement dashboard = wait.until(ExpectedConditions
-        .visibilityOfElementLocated(By.className("dashboard")));
-    Assert.assertTrue(dashboard.isDisplayed());
-}</code></pre>
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-cy="dashboard-overview-section"]').should('be.visible');
+  });
+});</code></pre>
         </div>
 
         <h3>Exemplo: Page Object Model</h3>
         <div class="resource-card">
-          <h4>LoginPage.java</h4>
-          <pre><code>public class LoginPage {
-    private WebDriver driver;
+          <h4>loginPage.js</h4>
+          <pre><code>export class LoginPage {
+  visit() {
+    cy.visit('/login');
+  }
 
-    @FindBy(id = "email")
-    private WebElement emailField;
+  fillEmail(email) {
+    cy.get('[data-cy="login-email-input"]').clear().type(email);
+  }
 
-    @FindBy(id = "password")
-    private WebElement passwordField;
+  fillPassword(password) {
+    cy.get('[data-cy="login-password-input"]').clear().type(password);
+  }
 
-    @FindBy(id = "login-btn")
-    private WebElement loginButton;
+  submit() {
+    cy.get('[data-cy="login-submit-button"]').click();
+  }
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
-
-    public DashboardPage login(String email, String password) {
-        emailField.sendKeys(email);
-        passwordField.sendKeys(password);
-        loginButton.click();
-        return new DashboardPage(driver);
-    }
+  login(email, password) {
+    this.visit();
+    this.fillEmail(email);
+    this.fillPassword(password);
+    this.submit();
+  }
 }</code></pre>
         </div>
 
-        <h3>Exemplo: Teste de API com RestAssured</h3>
+        <h3>Exemplo: Teste de API com Cypress</h3>
         <div class="resource-card">
-          <h4>Teste de API - Java</h4>
-          <pre><code>@Test
-public void testGetUser() {
-    given()
-        .header("Authorization", "Bearer " + token)
-        .when()
-        .get("/api/users/123")
-        .then()
-        .statusCode(200)
-        .body("name", equalTo("João Silva"))
-        .body("email", equalTo("joao@teste.com"));
-}</code></pre>
+          <h4>Teste de API - JavaScript</h4>
+          <pre><code>it('deve buscar um usuário existente', () => {
+  cy.request({
+    method: 'GET',
+    url: '/api/users/123',
+    headers: {
+      Authorization: `Bearer ${Cypress.env('token')}`
+    }
+  }).then((response) => {
+    expect(response.status).to.equal(200);
+    expect(response.body.name).to.equal('João Silva');
+    expect(response.body.email).to.equal('joao@teste.com');
+  });
+});</code></pre>
         </div>
 
         <h3>Exemplo: Teste de Performance com JMeter</h3>

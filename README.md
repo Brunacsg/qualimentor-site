@@ -1,15 +1,15 @@
-# Portal QA - Curso Completo de Qualidade de Software
+# Portal Qualidade de Software - Curso Completo de Qualidade de Software
 
 ## Descrição
 
-Portal SaaS com curso completo de QA contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com link de pagamento, autenticação segura e painel administrativo.
+Portal SaaS com curso completo de Qualidade de Software contendo 9 módulos de aprendizado com exemplos práticos, sistema de vendas com link de pagamento, autenticação segura e painel administrativo.
 
 ## Recursos
 
 - **Landing Page Pública**: Apresentação do curso, módulos e formulário de compra
 - **Sistema de Compras**: Cadastro via email, geração de chave PIX, emails de confirmação
 - **Autenticação Segura**: Login com email e senha apenas para usuários cadastrados
-- **9 Módulos de Curso**: Integralmente do QA com conteúdo prático
+- **9 Módulos de Curso**: Integralmente de Qualidade de Software com conteúdo prático
 - **Rastreamento de Progresso**: Acompanhe é completamento de cada módulo
 - **Painel Admin**: Gerenciamento de compras e aprovação de pagamentos
 
@@ -49,11 +49,14 @@ Use aqui a string de conexão do Supabase, Render PostgreSQL ou outro provedor c
 #### Email (opcional - simulado no console se não configurado)
 ```bash
 set ADMIN_EMAIL=seu-email@dominio.com
+set PAYMENT_CLICK_NOTIFY_EMAIL=seu-email@dominio.com
 set SMTP_HOST=smtp.seuservidor.com
 set SMTP_PORT=587
 set SMTP_USER=seu-usuario@dominio.com
 set SMTP_PASS=sua-senha-email
 ```
+
+`PAYMENT_CLICK_NOTIFY_EMAIL` define quem recebe o aviso assim que o aluno clicar em "Ir para o pagamento". Se não for informado, o sistema usa `ADMIN_EMAIL`.
 
 #### Webhook de pagamento (opcional, recomendado para automação)
 ```bash
@@ -82,7 +85,7 @@ Servidor rodará em: `http://localhost:3000`
 
 1. Acesse `http://localhost:3000` (página pública)
 2. Veja os módulos disponíveis
-3. Clique em "Começar a estudar QA agora"
+3. Clique em "Começar a estudar Qualidade de Software agora"
 4. Preencha nome e email
 5. Siga para o link de pagamento
 6. Após pagamento aprovado, recebe os dados de acesso ao curso
@@ -132,6 +135,10 @@ POST /purchase-request
   - name: string (obrigatório)
   
   Resposta: { success: bool, message: string, requestId: number }
+
+  Efeitos colaterais:
+  - envia email de confirmação para o aluno
+  - envia email administrativo avisando que o aluno clicou em "Ir para o pagamento"
 
 POST /payment-webhook
   Headers: x-payment-secret: sua_chave_webhook
@@ -256,6 +263,13 @@ Corpo: Instrução com chave PIX e passo a passo
 Para: email@cliente.com
 Assunto: Compra aprovada - Acesso ao curso
 Corpo: Confirmação e passo próximo
+```
+
+### Email quando o aluno vai para o pagamento
+```
+Para: PAYMENT_CLICK_NOTIFY_EMAIL (ou ADMIN_EMAIL)
+Assunto: Aluno clicou em Ir para o pagamento
+Corpo: nome, email, data, id da solicitação e link de pagamento
 ```
 
 ### Email de Compra Aprovada (para admin)
@@ -405,4 +419,4 @@ Para dúvidas sobre configuração ou uso, verifique os logs do terminal onde o 
 
 ---
 
-**Desenvolvido como SaaS completo com curso interativo de QA**
+**Desenvolvido como SaaS completo com curso interativo de Qualidade de Software**

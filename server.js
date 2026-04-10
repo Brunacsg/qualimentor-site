@@ -15,13 +15,14 @@ app.use(express.static('public'));
 const SECRET = 'segredo_super_forte';
 const ADMIN_SECRET = String(process.env.ADMIN_SECRET || '').trim();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'qualimentor.mentoria@gmail.com';
+const PAYMENT_CLICK_NOTIFY_EMAIL = String(process.env.PAYMENT_CLICK_NOTIFY_EMAIL || '').trim() || ADMIN_EMAIL;
 const PAGSEGURO_LINK = process.env.PAGSEGURO_LINK || 'https://pag.ae/81E_Aa4jo';
 const PAYMENT_WEBHOOK_SECRET = String(process.env.PAYMENT_WEBHOOK_SECRET || '').trim();
 const DATABASE_URL = String(process.env.DATABASE_URL || '').trim();
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = process.env.SMTP_PORT;
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
+const SMTP_HOST = String(process.env.SMTP_HOST || '').trim();
+const SMTP_PORT = String(process.env.SMTP_PORT || '').trim();
+const SMTP_USER = String(process.env.SMTP_USER || '').trim();
+const SMTP_PASS = String(process.env.SMTP_PASS || '').trim();
 const COURSE_MODULE_IDS = [
   'module-1',
   'module-2',
@@ -64,13 +65,17 @@ function getMailer() {
     return null;
   }
 
+  const isGmail = SMTP_HOST.toLowerCase() === 'smtp.gmail.com';
+  const smtpPassword = isGmail ? SMTP_PASS.replace(/\s+/g, '') : SMTP_PASS;
+  const smtpPort = Number(SMTP_PORT || 587);
+
   return nodemailer.createTransport({
     host: SMTP_HOST,
-    port: Number(SMTP_PORT || 587),
-    secure: false,
+    port: smtpPort,
+    secure: smtpPort === 465,
     auth: {
       user: SMTP_USER,
-      pass: SMTP_PASS,
+      pass: smtpPassword,
     },
   });
 }
@@ -92,6 +97,28 @@ async function sendEmail({ to, subject, text, html }) {
     subject,
     text,
     html,
+  });
+}
+
+async function verifyMailerConfiguration() {
+  const transporter = getMailer();
+  if (!transporter) {
+    return;
+  }
+
+  try {
+    await transporter.verify();
+    console.log(`SMTP verificado com sucesso para ${SMTP_USER} via ${SMTP_HOST}:${SMTP_PORT || '587'}.`);
+  } catch (error) {
+    console.error('Falha ao validar SMTP. Verifique SMTP_USER, SMTP_PASS (senha de app do Gmail), SMTP_HOST e SMTP_PORT.', error);
+  }
+}
+
+async function notifyPaymentClick({ requestId, email, name, createdAt, paymentLink }) {
+  await sendEmail({
+    to: PAYMENT_CLICK_NOTIFY_EMAIL,
+    subject: 'Aluno clicou em Ir para o pagamento',
+    text: `Um aluno acabou de seguir para o checkout do curso de Qualidade de Software.\n\nSolicitação: ${requestId}\nNome: ${name || 'Não informado'}\nEmail: ${email}\nData: ${createdAt}\nLink de pagamento: ${paymentLink}`,
   });
 }
 
@@ -153,6 +180,106 @@ function dbRun(sql, params = []) {
       resolve({ lastID: this.lastID, changes: this.changes });
     });
   });
+}
+
+function dbAll(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(rows || []);
+    });
+  });
+}
+
+function parsePositiveInteger(value, fallback, max = Number.MAX_SAFE_INTEGER) {
+  const parsed = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return fallback;
+  }
+
+  return Math.min(parsed, max);
+}
+
+function getListParams(req, defaults = {}) {
+  const page = parsePositiveInteger(req.query.page, defaults.page || 1);
+  const pageSize = parsePositiveInteger(req.query.pageSize, defaults.pageSize || 20, defaults.maxPageSize || 100);
+  const search = String(req.query.search || '').trim();
+
+  return {
+    page,
+    pageSize,
+    search,
+    offset: (page - 1) * pageSize,
+  };
+}
+
+function buildPagination(page, pageSize, total) {
+  const safeTotal = Number(total || 0);
+  const totalPages = Math.max(1, Math.ceil(safeTotal / pageSize));
+
+  return {
+    page,
+    pageSize,
+    total: safeTotal,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPreviousPage: page > 1,
+  };
+}
+
+const ADMIN_CACHE_TTL_MS = 15000;
+const adminCache = new Map();
+
+function getAdminCacheKey(label, req) {
+  return `${label}:${req.originalUrl}`;
+}
+
+function getAdminCachedValue(key) {
+  const entry = adminCache.get(key);
+  if (!entry) {
+    return null;
+  }
+
+  if ((Date.now() - entry.createdAt) > ADMIN_CACHE_TTL_MS) {
+    adminCache.delete(key);
+    return null;
+  }
+
+  return entry.payload;
+}
+
+function setAdminCachedValue(key, payload) {
+  adminCache.set(key, {
+    payload,
+    createdAt: Date.now(),
+  });
+}
+
+function invalidateAdminCache() {
+  adminCache.clear();
+}
+
+async function respondWithAdminCache(req, res, label, loader, errorMessage) {
+  const cacheKey = getAdminCacheKey(label, req);
+  const cachedPayload = getAdminCachedValue(cacheKey);
+
+  if (cachedPayload) {
+    res.json(cachedPayload);
+    return;
+  }
+
+  try {
+    const payload = await loader();
+    setAdminCachedValue(cacheKey, payload);
+    res.json(payload);
+  } catch (error) {
+    res.status(500).json({ success: false, message: errorMessage });
+  }
 }
 
 function generateTemporaryPassword() {
@@ -352,15 +479,17 @@ async function approvePurchaseRequest(request, options = {}) {
     plainPassword: generatedPassword,
   });
 
+  invalidateAdminCache();
+
   await sendEmail({
     to: normalizedEmail,
-    subject: 'Seu acesso ao curso QA está pronto',
+    subject: 'Seu acesso ao curso de Qualidade de Software está pronto',
     text: `Seu pagamento foi confirmado. Seus dados de acesso estão abaixo:\n\nLogin: ${normalizedEmail}\nSenha: ${generatedPassword}\n\nAcesse a página de login e entre com esses dados. Guarde esta mensagem para consultas futuras.`,
   });
 
   await sendEmail({
     to: ADMIN_EMAIL,
-    subject: approvalSource === 'webhook' ? 'Compra QA aprovada automaticamente' : 'Compra QA aprovada',
+    subject: approvalSource === 'webhook' ? 'Compra de curso de Qualidade de Software aprovada automaticamente' : 'Compra de curso de Qualidade de Software aprovada',
     text: `A solicitação de compra do email ${normalizedEmail} foi aprovada e os dados de acesso foram gerados.\n\nNome: ${normalizedName || 'Não informado'}\nLogin: ${normalizedEmail}\nSenha gerada: ${generatedPassword}\nOrigem da aprovação: ${approvalSource}\nProvedor: ${paymentProvider || 'Não informado'}\nReferência: ${paymentReference || 'Não informada'}\nAprovado em: ${approvedAt}.`,
   });
 
@@ -534,6 +663,7 @@ app.post('/create-user', authAdmin, async (req, res) => {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao criar usuário' });
       }
+      invalidateAdminCache();
       res.json({ success: true });
     }
   );
@@ -565,6 +695,8 @@ app.post('/purchase-request', async (req, res) => {
         return res.status(500).json({ success: false, message: 'Erro ao registrar solicitação' });
       }
 
+      invalidateAdminCache();
+
       const message = 'Cadastro registrado com sucesso. Você será direcionado para o pagamento.';
       const requestId = this.lastID;
 
@@ -574,14 +706,16 @@ app.post('/purchase-request', async (req, res) => {
         try {
           await sendEmail({
             to: email,
-            subject: 'Cadastro recebido - Curso QA',
-            text: 'Recebemos seu cadastro para compra do curso QA. Após a confirmação do pagamento, enviaremos para este email os dados de acesso.',
+            subject: 'Cadastro recebido - Curso de Qualidade de Software',
+            text: 'Recebemos seu cadastro para compra do curso de Qualidade de Software. Após a confirmação do pagamento, enviaremos para este email os dados de acesso.',
           });
 
-          await sendEmail({
-            to: ADMIN_EMAIL,
-            subject: 'Nova solicitação de compra - Portal QA',
-            text: `Nova solicitação de compra recebida:\nEmail: ${email}\nNome: ${name || 'Não informado'}\nData: ${createdAt}`,
+          await notifyPaymentClick({
+            requestId,
+            email,
+            name,
+            createdAt,
+            paymentLink,
           });
         } catch (error) {
           console.error('Erro ao enviar emails de solicitação:', error);
@@ -591,111 +725,188 @@ app.post('/purchase-request', async (req, res) => {
   );
 });
 
-app.get('/purchase-requests', authAdmin, (req, res) => {
-  db.all(
-    `SELECT
-      id,
-      email,
-      name,
-      status,
-      pixkey AS "pixKey",
-      paymentprovider AS "paymentProvider",
-      paymentreference AS "paymentReference",
-      approvalsource AS "approvalSource",
-      lastwebhookat AS "lastWebhookAt",
-      createdat AS "createdAt",
-      approvedat AS "approvedAt"
-     FROM purchase_requests
-     ORDER BY createdat DESC`,
-    (err, rows) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: 'Erro ao buscar solicitações' });
-    }
-    res.json({ success: true, requests: rows });
-    }
-  );
+app.get('/purchase-requests', authAdmin, async (req, res) => {
+  const { page, pageSize, search, offset } = getListParams(req, { pageSize: 20, maxPageSize: 100 });
+  const searchTerm = search ? `%${search.toLowerCase()}%` : '';
+  const whereClause = search
+    ? `WHERE lower(email) LIKE ? OR lower(COALESCE(name, '')) LIKE ? OR lower(COALESCE(status, '')) LIKE ? OR lower(COALESCE(paymentprovider, '')) LIKE ? OR lower(COALESCE(paymentreference, '')) LIKE ?`
+    : '';
+  const params = search ? [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm] : [];
+
+  await respondWithAdminCache(req, res, 'purchase-requests', async () => {
+    const totalRow = await dbGet(
+      `SELECT COUNT(*) AS total
+       FROM purchase_requests
+       ${whereClause}`,
+      params
+    );
+
+    const requests = await dbAll(
+      `SELECT
+        id,
+        email,
+        name,
+        status,
+        pixkey AS "pixKey",
+        paymentprovider AS "paymentProvider",
+        paymentreference AS "paymentReference",
+        approvalsource AS "approvalSource",
+        lastwebhookat AS "lastWebhookAt",
+        createdat AS "createdAt",
+        approvedat AS "approvedAt"
+       FROM purchase_requests
+       ${whereClause}
+       ORDER BY createdat DESC
+       LIMIT ? OFFSET ?`,
+      [...params, pageSize, offset]
+    );
+
+    return {
+      success: true,
+      requests,
+      pagination: buildPagination(page, pageSize, Number(totalRow?.total || 0)),
+      search,
+    };
+  }, 'Erro ao buscar solicitações');
 });
 
-app.get('/users', authAdmin, (req, res) => {
-  db.all(
-    `SELECT id, name, email, expiresat AS "expiresAt", activesessionid AS "activeSessionId"
-     FROM users
-     ORDER BY lower(email) ASC`,
-    (err, rows) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Erro ao buscar usuários' });
-      }
+app.get('/users', authAdmin, async (req, res) => {
+  const { page, pageSize, search, offset } = getListParams(req, { pageSize: 20, maxPageSize: 100 });
+  const searchTerm = search ? `%${search.toLowerCase()}%` : '';
+  const whereClause = search
+    ? `WHERE lower(email) LIKE ? OR lower(COALESCE(name, '')) LIKE ?`
+    : '';
+  const params = search ? [searchTerm, searchTerm] : [];
 
-      const users = rows.map((user) => ({
-        id: user.id,
-        name: user.name || '',
-        email: user.email,
-        expiresAt: user.expiresAt,
-        isActive: Boolean(user.activeSessionId),
-      }));
+  await respondWithAdminCache(req, res, 'users', async () => {
+    const totalRow = await dbGet(
+      `SELECT COUNT(*) AS total
+       FROM users
+       ${whereClause}`,
+      params
+    );
 
-      res.json({ success: true, users });
-    }
-  );
+    const rows = await dbAll(
+      `SELECT id, name, email, expiresat AS "expiresAt", activesessionid AS "activeSessionId"
+       FROM users
+       ${whereClause}
+       ORDER BY lower(email) ASC
+       LIMIT ? OFFSET ?`,
+      [...params, pageSize, offset]
+    );
+
+    const users = rows.map((user) => ({
+      id: user.id,
+      name: user.name || '',
+      email: user.email,
+      expiresAt: user.expiresAt,
+      isActive: Boolean(user.activeSessionId),
+    }));
+
+    return {
+      success: true,
+      users,
+      pagination: buildPagination(page, pageSize, Number(totalRow?.total || 0)),
+      search,
+    };
+  }, 'Erro ao buscar usuários');
 });
 
-app.get('/users-progress', authAdmin, (req, res) => {
-  db.all(
-    `SELECT
-      u.id,
-      u.name,
-      u.email,
-      u.expiresat AS "expiresAt",
-      COUNT(up.moduleid) AS "touchedModules",
-      COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS "completedModules",
-      COALESCE(SUM(CASE WHEN up.quizpassed = 1 THEN 1 ELSE 0 END), 0) AS "passedQuizzes",
-      COALESCE(MAX(up.updatedat), '') AS "lastActivity",
-      COALESCE(ROUND(AVG(CASE WHEN up.quiztotal > 0 THEN (CAST(up.quizscore AS NUMERIC) / up.quiztotal) * 100 END), 1), 0) AS "averageScore"
-     FROM users u
-     LEFT JOIN user_progress up ON up.userid = u.id
-    GROUP BY u.id, u.name, u.email, u.expiresat
-     ORDER BY lower(u.email) ASC`,
-    (err, rows) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Erro ao buscar progresso dos usuários' });
-      }
+app.get('/users-progress', authAdmin, async (req, res) => {
+  const { page, pageSize, search, offset } = getListParams(req, { pageSize: 20, maxPageSize: 100 });
+  const searchTerm = search ? `%${search.toLowerCase()}%` : '';
+  const whereClause = search
+    ? `WHERE lower(u.email) LIKE ? OR lower(COALESCE(u.name, '')) LIKE ?`
+    : '';
+  const params = search ? [searchTerm, searchTerm] : [];
 
-      const summaries = rows.map((row) => ({
-        id: row.id,
-        name: row.name || '',
-        email: row.email,
-        expiresAt: row.expiresAt,
-        touchedModules: Number(row.touchedModules || 0),
-        completedModules: Number(row.completedModules || 0),
-        passedQuizzes: Number(row.passedQuizzes || 0),
-        totalModules: COURSE_MODULE_IDS.length,
-        quizAverage: Number(row.averageScore || 0),
-        certificateEligible: Number(row.completedModules || 0) >= COURSE_MODULE_IDS.length,
-        lastUpdatedAt: row.lastActivity || null,
-      }));
+  await respondWithAdminCache(req, res, 'users-progress', async () => {
+    const totalRow = await dbGet(
+      `SELECT COUNT(*) AS total
+       FROM users u
+       ${whereClause}`,
+      params
+    );
 
-      res.json({ success: true, summaries });
-    }
-  );
+    const rows = await dbAll(
+      `SELECT
+        u.id,
+        u.name,
+        u.email,
+        u.expiresat AS "expiresAt",
+        COUNT(up.moduleid) AS "touchedModules",
+        COALESCE(SUM(CASE WHEN up.completed = 1 THEN 1 ELSE 0 END), 0) AS "completedModules",
+        COALESCE(SUM(CASE WHEN up.quizpassed = 1 THEN 1 ELSE 0 END), 0) AS "passedQuizzes",
+        COALESCE(MAX(up.updatedat), '') AS "lastActivity",
+        COALESCE(ROUND(AVG(CASE WHEN up.quiztotal > 0 THEN (CAST(up.quizscore AS NUMERIC) / up.quiztotal) * 100 END), 1), 0) AS "averageScore"
+       FROM users u
+       LEFT JOIN user_progress up ON up.userid = u.id
+       ${whereClause}
+       GROUP BY u.id, u.name, u.email, u.expiresat
+       ORDER BY lower(u.email) ASC
+       LIMIT ? OFFSET ?`,
+      [...params, pageSize, offset]
+    );
+
+    const summaries = rows.map((row) => ({
+      id: row.id,
+      name: row.name || '',
+      email: row.email,
+      expiresAt: row.expiresAt,
+      touchedModules: Number(row.touchedModules || 0),
+      completedModules: Number(row.completedModules || 0),
+      passedQuizzes: Number(row.passedQuizzes || 0),
+      totalModules: COURSE_MODULE_IDS.length,
+      quizAverage: Number(row.averageScore || 0),
+      certificateEligible: Number(row.completedModules || 0) >= COURSE_MODULE_IDS.length,
+      lastUpdatedAt: row.lastActivity || null,
+    }));
+
+    return {
+      success: true,
+      summaries,
+      pagination: buildPagination(page, pageSize, Number(totalRow?.total || 0)),
+      search,
+    };
+  }, 'Erro ao buscar progresso dos usuários');
 });
 
-app.get('/credential-deliveries', authAdmin, (req, res) => {
-  db.all(
-    `SELECT id, userid AS "userId", name, email, plainpassword AS "plainPassword", createdat AS "createdAt"
-     FROM credential_deliveries
-     ORDER BY createdat DESC`,
-    (err, rows) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Erro ao buscar credenciais geradas' });
-      }
+app.get('/credential-deliveries', authAdmin, async (req, res) => {
+  const { page, pageSize, search, offset } = getListParams(req, { pageSize: 20, maxPageSize: 100 });
+  const searchTerm = search ? `%${search.toLowerCase()}%` : '';
+  const whereClause = search
+    ? `WHERE lower(email) LIKE ? OR lower(COALESCE(name, '')) LIKE ?`
+    : '';
+  const params = search ? [searchTerm, searchTerm] : [];
 
-      res.json({ success: true, credentials: rows });
-    }
-  );
+  await respondWithAdminCache(req, res, 'credential-deliveries', async () => {
+    const totalRow = await dbGet(
+      `SELECT COUNT(*) AS total
+       FROM credential_deliveries
+       ${whereClause}`,
+      params
+    );
+
+    const credentials = await dbAll(
+      `SELECT id, userid AS "userId", name, email, plainpassword AS "plainPassword", createdat AS "createdAt"
+       FROM credential_deliveries
+       ${whereClause}
+       ORDER BY createdat DESC
+       LIMIT ? OFFSET ?`,
+      [...params, pageSize, offset]
+    );
+
+    return {
+      success: true,
+      credentials,
+      pagination: buildPagination(page, pageSize, Number(totalRow?.total || 0)),
+      search,
+    };
+  }, 'Erro ao buscar credenciais geradas');
 });
 
-app.get('/system-status', authAdmin, (req, res) => {
-  res.json({ success: true, status: buildSystemStatus() });
+app.get('/system-status', authAdmin, async (req, res) => {
+  await respondWithAdminCache(req, res, 'system-status', async () => ({ success: true, status: buildSystemStatus() }), 'Erro ao carregar diagnóstico');
 });
 
 app.get('/progress', auth, (req, res) => {
@@ -755,6 +966,8 @@ app.post('/progress', auth, (req, res) => {
       if (err) {
         return res.status(500).json({ success: false, message: 'Erro ao salvar progresso' });
       }
+
+      invalidateAdminCache();
 
       res.json({
         success: true,
@@ -938,6 +1151,10 @@ const PORT = process.env.PORT || 3000;
 initDatabase()
   .then(() => {
     console.log(`PostgreSQL em ${databaseLabel}`);
+    verifyMailerConfiguration().catch((error) => {
+      console.error('Erro inesperado ao validar configuração SMTP:', error);
+    });
+
     app.listen(PORT, () => {
       console.log(`🚀 Rodando em http://localhost:${PORT}`);
     });
